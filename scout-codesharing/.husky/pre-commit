@@ -1,2 +1,2 @@
-npx prettier . --write
-npx eslint .
+npm run format
+npm run lint
