@@ -10,11 +10,11 @@
     "preview": "vite preview",
     "prepare": "husky",
     "format": "prettier .  --write"
-    },
+  },
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
-    },
+  },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
     "@types/react": "^18.3.12",
@@ -28,5 +28,5 @@
     "husky": "^9.1.7",
     "prettier": "^3.4.1",
     "vite": "^6.0.1"
-    }
-  } 
+  }
+}
