@@ -5,7 +5,7 @@
 
   color-scheme: light dark;
   color: rgba(255, 255, 255, 0.87);
-  background-color: #242424;
+  background-color:#0B2878;
 
   font-synthesis: none;
   text-rendering: optimizeLegibility;
@@ -14,7 +14,7 @@
 }
 
 a {
-  font-weight: 500;
+  font-weight: 200;
   color: #646cff;
   text-decoration: inherit;
 }

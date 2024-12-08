@@ -40,3 +40,11 @@
 .read-the-docs {
   color: #888;
 }
+
+.background_post {
+  width: 570px;
+  height: 630px;
+  flex-shrink: 0;
+  border-radius: 10px;
+  background: rgba(0, 0, 0, 0.50);
+}
