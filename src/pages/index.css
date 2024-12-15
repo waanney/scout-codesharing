@@ -1,5 +1,7 @@
-#root {
-  padding:  23%;
-  text-align: center;
-  background: #0B2878;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+#root{
+  background-color: blue;
 }

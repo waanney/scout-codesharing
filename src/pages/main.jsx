@@ -3,10 +3,10 @@ import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
-import HomePage from './HomePage/HomePage.jsx';
-import Discussion from './Discussion/Discussion.jsx';
-import MyProfile from './MyProfile/MyProfile.jsx';
-import Post from './Posts/Post.jsx';
+import HomePage from './HomePage';
+import Discussion from './Discussion';
+import MyProfile from './MyProfile';
+import Post from './Post';
 
 const router = createBrowserRouter([
   {
