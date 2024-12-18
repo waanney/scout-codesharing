@@ -12,7 +12,10 @@
     "format": "prettier .  --write"
   },
   "dependencies": {
+    "@headlessui/react": "^2.2.0",
+    "@heroicons/react": "^2.2.0",
     "@tanstack/react-query": "^4.36.1",
+    "heroicons": "^2.2.0",
     "highlight.js": "^11.10.0",
     "node-modules": "^1.0.1",
     "react": "^18.3.1",
