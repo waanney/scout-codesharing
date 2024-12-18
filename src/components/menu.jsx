@@ -2,7 +2,7 @@ import React from 'react';
 
 const Menu = () => {
   return (
-   <div className="w-[100%] flex justify-between items-center px-[20px]">
+   <div className="w-[100%] fixed flex justify-between items-center px-[20px] z-20">
       <a className="flex justify-between items-center mt-[10px]" href="/">
         <img className="h-[37px] w-[37px] mr-[5px]" src="src/assets/Scout.ico" alt="Scout Logo" />
         <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
