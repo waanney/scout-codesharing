@@ -1,4 +1,6 @@
 import { Send } from 'lucide-react';
+import { Save } from 'lucide-react';
+import { Share } from 'lucide-react';
 
 function Post() {
   const SendClick = () => {
@@ -9,19 +11,35 @@ function Post() {
   return (
     <div className="h-[100%] w-auto flex flex-row justify-start flex-shrink-0 font-[Inter] antialiased bg-[#0b2878]">
       {/* Comment Space */}
-      <div className="relative w-[444px] h-[636px] rounded-[10px] bg-[#05143c] ml-[30px] mt-[150px] mb-[50px]">
+      <div className="relative w-[444px] h-[636px] rounded-[10px] bg-[#05143c] ml-[50px] mt-[150px] mb-[50px]">
         {/* User Info */}
-        <div className="flex flex-row">
-          <div className="mt-[37px] ml-[37px] h-[50px] w-[50px]">
+        <div className="flex flex-row mt-[37px]">
+          <div className="ml-[37px] h-[50px] w-[50px]">
             <img src="/placeholder.svg" alt="User Avatar" />
           </div>
           <div className="flex flex-col">
-            <div className="mt-[37px] ml-[10px] text-white font-bold text-2xl leading-9">
+            <div className="ml-[10px] text-white font-bold text-2xl leading-9">
               userName
             </div>
             <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
               hh:mm dd/mm/yyyy
             </div>
+          </div>
+          <div className="flex flex-col">
+            <button
+              onClick={SendClick}
+              className="text-white align-middle ml-[150px] mt-[-10px] flex flex-row items-center"
+            >
+              <Share className="h-[30px] w-[30px]" />
+              Share
+            </button>
+            <button
+              onClick={SendClick}
+              className="text-white align-middle ml-[150px] mt-[10px] flex flex-row items-center"
+            >
+              <Save className="h-[30px] w-[30px]" />
+               Save
+            </button>
           </div>
         </div>
         {/* Problem Title */}
