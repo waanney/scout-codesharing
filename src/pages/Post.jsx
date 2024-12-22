@@ -34,7 +34,9 @@ function Post() {
           </div>
         </div>
         {/* Comments Section */}
-        <div className="w-[80%] h-[400px] mx-auto mb-[10px] px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory">
+        <div className="w-[80%] h-[400px] mx-auto mb-[10px] px-[10px] 
+                        overflow-x-auto overflow-y-auto snap-y snap-mandatory 
+                        scrollbar scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin">
           {[1, 2, 3, 4, 5, 6].map(num => (
             <div key={num} className="mb-4">
               <p className="text-white text-2xl font-bold leading-9">
@@ -73,19 +75,19 @@ function Post() {
       </div>
 
       {/* Code Space */}
-      <div className="relative w-[769px] h-[636px] rounded-[10px] bg-[#05143c] ml-[30px] mt-[150px] mb-[50px]">
+      <div className="relative w-[769px] h-[636px] rounded-[10px] bg-[#05143c] ml-[20px] mt-[150px] mb-[50px]">
         <br />
-        <div className="font-mono w-[760px] h-[600px] px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory">
+        <div className="font-mono w-[760px] h-[600px] px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin">
           {numbers.map(
             (
               line, //mảng numbers là hằng được tạo để test
             ) => (
               <div key={line}>
                 <p className="font-mono flex">
-                  <div className="text-gray-400 ml-[10px] w-[40px] text-right">
+                  <div className="text-gray-400 ml-[10px] w-[30px] text-right">
                     {line}
                   </div>
-                  <div className="text-white ml-[50px]">
+                  <div className="text-white ml-[30px]">
                     Code_of_line_{line}
                   </div>
                 </p>
