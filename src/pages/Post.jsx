@@ -4,7 +4,6 @@ function Post() {
   const SendClick = () => {
     alert('Button clicked!');
   };
-
   const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
 
   return (
