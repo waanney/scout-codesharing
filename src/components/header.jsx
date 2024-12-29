@@ -1,4 +1,5 @@
 import { useState } from 'react';
+
 import {
   Dialog,
   DialogPanel,
@@ -73,8 +74,8 @@ export default function HeaderForAllPage() {
       >
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
-            <span className="sr-only">Your Company</span>
-            <img alt="" src="../assets/logo.png" className="h-8 w-auto" />
+            <span className="sr-only">SCOUT</span>
+            <img alt="" src="" className="h-8 w-auto" />
           </a>
         </div>
         <div className="flex lg:hidden">
@@ -87,7 +88,8 @@ export default function HeaderForAllPage() {
             <Bars3Icon aria-hidden="true" className="size-6" />
           </button>
         </div>
-        <PopoverGroup className="hidden lg:flex lg:gap-x-12">
+
+        <PopoverGroup className="hidden lg:flex lg:gap-x-12 ">
           <Popover className="relative">
             <PopoverButton className="flex items-center gap-x-1 text-sm/6 font-semibold text-white">
               Home
@@ -169,12 +171,8 @@ export default function HeaderForAllPage() {
         <DialogPanel className="fixed inset-y-0 right-0 z-10 w-full overflow-y-auto bg-white px-6 py-6 sm:max-w-sm sm:ring-1 sm:ring-gray-900/10">
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
-              <span className="sr-only">Your Company</span>
-              <img
-                alt=""
-                src="https://tailwindui.com/plus/img/logos/mark.svg?color=indigo&shade=600"
-                className="h-8 w-auto"
-              />
+              <span className="sr-only">SCOUT</span>
+              <img alt="" src="../assets/logo.svg" className="h-8 w-auto" />
             </a>
             <button
               type="button"
