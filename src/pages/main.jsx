@@ -11,7 +11,7 @@ import Post from './Post';
 const router = createBrowserRouter([
   {
     path: '/',
-    element: <HomePage />,
+    element: <Post />,
   },
   {
     path: '/discussion',
@@ -23,7 +23,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/post=',
-    element: <Post />,
+    element: <HomePage />,
   },
 ]);
 
