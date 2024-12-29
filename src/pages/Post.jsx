@@ -2,6 +2,7 @@ import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
 import HeaderForAllPage from '../components/header.jsx';
+import FooterAllPage from '../components/footer.jsx';
 
 function Post() {
   const SendClick = () => {
@@ -125,7 +126,7 @@ function Post() {
         </div>
       </div>
       {/* foot*/}
-      <div className="text-default-text"></div>
+      <FooterAllPage />
     </div>
   );
 }

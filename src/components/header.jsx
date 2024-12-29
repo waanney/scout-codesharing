@@ -75,7 +75,11 @@ export default function HeaderForAllPage() {
         <div className="flex lg:flex-1">
           <a href="#" className="-m-1.5 p-1.5">
             <span className="sr-only">SCOUT</span>
-            <img alt="" src="" className="h-8 w-auto" />
+            <img
+              alt=""
+              src="https://github.com/waanney/scout-codesharing/blob/a630ee3077343f29e6ea28250fe972640d4f5ee4/src/assets/logo.svg"
+              className="h-8 w-auto"
+            />
           </a>
         </div>
         <div className="flex lg:hidden">
@@ -172,7 +176,11 @@ export default function HeaderForAllPage() {
           <div className="flex items-center justify-between">
             <a href="#" className="-m-1.5 p-1.5">
               <span className="sr-only">SCOUT</span>
-              <img alt="" src="../assets/logo.svg" className="h-8 w-auto" />
+              <img
+                alt=""
+                src="https://github.com/waanney/scout-codesharing/blob/a630ee3077343f29e6ea28250fe972640d4f5ee4/src/assets/logo.svg"
+                className="h-8 w-auto"
+              />
             </a>
             <button
               type="button"
