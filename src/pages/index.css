@@ -3,5 +3,6 @@
 @tailwind utilities;
 
 #root {
-  background-color: blue;
+  background-color: #0b2878;
+  color: white;
 }

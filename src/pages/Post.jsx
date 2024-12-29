@@ -1,7 +1,7 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
-import HeaderForAllPage from '../components/header.jsx';
+import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 
 function Post() {
@@ -13,7 +13,7 @@ function Post() {
   return (
     <div className="flex min-h-screen flex-col bg-[#0b2878]">
       {/* Header*/}
-      <HeaderForAllPage />
+      <HeaderForAllPages />
       {/* body */}
       <div className="flex flex-col">
         {/*format thẻ chứa content*/}
