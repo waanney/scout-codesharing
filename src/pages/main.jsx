@@ -7,11 +7,21 @@ import HomePage from './HomePage';
 import Discussion from './Discussion';
 import MyProfile from './MyProfile';
 import Post from './Post';
+import Login from './Login';
+import Signup from './Signup';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: <HomePage />,
+  },
+  {
+    path: '/signup',
+    element: <Signup />,
+  },
+  {
+    path: '/login',
+    element: <Login />,
   },
   {
     path: '/discussion',
