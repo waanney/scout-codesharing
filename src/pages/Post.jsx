@@ -20,7 +20,7 @@ function Post() {
           {/*format thẻ chứa content*/}
           <div className="cards grid grid-cols-[2fr_3fr] gap-[34px] place-items-center overflow-hidden px-5 lg:mt-16 lg:flex-row lg:items-stretch lg:px-[calc(160px-(1920px-100vw)/3)]">
             {/* thẻ thông tin */}
-            <div className="card rounded-[10px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[150px] mb-[50px]">
+            <div className="card rounded-[10px] h-[636px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
               {/* User Info */}
               <div className="cards grid grid-cols-2 gap-[10px] mt-[37px]">
                 <div className="card flex flex-row">
@@ -40,7 +40,7 @@ function Post() {
                   <div className="w-[100px]">
                     <button
                       onClick={SendClick}
-                      className="text-white flex flex-row items-center"
+                      className="text-white flex flex-row items-center hover:scale-110"
                     >
                       <Share className="h-[30px] w-[30px]" />
                       Share
@@ -49,7 +49,7 @@ function Post() {
                   <div className="w-[100px]">
                     <button
                       onClick={SendClick}
-                      className="text-white flex flex-row items-center"
+                      className="text-white flex flex-row items-center hover:scale-110"
                     >
                       <Save className="h-[30px] w-[30px]" />
                       Save
@@ -58,17 +58,19 @@ function Post() {
                 </div>
               </div>
               {/* Problem Title */}
-              <div>
-                <div className="mx-[38px] text-white text-center text-2xl font-bold leading-[150%]">
+              <div className="mx-[38px] text-white">
+                <div className="text-center text-2xl font-bold leading-[150%]">
                   Problem solving
                 </div>
-                <div className="ml-[38px] text-white text-xl font-normal leading-[150%]">
-                  caption_from_DataBase
+                <div className="text-xl font-normal leading-[150%]">
+                  caption_from_DataBase caption_from_DataBase
+                  caption_from_DataBase caption_from_DataBase
+                  caption_from_DataBase caption_from_DataBase
                 </div>
               </div>
               {/* Comments Section */}
               <div
-                className="w-[80%] h-[400px] mx-auto px-[10px]
+                className="w-[80%] h-[60%] mx-auto px-[10px]
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory 
                         scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
               >
@@ -95,7 +97,7 @@ function Post() {
               <div className="flex flex-row px-[20px] py-[20px]">
                 <input
                   className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%]"
-                  placeholder="  Add a comment..."
+                  placeholder="  Add your comment..."
                   type="text"
                 />
                 <button
@@ -105,16 +107,16 @@ function Post() {
                   value="user_input_comment"
                   className="text-white align-middle ml-[10px] rotate-45"
                 >
-                  <Send className="h-[30px] w-[30px]" />
+                  <Send className="h-[30px] w-[30px] hover:scale-110" />
                 </button>
               </div>
             </div>
             {/* Code Space */}
-            <div className="card rounded-[10px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[150px] mb-[50px]">
+            <div className="card rounded-[10px] h-[636px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
               <div
-                className="font-mono w-[100%] h-[600px] 
-                            overflow-x-auto overflow-y-auto snap-y snap-mandatory 
-                            scrollbar-thumb-gray-300 scrollbar-track-[#091438] scrollbar-thin"
+                className="font-mono w-[100%] h-[100%]
+                          overflow-x-auto overflow-y-auto snap-y snap-mandatory 
+                          scrollbar-thumb-gray-300 scrollbar-track-[#091438] scrollbar-thin"
               >
                 {numbers.map(
                   (
