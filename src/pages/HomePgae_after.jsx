@@ -1,10 +1,10 @@
-import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
+import HeaderForAllPages_after from '../components/header_after.jsx';
 function HomePage() {
   return (
     <>
       <div className="flex min-h-screen flex-col">
-        <HeaderForAllPages/>
+        <HeaderForAllPages_after/>
         <div
           className=" bg-fixed bg-no-repeat bg-center bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 w-full h-[500px] flex items-center justify-center text-center text-[60px] px-5 my-[90px]"
           style={{
