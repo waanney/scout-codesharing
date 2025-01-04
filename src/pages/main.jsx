@@ -9,6 +9,7 @@ import MyProfile from './MyProfile';
 import Post from './Post';
 import Login from './Login';
 import Signup from './Signup';
+import HomePage_after from './HomePgae_after';
 
 const router = createBrowserRouter([
   {
@@ -22,6 +23,10 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/homepage_after',
+    element: <HomePage_after />,
   },
   {
     path: '/discussion',
