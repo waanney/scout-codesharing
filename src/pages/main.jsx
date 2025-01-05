@@ -4,9 +4,9 @@ import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 
 import HomePage from './HomePage';
-import Discussion from './Discussion';
+import Board from './DiscussionPage/_id';
 import MyProfile from './MyProfile';
-import Post from './Post';
+import Post from './UsersPost/Post';
 
 const router = createBrowserRouter([
   {
@@ -15,7 +15,7 @@ const router = createBrowserRouter([
   },
   {
     path: '/discussion',
-    element: <Discussion />,
+    element: <Board />,
   },
   {
     path: '/myprofile',

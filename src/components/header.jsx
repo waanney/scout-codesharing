@@ -12,12 +12,20 @@ const HeaderForAllPages = () => {
 
       <div className="flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px] mt-[10px] ml-[30px] px-[15px]">
         <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-          <a className="section" href="#home">
+          <a
+            className="section"
+            onClick={() => (window.location.href = 'http://localhost:5173/')}
+          >
             Home
           </a>
         </div>
         <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-          <a className="section" href="#discussion">
+          <a
+            className="section"
+            onClick={() =>
+              (window.location.href = 'http://localhost:5173/discussion')
+            }
+          >
             Discussion
           </a>
         </div>

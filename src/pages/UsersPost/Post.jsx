@@ -1,8 +1,8 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
-import HeaderForAllPages from '../components/header.jsx';
-import FooterAllPage from '../components/footer.jsx';
+import HeaderForAllPages from '../../components/header.jsx';
+import FooterAllPage from '../../components/footer.jsx';
 
 function Post() {
   const SendClick = () => {
@@ -78,8 +78,7 @@ function Post() {
                     User{num}
                   </p>
                   <p className="text-white text-[15px] font-normal leading-[150%]">
-                    {num === 1 &&
-                      'Tôi thích những dòng code này, help what??'}
+                    {num === 1 && 'Tôi thích những dòng code này, help what??'}
                     {num === 2 && 'Code này quá tệ'}
                     {num === 3 && 'Tôi sẽ copy code về dùng'}
                     {num === 4 && 'Tự bơi đi bro'}
@@ -116,22 +115,16 @@ function Post() {
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory 
                         scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
             >
-              {numbers.map(
-                (
-                  line, //mảng numbers là hằng được tạo để test
-                ) => (
-                  <div key={line}>
-                    <p className="font-mono flex">
-                      <div className="text-gray-400 ml-[10px] w-[30px] text-right">
-                        {line}
-                      </div>
-                      <div className="text-white ml-[30px]">
-                        // Code_of_line_{line}
-                      </div>
-                    </p>
-                  </div>
-                ),
-              )}
+              {numbers.map(line => (
+                <div key={line}>
+                  <p className="font-mono flex">
+                    <div className="text-gray-400 ml-[10px] w-[30px] text-right">
+                      {line}
+                    </div>
+                    <div className="text-white ml-[30px]">{line}</div>
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>
