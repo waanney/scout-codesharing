@@ -78,8 +78,7 @@ function Post() {
                     User{num}
                   </p>
                   <p className="text-white text-[15px] font-normal leading-[150%]">
-                    {num === 1 &&
-                      'Tôi thích những dòng code này, help what??'}
+                    {num === 1 && 'Tôi thích những dòng code này, help what??'}
                     {num === 2 && 'Code này quá tệ'}
                     {num === 3 && 'Tôi sẽ copy code về dùng'}
                     {num === 4 && 'Tự bơi đi bro'}
@@ -125,6 +124,7 @@ function Post() {
                       <div className="text-gray-400 ml-[10px] w-[30px] text-right">
                         {line}
                       </div>
+                      {/* eslint-disable-next-line */}
                       <div className="text-white ml-[30px]">
                         // Code_of_line_{line}
                       </div>

@@ -9,14 +9,19 @@ function Discussion() {
   const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
   return (
     <>
-      <div className="flex min-h-screen flex-col" >
+      <div className="flex min-h-screen flex-col">
         <HeaderForAllPages />
         <div className="fixed z-10 flex w-full items-center justify-between p-5 transition-all md:py-3.5 lg:px-7 lg:py-5 shadow-[0px_6px_15px_rgba(64,79,104,0.05)]"></div>
         <div className="place-items-center font-raleway text-[48px] text-white font-bold mt-[103px]">
           <p>What is on?</p>
         </div>
-        <div className="cards grid grid-cols-2 gap-[66x] place-items-center mt-[21px]" >
-          <div className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]" onClick={() => window.location.href = 'http://localhost:5173/post'}>
+        <div className="cards grid grid-cols-2 gap-[66x] place-items-center mt-[21px]">
+          <div
+            className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
+            onClick={() =>
+              (window.location.href = 'http://localhost:5173/post')
+            }
+          >
             {/*User info*/}
             <div className="cards grid grid-cols-2 gap-[10px]">
               <div className="card flex flex-row">
@@ -77,8 +82,9 @@ function Discussion() {
                       <div className="text-gray-400 ml-[15px] w-[15px] text-right">
                         {line}
                       </div>
+                      {/* eslint-disable-next-line */}
                       <div className="text-white ml-[15px]">
-                        // Code_of_line_{line}
+                        //Code_of_line_{line}
                       </div>
                     </p>
                   </div>
