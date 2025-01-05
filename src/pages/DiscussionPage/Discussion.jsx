@@ -73,16 +73,23 @@ function Discussion() {
               className="font-mono text-[12px] w-[80%] h-[55%] mt-[10px] bg-[#00000080] rounded-[5px] place-self-center
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory"
             >
-              {numbers.slice(0, 17).map(line => (
-                <div key={line}>
-                  <p className="font-mono flex">
-                    <div className="text-gray-400 ml-[15px] w-[15px] text-right">
-                      {line}
-                    </div>
-                    <div className="text-white ml-[15px]">{line}</div>
-                  </p>
-                </div>
-              ))}
+              {numbers.slice(0, 17).map(
+                (
+                  line, //mảng numbers là hằng được tạo để test
+                ) => (
+                  <div key={line}>
+                    <p className="font-mono flex">
+                      <div className="text-gray-400 ml-[15px] w-[15px] text-right">
+                        {line}
+                      </div>
+                      {/* eslint-disable-next-line */}
+                      <div className="text-white ml-[15px]">
+                        //Code_of_line_{line}
+                      </div>
+                    </p>
+                  </div>
+                ),
+              )}
             </div>
             {/* Comments Section */}
             <div
