@@ -2,6 +2,8 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { Provider } from 'react-redux'; // Import Provider
+import store from '../redux/store'; // Import store once
 
 import HomePage from './HomePage';
 import Discussion from './Discussion';
@@ -9,7 +11,7 @@ import MyProfile from './MyProfile';
 import Post from './Post';
 import Login from './Login';
 import Signup from './Signup';
-import HomePage_after from './HomePgae_after';
+import HomePage_after from './HomePage_after';
 
 const router = createBrowserRouter([
   {
@@ -44,6 +46,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
-  </StrictMode>,
+    <Provider store={store}> 
+      <RouterProvider router={router} />
+    </Provider>
+  </StrictMode>
 );
