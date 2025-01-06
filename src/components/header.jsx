@@ -3,7 +3,7 @@ import { useState } from "react";
 import { Link } from "react-router-dom";
 
 export const useUser = () => {
-  const [user, setUser] = useState("null");
+  const [user, setUser] = useState(null);
 
   return { user, setUser };
 };
