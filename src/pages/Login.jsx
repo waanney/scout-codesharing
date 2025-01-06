@@ -13,8 +13,8 @@ const Login = () => {
   const handleLogin = (e) => {
     e.preventDefault();
     const newUser = {
-      UserID: UserID,
-      Password: Password,
+      userID: UserID,
+      password: Password,
     };
     loginUser(newUser,dispatch,navigate)
   };
