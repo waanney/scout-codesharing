@@ -99,8 +99,10 @@ function Discussion() {
             >
               {[1, 2, 3, 4, 5, 6].map(num => (
                 <div key={num} className="mb-4">
-                  <p className="text-white text-[14px] font-bold">User{num}</p>
-                  <p className="text-white text-[12px] font-normal leading-[150%]">
+                  <div className="text-white text-[14px] font-bold">
+                    User{num}
+                  </div>
+                  <div className="text-white text-[12px] font-normal leading-[150%]">
                     {num === 1 && 'Tôi thích những dòng code này, help what??'}
                     {num === 2 && 'Code này quá tệ'}
                     {num === 3 && 'Tôi sẽ copy code về dùng'}
@@ -109,7 +111,7 @@ function Discussion() {
                       'Demo_text_comment Demo_text_comment Demo_text_comment'}
                     {num === 6 &&
                       'Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment'}
-                  </p>
+                  </div>
                 </div>
               ))}
             </div>
