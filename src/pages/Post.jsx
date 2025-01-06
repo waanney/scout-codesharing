@@ -4,6 +4,7 @@ import { Share } from 'lucide-react';
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 
+
 function Post() {
   const SendClick = () => {
     alert('Button clicked!');
@@ -63,7 +64,7 @@ function Post() {
             <div
               className="w-[80%] h-[400px] mx-auto mb-[10px] px-[10px] 
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory 
-                         scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
+                        scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
             >
               {[1, 2, 3, 4, 5, 6].map(num => (
                 <div key={num} className="mb-4">

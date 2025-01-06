@@ -48,7 +48,7 @@ const Login = () => {
             <div className="font-Inter font-bold text-[18px] text-right mr-[8px] mt-[43px]">Forgot your password?</div>
             <div className="flex items-center justify-center mt-[35px] ">
               <button type="submit" className="flex items-center justify-center h-[50px] w-[150px] bg-[#3366cc] bg-opacity-50 font-Inter font-bold text-[25px] rounded-[10px] cursor-pointer">Log In</button>
-            </div>  
+            </div> 
             <div className=" text-center mt-[28px] text-[20px] text-white text-opacity-70">
               Don't have an account? <Link to="/signup"><span className="font-bold italic cursor-pointer hover:underline">Sign up</span></Link>
             </div>        

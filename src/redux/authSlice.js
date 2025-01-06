@@ -12,7 +12,6 @@ const authSLice = createSlice ({
             isFetching:false,
             error:false,
             success:false
-
         }
     },
     reducers:{

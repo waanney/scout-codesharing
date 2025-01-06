@@ -6,20 +6,20 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; 
 
 function Signup() {
-  const [Username, setUsername] = useState("");
-  const [UserID, setUserid] = useState("");
-  const [Password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [username, setUsername] = useState("");
+  const [userID, setUserid] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleRegister = (e) => {
     e.preventDefault();
     const newUser = {
-      Username: Username,
-      UserID: UserID,
-      Password: Password,
-      ConfirmPassword: ConfirmPassword,
+      Username: username,
+      UserID: userID,
+      Password: password,
+      ConfirmPassword: confirmPassword,
     };
     registerUser(newUser, dispatch, navigate);
   };
