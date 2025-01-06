@@ -16,10 +16,10 @@ function Signup() {
   const handleRegister = (e) => {
     e.preventDefault();
     const newUser = {
-      Username: username,
-      UserID: userID,
-      Password: password,
-      ConfirmPassword: confirmPassword,
+      username: username,
+      userID: userID,
+      password: password,
+      confirmPassword: confirmPassword,
     };
     registerUser(newUser, dispatch, navigate);
   };

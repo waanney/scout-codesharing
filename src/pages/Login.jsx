@@ -51,7 +51,7 @@ const Login = () => {
             </div> 
             <div className=" text-center mt-[28px] text-[20px] text-white text-opacity-70">
               Don't have an account? <Link to="/signup"><span className="font-bold italic cursor-pointer hover:underline">Sign up</span></Link>
-            </div>        
+            </div>
           </form>
         </div>
       </div>
