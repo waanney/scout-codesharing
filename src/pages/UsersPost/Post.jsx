@@ -23,7 +23,11 @@ function Post() {
             <div className="cards grid grid-cols-2 gap-[10px] mt-[37px]">
               <div className="card flex flex-row">
                 <div className="ml-[37px] h-[50px] w-[50px]">
-                  <img src="/placeholder.svg" alt="User Avatar" />
+                  <img
+                    className="rounded-full"
+                    src="..\src\assets\demo_avatar.png"
+                    alt="User Avatar"
+                  />
                 </div>
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
@@ -74,10 +78,10 @@ function Post() {
             >
               {[1, 2, 3, 4, 5, 6].map(num => (
                 <div key={num} className="mb-4">
-                  <p className="text-white text-2xl font-bold leading-9">
+                  <div className="text-white text-2xl font-bold leading-9">
                     User{num}
-                  </p>
-                  <p className="text-white text-[15px] font-normal leading-[150%]">
+                  </div>
+                  <div className="text-white text-[15px] font-normal leading-[150%]">
                     {num === 1 && 'Tôi thích những dòng code này, help what??'}
                     {num === 2 && 'Code này quá tệ'}
                     {num === 3 && 'Tôi sẽ copy code về dùng'}
@@ -86,7 +90,7 @@ function Post() {
                       'Demo_text_comment Demo_text_comment Demo_text_comment'}
                     {num === 6 &&
                       'Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment'}
-                  </p>
+                  </div>
                 </div>
               ))}
             </div>
