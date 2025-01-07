@@ -1,25 +1,28 @@
 import HeaderForAllPages from '../components/header.jsx';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../redux/apiRequest.js';
-import { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useState } from 'react'; 
+import { useDispatch, useSelector } from 'react-redux'; 
+import { useNavigate } from 'react-router-dom'; 
 
 function Signup() {
-  const [username, setUsername] = useState('');
-  const [userID, setUserid] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [Username, setUsername] = useState("");
+  const [UserID, setUserid] = useState("");
+  const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const error = useSelector((state) => state.auth.register.error);
+
+ 
   const handleRegister = e => {
     e.preventDefault();
     const newUser = {
-      username: username,
-      userID: userID,
-      password: password,
-      confirmPassword: confirmPassword,
+      username: Username,
+      userID: UserID,
+      password: Password,
+      confirmPassword: ConfirmPassword,
     };
     registerUser(newUser, dispatch, navigate);
   };
@@ -29,13 +32,9 @@ function Signup() {
       <div className="flex min-h-screen flex-col">
         <HeaderForAllPages />
         <div className="flex flex-col items-center justify-center px-4 mt-[100px]">
-          <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">
-            Create an account
-          </h1>
-          <form
-            onSubmit={handleRegister}
-            className="flex flex-grow flex-col h-[600px] w-[500px] bg-black bg-opacity-50 rounded-[10px]"
-          >
+          <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">Create an account</h1>
+          {error && <p style={{ color: "red" }}>{error}</p>}
+          <form onSubmit={handleRegister} className="flex flex-grow flex-col h-[600px] w-[500px] bg-black bg-opacity-50 rounded-[10px]">
             <div className="mt-[22px] ml-[8px]">
               <label
                 className="font-Inter font-bold text-[18px]"
