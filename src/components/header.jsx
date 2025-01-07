@@ -6,23 +6,20 @@ import { logoutUser } from "../redux/apiRequest";
 
 
 const HeaderForAllPages = () => {
-  const user = useSelector((state)=> state.auth.login.currentUser);
-  const [open,setOpen]= useState(false);
-
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
   const { isFetching, error } = useSelector((state) => state.auth.logout);
 
+  const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const handleLogout = async () => {
-    await logoutUser(dispatch, navigate);
-    navigate("/")
-};
-
+  const handleLogout = () => {
+    logoutUser(dispatch, navigate); 
+  };
 
   return (
     <div className="fixed w-full px-[10px] z-20 ">
-      {user ? (
+      {currentUser ? (
         <>
           <div className="mx-auto flex items-center justify-between">
             <a className="flex justify-between items-center mt-[10px]" href="/">
@@ -66,7 +63,7 @@ const HeaderForAllPages = () => {
                 <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
                   <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                 </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{user.username}</h5>
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{currentUser.username}</h5>
             </a>
 
           <div

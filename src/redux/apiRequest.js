@@ -28,19 +28,16 @@ export const registerUser = async (user,dispatch,navigate) => {
 export const logoutUser = async (dispatch, navigate) => {
     dispatch(logoutStart());
     try {
-        await axiosJWT.post(
-            "http://localhost:8017/v1/Auth/logout",{}, // Không cần body
-            {
-                headers: {
-                    token: `Bearer ${store.getState().auth.login.currentUser.access_token}`,
-                },
-            }
-        );
+        await axiosJWT.post("http://localhost:8017/v1/Auth/logout", {}, {
+            headers: {
+                token: `Bearer ${store.getState().auth.login.currentUser.access_token}`,
+            },
+        });
         dispatch(logoutSuccess());
         navigate("/");
     } catch (err) {
         dispatch(logoutFailed());
-        console.error("Logout Error:", err.response?.data || err.message);
+        console.error("Logout Error:", err.message);
     }
 };
 
@@ -51,7 +48,7 @@ export const refreshAccessToken = async () => {
         store.dispatch(updateToken(newToken));
         return newToken;
     } catch (err) {
-        console.error("Refresh Token Error:", err.response?.data || err.message);
+        console.error("Refresh Token Error:", err.response?.data || err.message || "Unexpected error");
         throw err;
     }
 };
