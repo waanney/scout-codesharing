@@ -2,10 +2,6 @@
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import { useState, useRef, useEffect } from "react";
-<<<<<<< HEAD
-=======
-import {useSelector} from "react-redux";
->>>>>>> bca9807b37dc53c74c2c9e5fe41a64471855cf92
 
 function MyProfile() {
   const [title, setTitle] = useState("")
@@ -40,10 +36,7 @@ function MyProfile() {
       setLineNumbers(prev => prev.slice(0, currentLines.length))
     }
   }
-<<<<<<< HEAD
-=======
   //const user = useSelector((state)=> state.auth.login.currentUser);
->>>>>>> bca9807b37dc53c74c2c9e5fe41a64471855cf92
   return( 
   <>
     <HeaderForAllPages/>
