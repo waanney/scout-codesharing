@@ -1,12 +1,25 @@
-/* eslint-disable react-refresh/only-export-components */
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { logoutUser } from "../redux/apiRequest";
 
 
 const HeaderForAllPages = () => {
   const user = useSelector(state => state.auth.login.currentUser);
   const [open,setOpen]= useState(false);
+
+  const { isFetching, error } = useSelector((state) => state.auth.logout);
+
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLogout = async () => {
+    await logoutUser(dispatch, navigate);
+    navigate("/")
+};
+
+
   return (
     <div className="fixed w-full px-[10px] z-20 ">
       {user ? (
@@ -68,10 +81,14 @@ const HeaderForAllPages = () => {
               
               <p className="font-medium">Change Password</p>
             </button>
-            <div className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all">
+            <Link to="/" className="clicklogout">
+            <button onClick={handleLogout} className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all">
               
               <p className="font-medium">Log out</p>
-            </div>
+            </button>
+            </Link>
+            {isFetching && <p>Logging out...</p>}
+            {error && <p style={{ color: "red" }}>Logout failed. Please try again.</p>}
           </div>
         </div>
 

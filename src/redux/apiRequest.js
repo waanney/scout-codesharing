@@ -1,6 +1,8 @@
 /* eslint-disable no-unused-vars */
 import axios from "axios";
-import { loginFailed, loginStart, loginSuccess, registerFailed, registerStart, registerSuccess } from "./authSlice";
+import { loginFailed, loginStart, loginSuccess, registerFailed, registerStart, registerSuccess, logoutStart, logoutFailed, logoutSuccess } from "./authSlice";
+import axiosJWT from "./axiosJWT";
+import store from "./store";
 
 export const loginUser = async(user,dispatch,navigate) => {
     dispatch(loginStart());
@@ -9,7 +11,7 @@ export const loginUser = async(user,dispatch,navigate) => {
         dispatch(loginSuccess(res.data));
         navigate("/")
     }catch(err) {
-        dispatch(loginFailed());
+        dispatch(loginFailed(err.response?.data?.message));
     }
 }
 export const registerUser = async (user,dispatch,navigate) => {
@@ -19,7 +21,37 @@ export const registerUser = async (user,dispatch,navigate) => {
         dispatch(registerSuccess());
         navigate("/login")
     }catch(err) {
-        dispatch(registerFailed());
+        dispatch(registerFailed(err.response?.data?.message));
     }
 }
 
+export const logoutUser = async (dispatch, navigate) => {
+    dispatch(logoutStart());
+    try {
+        await axiosJWT.post(
+            "http://localhost:8017/v1/Auth/logout",{}, // Không cần body
+            {
+                headers: {
+                    token: `Bearer ${store.getState().auth.login.currentUser.access_token}`,
+                },
+            }
+        );
+        dispatch(logoutSuccess());
+        navigate("/");
+    } catch (err) {
+        dispatch(logoutFailed());
+        console.error("Logout Error:", err.response?.data || err.message);
+    }
+};
+
+export const refreshAccessToken = async () => {
+    try {
+        const res = await axios.post("http://localhost:8017/v1/Auth/refresh-token", {}, { withCredentials: true });
+        const newToken = res.data.new_access_token;
+        store.dispatch(updateToken(newToken));
+        return newToken;
+    } catch (err) {
+        console.error("Refresh Token Error:", err.response?.data || err.message);
+        throw err;
+    }
+};

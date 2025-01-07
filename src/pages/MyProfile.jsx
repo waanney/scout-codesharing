@@ -2,7 +2,6 @@
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import { useState, useRef, useEffect } from "react";
-import { useUser } from "../components/header.jsx";
 
 function MyProfile() {
   const [title, setTitle] = useState("")
@@ -37,7 +36,6 @@ function MyProfile() {
       setLineNumbers(prev => prev.slice(0, currentLines.length))
     }
   }
-  const { user } = useUser();
   return( 
   <>
     <HeaderForAllPages/>
@@ -45,7 +43,7 @@ function MyProfile() {
     <div className="flex min-h-screen flex-col">
       <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
         <a className="flex flex-col items-center">
-          <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">{user}</h2>
+          <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">Username</h2>
           <svg className="my-[12px]" height="142" width="142" xmlns="http://www.w3.org/2000/svg">
               <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
           </svg>
@@ -91,7 +89,7 @@ function MyProfile() {
             <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
               <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
             </svg>
-            <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{user}</h5>
+            <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">Username</h5>
             </a>
           </div>
           <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">

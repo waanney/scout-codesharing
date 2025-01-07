@@ -2,7 +2,7 @@ import HeaderForAllPages from '../components/header.jsx';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../redux/apiRequest.js';
 import { useState } from 'react'; 
-import { useDispatch } from 'react-redux'; 
+import { useDispatch, useSelector } from 'react-redux'; 
 import { useNavigate } from 'react-router-dom'; 
 
 function Signup() {
@@ -12,6 +12,8 @@ function Signup() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const error = useSelector((state) => state.auth.register.error);
 
   const handleRegister = (e) => {
     e.preventDefault();
@@ -30,6 +32,7 @@ function Signup() {
         <HeaderForAllPages />
         <div className="flex flex-col items-center justify-center px-4 mt-[100px]">
           <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">Create an account</h1>
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <form onSubmit={handleRegister} className="flex flex-grow flex-col h-[600px] w-[500px] bg-black bg-opacity-50 rounded-[10px]">
             <div className="mt-[22px] ml-[8px]">
               <label className="font-Inter font-bold text-[18px]" htmlFor="username">Username <span className="text-[15px] text-white text-opacity-70"> &#40;display name&#41;</span></label>

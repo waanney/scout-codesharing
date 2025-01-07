@@ -1,4 +1,5 @@
-import { useDispatch } from 'react-redux';
+/* eslint-disable react/no-unescaped-entities */
+import { useDispatch, useSelector } from 'react-redux';
 import HeaderForAllPages from '../components/header.jsx';
 import { loginUser } from '../redux/apiRequest.js';
 import {Link, useNavigate} from 'react-router-dom';
@@ -9,6 +10,8 @@ const Login = () => {
   const[Password, setPassword]=useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  const error = useSelector((state) => state.auth.login.error);
 
   const handleLogin = (e) => {
     e.preventDefault();
@@ -24,6 +27,7 @@ const Login = () => {
         <HeaderForAllPages />
         <div className="flex flex-col items-center justify-center px-4 mt-[100px]">
           <h1 className="text-center text-[60px] font-bold mb-10 text-white">Log in</h1>
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <form onSubmit={handleLogin} className="flex flex-grow flex-col h-[500px] w-[500px] bg-black bg-opacity-50 rounded-[10px]">
             <div className= "mt-[31px] ml-[8px]"> 
               <label className="font-Inter font-bold text-[18px]" htmlFor="userid">UserID</label>
