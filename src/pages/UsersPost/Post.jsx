@@ -4,11 +4,11 @@ import { Share } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 
-function Post() {
+function Post({ board }) {
   const SendClick = () => {
     alert('Button clicked!');
   };
-  const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
+  const numbers = Array.from({ length: 1 }, (_, index) => index + 1);
 
   return (
     <>
@@ -65,9 +65,7 @@ function Post() {
                 Problem solving
               </div>
               <div className="text-xl font-normal leading-[150%]">
-                caption_from_DataBase caption_from_DataBase
-                caption_from_DataBase caption_from_DataBase
-                caption_from_DataBase caption_from_DataBase
+                {board?.title}
               </div>
             </div>
             {/* Comments Section */}
@@ -82,7 +80,7 @@ function Post() {
                     User{num}
                   </div>
                   <div className="text-white text-[15px] font-normal leading-[150%]">
-                    {num === 1 && 'Tôi thích những dòng code này, help what??'}
+                    {num === 1 && 'afdfsdf'}
                     {num === 2 && 'Code này quá tệ'}
                     {num === 3 && 'Tôi sẽ copy code về dùng'}
                     {num === 4 && 'Tự bơi đi bro'}
@@ -126,12 +124,9 @@ function Post() {
                   <div key={line}>
                     <p className="font-mono flex">
                       <div className="text-gray-400 ml-[10px] w-[30px] text-right">
-                        {line}
+                        {board.content}
                       </div>
-                      {/* eslint-disable-next-line */}
-                      <div className="text-white ml-[30px]">
-                        // Code_of_line_{line}
-                      </div>
+                      <div className="text-white ml-[30px]"></div>
                     </p>
                   </div>
                 ),

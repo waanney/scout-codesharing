@@ -1,4 +1,11 @@
+import { Save } from 'lucide-react';
+import { Share } from 'lucide-react';
+
 const postCard = () => {
+  const SendClick = () => {
+    alert('Button clicked!');
+  };
+  const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
   return (
     <div className="cards grid grid-cols-2 gap-[66x] place-items-center mt-[21px]">
       <div

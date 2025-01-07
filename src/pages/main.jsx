@@ -6,7 +6,7 @@ import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import HomePage from './HomePage';
 import Board from './DiscussionPage/_id';
 import MyProfile from './MyProfile';
-import Post from './UsersPost/Post';
+import PostGetID from './UsersPost/_id';
 
 const router = createBrowserRouter([
   {
@@ -22,8 +22,8 @@ const router = createBrowserRouter([
     element: <MyProfile />,
   },
   {
-    path: '/post',
-    element: <Post />,
+    path: '/post/:boardId',
+    element: <PostGetID />,
   },
 ]);
 
