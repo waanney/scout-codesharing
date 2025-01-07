@@ -6,7 +6,7 @@ import { logoutUser } from "../redux/apiRequest";
 
 
 const HeaderForAllPages = () => {
-  const user = useSelector(state => state.auth.login.currentUser);
+  const user = useSelector((state)=> state.auth.login.currentUser);
   const [open,setOpen]= useState(false);
 
   const { isFetching, error } = useSelector((state) => state.auth.logout);

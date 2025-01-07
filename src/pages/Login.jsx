@@ -5,6 +5,7 @@ import { loginUser } from '../redux/apiRequest.js';
 import {Link, useNavigate} from 'react-router-dom';
 import { useState } from 'react'; 
 
+
 const Login = () => {
   const[UserID, setUsername]=useState("");
   const[Password, setPassword]=useState("");
@@ -32,6 +33,7 @@ const Login = () => {
             <div className= "mt-[31px] ml-[8px]"> 
               <label className="font-Inter font-bold text-[18px]" htmlFor="userid">UserID</label>
               <input 
+                id="userid"
                 onChange={(e)=>setUsername(e.target.value)}
                 className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent  border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]" 
                 type="text"  
@@ -42,6 +44,7 @@ const Login = () => {
             <div className= "mt-[31px] ml-[8px]"> 
               <label className="font-Inter font-bold text-[18px]" htmlFor="password">Password</label>
               <input 
+                id="password"
                 onChange={(e)=>setPassword(e.target.value)}
                 className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent  border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
                 type="password"

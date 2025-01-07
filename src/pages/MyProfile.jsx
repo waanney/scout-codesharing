@@ -2,6 +2,10 @@
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import { useState, useRef, useEffect } from "react";
+<<<<<<< HEAD
+=======
+import {useSelector} from "react-redux";
+>>>>>>> bca9807b37dc53c74c2c9e5fe41a64471855cf92
 
 function MyProfile() {
   const [title, setTitle] = useState("")
@@ -36,6 +40,10 @@ function MyProfile() {
       setLineNumbers(prev => prev.slice(0, currentLines.length))
     }
   }
+<<<<<<< HEAD
+=======
+  //const user = useSelector((state)=> state.auth.login.currentUser);
+>>>>>>> bca9807b37dc53c74c2c9e5fe41a64471855cf92
   return( 
   <>
     <HeaderForAllPages/>
@@ -150,12 +158,18 @@ function MyProfile() {
             value={text}
             onChange={handleTextChange}
             onKeyDown={handleKeyDown}
-            onScroll={() => {
+            onScroll={(e) => {
               // Force re-render to update line numbers position
-              setText(prev => prev)
+              const target = e.target;
+              if (target) {
+                const lineNumbersContainer = target.previousSibling.firstChild;
+                if (lineNumbersContainer) {
+                  lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`;
+                }
+              }
             }}
             className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
-            placeholder="Put your code here..."
+            placeholder="Press Enter to create new numbered lines..."
             style={{
               lineHeight,
               height: `calc(${lineHeight} * ${numberOfVisibleLines})`,

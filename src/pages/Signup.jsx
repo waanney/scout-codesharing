@@ -6,10 +6,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom'; 
 
 function Signup() {
-  const [username, setUsername] = useState("");
-  const [userID, setUserid] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [Username, setUsername] = useState("");
+  const [UserID, setUserid] = useState("");
+  const [Password, setPassword] = useState("");
+  const [ConfirmPassword, setConfirmPassword] = useState("");
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -18,10 +18,10 @@ function Signup() {
   const handleRegister = (e) => {
     e.preventDefault();
     const newUser = {
-      username: username,
-      userID: userID,
-      password: password,
-      confirmPassword: confirmPassword,
+      username: Username,
+      userID: UserID,
+      password: Password,
+      confirmPassword: ConfirmPassword,
     };
     registerUser(newUser, dispatch, navigate);
   };
