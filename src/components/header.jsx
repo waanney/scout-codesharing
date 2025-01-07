@@ -1,15 +1,11 @@
 /* eslint-disable react-refresh/only-export-components */
 import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export const useUser = () => {
-  const [user, setUser] = useState(null);
-
-  return { user, setUser };
-};
 
 const HeaderForAllPages = () => {
-  const { user } = useUser();
+  const user = useSelector(state => state.auth.login.currentUser);
   const [open,setOpen]= useState(false);
   return (
     <div className="fixed w-full px-[10px] z-20 ">
@@ -57,7 +53,7 @@ const HeaderForAllPages = () => {
                 <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
                   <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                 </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{user}</h5>
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{user.username}</h5>
             </a>
 
           <div
