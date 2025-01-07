@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+
 import axios from "axios";
 import { loginFailed, loginStart, loginSuccess, registerFailed, registerStart, registerSuccess, logoutStart, logoutFailed, logoutSuccess } from "./authSlice";
 import axiosJWT from "./axiosJWT";
