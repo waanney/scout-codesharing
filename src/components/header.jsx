@@ -5,7 +5,7 @@ import { useSelector } from "react-redux";
 
 
 const HeaderForAllPages = () => {
-  const user = useSelector(state => state.auth.login.currentUser);
+  const user = useSelector((state)=> state.auth.login.currentUser);
   const [open,setOpen]= useState(false);
   return (
     <div className="fixed w-full px-[10px] z-20 ">
