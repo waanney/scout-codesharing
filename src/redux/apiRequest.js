@@ -9,22 +9,20 @@ import {
   registerSuccess,
 } from './authSlice';
 
-export const loginUser = async (Users, dispatch, navigate) => {
+export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post(`http://localhost:8017/v1/Auth/login`, Users);
+    const res = await axios.post('http://localhost:8017/v1/Auth/login', user);
     dispatch(loginSuccess(res.data));
     navigate('/');
   } catch (err) {
     dispatch(loginFailed());
   }
 };
-
-// sign up
-export const registerUser = async (Users, dispatch, navigate) => {
+export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    await axios.post(`http://localhost:8017/v1/Auth/`, Users);
+    await axios.post('http://localhost:8017/v1/Auth/', user);
     dispatch(registerSuccess());
     navigate('/login');
   } catch (err) {
