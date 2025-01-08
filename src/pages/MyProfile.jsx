@@ -2,8 +2,10 @@
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import { useState, useRef, useEffect } from "react";
+import { useSelector } from "react-redux";
 
 function MyProfile() {
+  const currentUser = useSelector((state) => state.auth.login.currentUser);
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [text, setText] = useState("")
@@ -36,15 +38,15 @@ function MyProfile() {
       setLineNumbers(prev => prev.slice(0, currentLines.length))
     }
   }
-  //const user = useSelector((state)=> state.auth.login.currentUser);
+
   return( 
   <>
     <HeaderForAllPages/>
-    <div className="flex">
-    <div className="flex min-h-screen flex-col">
+    <div className="flex ">
+    <div className="flex flex-col">
       <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
         <a className="flex flex-col items-center">
-          <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">Username</h2>
+          <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">{currentUser.username}</h2>
           <svg className="my-[12px]" height="142" width="142" xmlns="http://www.w3.org/2000/svg">
               <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
           </svg>
@@ -82,7 +84,7 @@ function MyProfile() {
       </div>
     </div>
     
-    <div className="mt-[125px] ml-[50px] w-[900px] h-[570px] bg-black bg-opacity-50">
+    <div className="mt-[125px] ml-[30px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
       <div className="relative rounded-[10px]">
         <div className="flex justify-between mt-[10px] mx-[10px]">
           <div className=" flex items-center space-x-1">
@@ -90,7 +92,7 @@ function MyProfile() {
             <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
               <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
             </svg>
-            <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">Username</h5>
+            <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{currentUser.username}</h5>
             </a>
           </div>
           <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
@@ -176,6 +178,7 @@ function MyProfile() {
     </div>
     <FooterAllPage/>
   </>
+  
   );
 }
 

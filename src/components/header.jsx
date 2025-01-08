@@ -87,7 +87,6 @@ const HeaderForAllPages = () => {
             </button>
             </Link>
             {isFetching && <p>Logging out...</p>}
-            {error && <p style={{ color: "red" }}>Logout failed. Please try again.</p>}
           </div>
         </div>
 
