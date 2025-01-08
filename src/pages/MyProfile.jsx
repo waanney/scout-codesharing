@@ -43,7 +43,7 @@ function MyProfile() {
   <>
     <HeaderForAllPages/>
     <div className="flex ">
-    <div className="flex min-h-screen flex-col flex-col">
+    <div className="flex min-h-screen flex-col">
       <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
         <a className="flex flex-col items-center">
           <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">{currentUser.username}</h2>
