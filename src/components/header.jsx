@@ -3,9 +3,11 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/apiRequest';
+import useRestoreState from '../redux/useRestoreState';
 
 const HeaderForAllPages = () => {
-  const currentUser = useSelector(state => state.auth.login.currentUser);
+  useRestoreState();
+  const currentUser = useSelector(state => state.auth.login.currentUser) || JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
   const { isFetching, error } = useSelector(state => state.auth.logout);
 
   const [open, setOpen] = useState(false);
@@ -14,7 +16,10 @@ const HeaderForAllPages = () => {
 
   const handleLogout = () => {
     logoutUser(dispatch, navigate);
+
+    localStorage.removeItem('currentUser');//xóa thông tin trong localStorage
   };
+
 
   return (
     <div className="fixed w-full px-[10px] z-20 ">

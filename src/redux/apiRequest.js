@@ -7,6 +7,8 @@ export const loginUser = async(user,dispatch,navigate) => {
     dispatch(loginStart());
     try {
         const res = await axios.post('http://localhost:8017/v1/Auth/login',user);
+        // Lưu thông tin user vào localStorage
+        localStorage.setItem('currentUser', JSON.stringify(res.data));
         dispatch(loginSuccess(res.data));
         navigate("/")
     }catch(err) {

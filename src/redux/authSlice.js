@@ -29,6 +29,7 @@ const authSlice = createSlice({
             state.login.isFetching = false;
             state.login.currentUser = action.payload;
             state.login.error = false;
+            localStorage.setItem('user', JSON.stringify(action.payload)); 
         },
         loginFailed: (state, action) => {
             state.login.isFetching = false;
@@ -54,6 +55,7 @@ const authSlice = createSlice({
             state.logout.isFetching = false;
             state.login.currentUser = null; 
             state.logout.error = false;
+            localStorage.removeItem('user');
         },
         logoutFailed: (state) => {
             state.logout.isFetching = false;
