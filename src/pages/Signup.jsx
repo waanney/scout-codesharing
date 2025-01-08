@@ -15,7 +15,7 @@ function Signup() {
 
   const error = useSelector((state) => state.auth.register.error);
 
- 
+
   const handleRegister = e => {
     e.preventDefault();
     const newUser = {

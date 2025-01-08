@@ -2,6 +2,7 @@
 import axios from "axios";
 import { loginFailed, loginStart, loginSuccess, registerFailed, registerStart, registerSuccess, logoutStart, logoutFailed, logoutSuccess } from "./authSlice";
 import axiosJWT from "./axiosJWT";
+import {createStart,createFailed,createSuccess} from "./uppostSlice"
 
 export const loginUser = async(user,dispatch,navigate) => {
     dispatch(loginStart());
@@ -37,3 +38,14 @@ export const logoutUser = async (dispatch, navigate) => {
         console.error("Logout Error:", err.message);
     }
 };
+
+export const createPost = async (boards,dispatch,navigate) => {
+    dispatch(createStart());
+    try {
+        await axios.post('http://localhost:8017/v1/boards',boards);
+        dispatch(createSuccess());
+        navigate("/discussion")
+    }catch(err) {
+        dispatch(createFailed(err.response?.data?.message));
+    }
+}

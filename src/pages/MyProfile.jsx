@@ -1,8 +1,9 @@
-/* eslint-disable no-unused-vars */
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
+import {createPost} from '../redux/apiRequest.js'
 import { useState, useRef, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from 'react-redux'; 
+import { useNavigate, /*Link*/ } from 'react-router-dom'; 
 
 function MyProfile() {
   const currentUser = useSelector(state => state.auth.login.currentUser) || JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
@@ -13,12 +14,26 @@ function MyProfile() {
   const textareaRef = useRef(null)
   const lineHeight = "1.5rem"
   const numberOfVisibleLines = 18
+  const userId = currentUser ? currentUser._id : '';
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   // Update line numbers when text changes
   useEffect(() => {
     const lines = text.split("\n")
     setLineNumbers(lines.map(() => true))
   }, [text])
+
+  const handleCreatepost = (e) => {
+    e.preventDefault();
+    const newPost = {
+      title: title,
+      description: description,
+      userId: userId,
+      content:text,
+    };
+    createPost(newPost, dispatch, navigate)
+  }
 
   const handleKeyDown = (e) => {
     if (e.key === "Enter") {
@@ -85,7 +100,7 @@ function MyProfile() {
     </div>
     
     <div className="mt-[125px] ml-[30px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
-      <div className="relative rounded-[10px]">
+      <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
         <div className="flex justify-between mt-[10px] mx-[10px]">
           <div className=" flex items-center space-x-1">
             <a className="flex items-center">
@@ -95,8 +110,10 @@ function MyProfile() {
             <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{currentUser.username}</h5>
             </a>
           </div>
-          <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
-              Submit
+          <button 
+            type="submit"
+            className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
+              Create
           </button>
         </div>
         <input 
@@ -173,7 +190,7 @@ function MyProfile() {
             aria-label="Numbered text editor"
           />
         </div>
-      </div>
+      </form>
     </div>
     </div>
     <FooterAllPage/>
