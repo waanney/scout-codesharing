@@ -1,7 +1,7 @@
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
 
-const postCard = () => {
+const PostCard = ({ post }) => {
   const SendClick = () => {
     alert('Button clicked!');
   };
@@ -21,7 +21,9 @@ const postCard = () => {
     <div className="cards grid grid-cols-2 gap-[66x] place-items-center mt-[21px]">
       <div
         className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
-        onClick={() => (window.location.href = 'http://localhost:5173/post')}
+        onClick={() =>
+          (window.location.href = `http://localhost:5173/post/${post._id}`)
+        }
       >
         {/*User info*/}
         <div className="cards grid grid-cols-2 gap-[10px]">
@@ -66,8 +68,7 @@ const postCard = () => {
 
         {/*Title*/}
         <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%]">
-          caption_from_DataBase caption_from_DataBase caption_from_DataBase
-          caption_from_DataBase
+          {post.title}
         </div>
         {/*Code display*/}
         <div
@@ -81,4 +82,4 @@ const postCard = () => {
   );
 };
 
-export default postCard;
+export default PostCard;
