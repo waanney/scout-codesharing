@@ -5,7 +5,7 @@ import { useState, useRef, useEffect } from "react";
 import { useSelector } from "react-redux";
 
 function MyProfile() {
-  const currentUser = useSelector((state) => state.auth.login.currentUser);
+  const currentUser = useSelector(state => state.auth.login.currentUser) || JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
   const [title, setTitle] = useState("")
   const [description, setDescription] = useState("")
   const [text, setText] = useState("")
