@@ -8,7 +8,10 @@ function Post({ board }) {
   const SendClick = () => {
     alert('Button clicked!');
   };
-  const numbers = Array.from({ length: 1 }, (_, index) => index + 1);
+  function stringToArray(inputString) {
+    return inputString.split('\n'); // Tách chuỗi dựa trên dấu xuống dòng
+  }
+  //const numbers = Array.from({ length: 1 }, (_, index) => index + 1);
 
   return (
     <>
@@ -117,20 +120,16 @@ function Post({ board }) {
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory 
                         scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
             >
-              {numbers.map(
-                (
-                  line, //mảng numbers là hằng được tạo để test
-                ) => (
-                  <div key={line}>
-                    <p className="font-mono flex">
-                      <div className="text-gray-400 ml-[10px] w-[30px] text-right">
-                        {board.content}
-                      </div>
-                      <div className="text-white ml-[30px]"></div>
-                    </p>
-                  </div>
-                ),
-              )}
+              {stringToArray(board.content).map((code, line) => (
+                <div key={line}>
+                  <p className="font-mono flex">
+                    <div className="text-gray-400 ml-[10px] w-[30px] text-right">
+                      {line + 1}
+                    </div>
+                    <div className="text-white ml-[30px]">{code}</div>
+                  </p>
+                </div>
+              ))}
             </div>
           </div>
         </div>

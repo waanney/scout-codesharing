@@ -5,7 +5,18 @@ const postCard = () => {
   const SendClick = () => {
     alert('Button clicked!');
   };
-  const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
+  const separate = str => {
+    let line = 1;
+    while (str.indexOf('\n') !== -1) {
+      <div>
+        <div>{line}</div>
+        <div>{str.substring(0, str.indexOf('\n'))}</div>
+      </div>;
+      str = str.substring(str.indexOf('\n') + 1, str.length);
+      line++;
+    }
+  };
+  //const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
   return (
     <div className="cards grid grid-cols-2 gap-[66x] place-items-center mt-[21px]">
       <div
@@ -63,45 +74,7 @@ const postCard = () => {
           className="font-mono text-[12px] w-[80%] h-[55%] mt-[10px] bg-[#00000080] rounded-[5px] place-self-center
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory"
         >
-          {numbers.slice(0, 17).map(
-            (
-              line, //mảng numbers là hằng được tạo để test
-            ) => (
-              <div key={line}>
-                <p className="font-mono flex">
-                  <div className="text-gray-400 ml-[15px] w-[15px] text-right">
-                    {line}
-                  </div>
-                  {/* eslint-disable-next-line */}
-                  <div className="text-white ml-[15px]">
-                    //Code_of_line_{line}
-                  </div>
-                </p>
-              </div>
-            ),
-          )}
-        </div>
-        {/* Comments Section */}
-        <div
-          className="w-[80%] h-[25%] mt-[10px] mx-auto px-[10px] 
-                      overflow-x-auto overflow-y-auto snap-y snap-mandatory 
-                      scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
-        >
-          {[1, 2, 3, 4, 5, 6].map(num => (
-            <div key={num} className="mb-4">
-              <p className="text-white text-[14px] font-bold">User{num}</p>
-              <p className="text-white text-[12px] font-normal leading-[150%]">
-                {num === 1 && 'Tôi thích những dòng code này, help what??'}
-                {num === 2 && 'Code này quá tệ'}
-                {num === 3 && 'Tôi sẽ copy code về dùng'}
-                {num === 4 && 'Tự bơi đi bro'}
-                {num === 5 &&
-                  'Demo_text_comment Demo_text_comment Demo_text_comment'}
-                {num === 6 &&
-                  'Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment'}
-              </p>
-            </div>
-          ))}
+          {separate('a\nb\nc\n')}
         </div>
       </div>
     </div>

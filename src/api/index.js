@@ -6,3 +6,9 @@ export const fetchBoardDetails_API = async boardId => {
   //axios tra ve ket qua la data
   return response.data;
 };
+
+export const fetchUserDetails_API = async userId => {
+  const response = await axios.get(`${API_ROOT}/v1/Auth/${userId}`);
+  //axios tra ve ket qua la data
+  return response.data;
+};

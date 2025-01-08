@@ -6,7 +6,11 @@ function Discussion() {
   const SendClick = () => {
     alert('Button clicked!');
   };
-  const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
+
+  function stringToArray(inputString) {
+    return inputString.split('\n'); // Tách chuỗi dựa trên dấu xuống dòng
+  }
+  //const numbers = Array.from({ length: 50 }, (_, index) => index + 1);
   return (
     <>
       <div className="flex min-h-screen flex-col">
@@ -73,23 +77,16 @@ function Discussion() {
               className="font-mono text-[12px] w-[80%] h-[55%] mt-[10px] bg-[#00000080] rounded-[5px] place-self-center
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory"
             >
-              {numbers.slice(0, 17).map(
-                (
-                  line, //mảng numbers là hằng được tạo để test
-                ) => (
-                  <div key={line}>
-                    <p className="font-mono flex">
-                      <div className="text-gray-400 ml-[15px] w-[15px] text-right">
-                        {line}
-                      </div>
-                      {/* eslint-disable-next-line */}
-                      <div className="text-white ml-[15px]">
-                        //Code_of_line_{line}
-                      </div>
-                    </p>
-                  </div>
-                ),
-              )}
+              {stringToArray('a\nb\nc\n').map((code, line) => (
+                <div key={line}>
+                  <p className="font-mono flex">
+                    <div className="text-gray-400 ml-[10px] w-[30px] text-right">
+                      {line}
+                    </div>
+                    <div className="text-white ml-[30px]">{code}</div>
+                  </p>
+                </div>
+              ))}
             </div>
             {/* Comments Section */}
             <div
