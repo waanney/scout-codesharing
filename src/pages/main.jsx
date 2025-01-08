@@ -6,11 +6,11 @@ import { Provider } from 'react-redux'; // Import Provider
 import store from '../redux/store'; // Import store once
 
 import HomePage from './HomePage';
-import Discussion from './Discussion';
+import Board from './DiscussionPage/_id';
 import MyProfile from './MyProfile';
-import Post from './Post';
 import Login from './Login';
 import Signup from './Signup';
+import PostGetID from './UsersPost/_id';
 
 const router = createBrowserRouter([
   {
@@ -27,15 +27,15 @@ const router = createBrowserRouter([
   },
   {
     path: '/discussion',
-    element: <Discussion />,
+    element: <Board />,
   },
   {
     path: '/myprofile',
     element: <MyProfile />,
   },
   {
-    path: '/post',
-    element: <Post />,
+    path: '/post/:boardId',
+    element: <PostGetID />,
   },
 ]);
 

@@ -1,20 +1,19 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
-import { useDispatch } from "react-redux";
-import { logoutUser } from "../redux/apiRequest";
-
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
+import { logoutUser } from '../redux/apiRequest';
 
 const HeaderForAllPages = () => {
-  const currentUser = useSelector((state) => state.auth.login.currentUser);
-  const { isFetching, error } = useSelector((state) => state.auth.logout);
+  const currentUser = useSelector(state => state.auth.login.currentUser);
+  const { isFetching, error } = useSelector(state => state.auth.logout);
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    logoutUser(dispatch, navigate); 
+    logoutUser(dispatch, navigate);
   };
 
   return (
@@ -65,32 +64,37 @@ const HeaderForAllPages = () => {
                 <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
                   <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                 </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{currentUser.username}</h5>
-            </a>
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                  {currentUser.username}
+                </h5>
+              </a>
 
-          <div
-            className={`absolute left-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
-            open
-            ? 'opacity-100 translate-y-0' 
-            : 'opacity-0 -translate-y-5'
-          }`}
-          >
-
-            <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
-              
-              <p className="font-medium">Change Password</p>
-            </button>
-            <Link to="/" className="clicklogout">
-            <button onClick={handleLogout} className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all">
-              
-              <p className="font-medium">Log out</p>
-            </button>
-            </Link>
-            {isFetching && <p>Logging out...</p>}
-          </div>
-        </div>
-
-
+              <div
+                className={`absolute left-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
+                  open
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 -translate-y-5'
+                }`}
+              >
+                <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
+                  <p className="font-medium">Change Password</p>
+                </button>
+                <Link to="/" className="clicklogout">
+                  <button
+                    onClick={handleLogout}
+                    className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all"
+                  >
+                    <p className="font-medium">Log out</p>
+                  </button>
+                </Link>
+                {isFetching && <p>Logging out...</p>}
+                {error && (
+                  <p style={{ color: 'red' }}>
+                    Logout failed. Please try again.
+                  </p>
+                )}
+              </div>
+            </div>
           </div>
         </>
       ) : (
