@@ -80,7 +80,7 @@ function Post({ board }) {
                     User{num}
                   </div>
                   <div className="text-white text-[15px] font-normal leading-[150%]">
-                    {num === 1 && 'afdfsdf'}
+                    {num === 1 && 'afdsafsadf'}
                     {num === 2 && 'Code này quá tệ'}
                     {num === 3 && 'Tôi sẽ copy code về dùng'}
                     {num === 4 && 'Tự bơi đi bro'}

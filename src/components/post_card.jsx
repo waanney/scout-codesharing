@@ -107,4 +107,5 @@ const postCard = () => {
     </div>
   );
 };
+
 export default postCard;
