@@ -55,11 +55,17 @@ const authSlice = createSlice({
             state.login.currentUser = null; 
             state.logout.error = false;
         },
-        
         logoutFailed: (state) => {
             state.logout.isFetching = false;
             state.logout.error = true;
         },
+        
+        // New clearError reducer
+        clearError: (state) => {
+            state.login.error = false; // Reset the error state
+            state.register.error = false; // Reset register error state (optional)
+            state.logout.error = false; // Reset logout error state (optional)
+        }
     },
 });
 
@@ -73,6 +79,7 @@ export const {
     logoutStart,
     logoutFailed,
     logoutSuccess,
+    clearError, // Export the clearError action
 } = authSlice.actions;
 
 export default authSlice.reducer;

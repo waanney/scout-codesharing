@@ -1,7 +1,7 @@
 import HeaderForAllPages from '../components/header.jsx';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../redux/apiRequest.js';
-import { useState } from 'react'; 
+import { useState, useEffect } from 'react'; 
 import { useDispatch, useSelector } from 'react-redux'; 
 import { useNavigate } from 'react-router-dom'; 
 
@@ -26,6 +26,35 @@ function Signup() {
     };
     registerUser(newUser, dispatch, navigate);
   };
+  const [showError, setShowError] = useState(false);
+  const [fadeError, setFadeError] = useState(false);
+
+  // Effect to show the error message when it appears
+  useEffect(() => {
+    if (error) {
+      setShowError(true);  // Show the error immediately
+      setFadeError(false); // Reset the fade-out effect
+
+      // After 2 seconds, start fading out the error message
+      const timer = setTimeout(() => {
+        setFadeError(true);
+      }, 2000);
+
+      // After 3 seconds, hide the error completely
+      const hideTimer = setTimeout(() => {
+        setShowError(false); // Hide the error message after fade
+        setFadeError(false);  // Reset fade effect
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(hideTimer);
+      };
+    } else {
+      setShowError(false);  // Hide the error message if there's no error
+      setFadeError(false);   // Reset fade effect
+    }
+  }, [error]); // Trigger when error changes
 
   return (
     <>
@@ -33,7 +62,19 @@ function Signup() {
         <HeaderForAllPages />
         <div className="flex flex-col items-center justify-center px-4 mt-[100px]">
           <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">Create an account</h1>
-          {error && <p style={{ color: "red" }}>{error}</p>}
+          {showError && error && (
+            <div className="fixed inset-0 flex items-center justify-center z-10">
+              <div
+                className={`w-[450px] h-[110px] bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] 
+                  ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
+              >
+                <p className="text-[22px] font-bold text-center text-red-600">
+                  {error}
+                </p>
+              </div>
+            </div>
+          )}
           <form onSubmit={handleRegister} className="flex flex-grow flex-col h-[600px] w-[500px] bg-black bg-opacity-50 rounded-[10px]">
             <div className="mt-[22px] ml-[8px]">
               <label
