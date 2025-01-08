@@ -2,7 +2,6 @@
 import axios from "axios";
 import { loginFailed, loginStart, loginSuccess, registerFailed, registerStart, registerSuccess, logoutStart, logoutFailed, logoutSuccess } from "./authSlice";
 import axiosJWT from "./axiosJWT";
-import store from "./store";
 
 export const loginUser = async(user,dispatch,navigate) => {
     dispatch(loginStart());
@@ -28,27 +27,11 @@ export const registerUser = async (user,dispatch,navigate) => {
 export const logoutUser = async (dispatch, navigate) => {
     dispatch(logoutStart());
     try {
-        await axiosJWT.post("http://localhost:8017/v1/Auth/logout", {}, {
-            headers: {
-                token: `Bearer ${store.getState().auth.login.currentUser.access_token}`,
-            },
-        });
+        await axiosJWT.post("http://localhost:8017/v1/Auth/logout", {})
         dispatch(logoutSuccess());
         navigate("/");
     } catch (err) {
         dispatch(logoutFailed());
         console.error("Logout Error:", err.message);
-    }
-};
-
-export const refreshAccessToken = async () => {
-    try {
-        const res = await axios.post("http://localhost:8017/v1/Auth/refresh-token", {}, { withCredentials: true });
-        const newToken = res.data.new_access_token;
-        store.dispatch(updateToken(newToken));
-        return newToken;
-    } catch (err) {
-        console.error("Refresh Token Error:", err.response?.data || err.message || "Unexpected error");
-        throw err;
     }
 };
