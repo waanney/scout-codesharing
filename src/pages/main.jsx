@@ -11,6 +11,7 @@ import MyProfile from './MyProfile';
 import Login from './Login';
 import Signup from './Signup';
 import PostGetID from './UsersPost/_id';
+import UserStorage from './StoragePage/UserStorage';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
   {
     path: '/post/:boardId',
     element: <PostGetID />,
+  },
+  {
+    path: '/mystorage',
+    element: <UserStorage />,
   },
 ]);
 

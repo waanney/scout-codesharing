@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { fetchBoardCollection_API } from '../../api/index';
-import Discussion from '../DiscussionPage/Discussion.jsx';
+import Discussion from './Discussion.jsx';
 
 function Board() {
   const [board, setBoard] = useState(null);

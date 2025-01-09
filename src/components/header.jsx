@@ -49,13 +49,11 @@ const HeaderForAllPages = () => {
                   Discussion
                 </Link>
               </div>
-
               <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <a className="section" href="#projects">
+                <Link to="/mystorage" className="section">
                   Storage
-                </a>
+                </Link>
               </div>
-
               <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
                 <Link to="/myprofile" className="section">
                   Profile
@@ -125,7 +123,7 @@ const HeaderForAllPages = () => {
               </Link>
 
               <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <a className="section" href="#storage">
+                <a className="section" href="">
                   Storage
                 </a>
               </div>
