@@ -6,7 +6,7 @@ function HomePage() {
       <div className="flex min-h-screen flex-col">
         <HeaderForAllPages/>
         <div
-          className=" bg-fixed bg-no-repeat bg-center bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 w-full h-[500px] flex items-center justify-center text-center text-[60px] px-5 my-[90px]"
+          className=" bg-fixed bg-no-repeat bg-center bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 w-full h-[500px] flex items-center justify-center text-center text-[60px] px-5 mt-[150px] mb-[90px]"
           style={{
             backgroundImage: "url('src/assets/Scout_blur.png')",
             backgroundSize: '500px 500px',

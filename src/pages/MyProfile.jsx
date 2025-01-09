@@ -43,8 +43,8 @@ function MyProfile() {
   <>
     <HeaderForAllPages/>
     <div className="flex ">
-    <div className="flex flex-col">
-      <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
+    <div className="flex flex-col w-full justify-between">
+      <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[50px] rounded-[10px]">
         <a className="flex flex-col items-center">
           <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">{currentUser.username}</h2>
           <svg className="my-[12px]" height="142" width="142" xmlns="http://www.w3.org/2000/svg">
@@ -66,14 +66,14 @@ function MyProfile() {
           <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">27</div>
         </div>
       </div>
-      <div className="flex h-[92px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
+      <div className="flex h-[92px] w-[230px] bg-[#3366CC] mt-[11px] ml-[50px] rounded-[10px]">
         <img 
           className="h-[13px] w-[14px] m-[11px]"
           src="src/assets/Content.svg">
         </img>
         <span className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">I am used to with online service and I usually do my online shopping from Instagram.</span>
       </div>
-      <div className="h-[100px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
+      <div className="h-[100px] w-[230px] bg-[#3366CC] mt-[11px] ml-[50px] rounded-[10px]">
         <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">PERSONALITY</span>
         <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px]">
           <div className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium ">Introvert</div>
@@ -84,7 +84,7 @@ function MyProfile() {
       </div>
     </div>
     
-    <div className="mt-[125px] ml-[30px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
+    <div className="mt-[125px] mr-[50px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
       <div className="relative rounded-[10px]">
         <div className="flex justify-between mt-[10px] mx-[10px]">
           <div className=" flex items-center space-x-1">
