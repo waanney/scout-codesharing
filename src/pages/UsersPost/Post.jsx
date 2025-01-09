@@ -1,6 +1,7 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
+import { CopyBlock, hybrid } from 'react-code-blocks';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 
@@ -8,11 +9,10 @@ function Post({ board }) {
   const SendClick = () => {
     alert('Button clicked!');
   };
-  function stringToArray(inputString) {
-    return inputString.split('\n'); // Tách chuỗi dựa trên dấu xuống dòng
-  }
-  //const numbers = Array.from({ length: 1 }, (_, index) => index + 1);
-
+  const customTheme = {
+    ...hybrid,
+    backgroundColor: 'transparent',
+  };
   return (
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
@@ -120,16 +120,13 @@ function Post({ board }) {
                         overflow-x-auto overflow-y-auto snap-y snap-mandatory 
                         scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
             >
-              {stringToArray(board.content).map((code, line) => (
-                <div key={line}>
-                  <p className="font-mono flex">
-                    <div className="text-gray-400 ml-[10px] w-[30px] text-right">
-                      {line + 1}
-                    </div>
-                    <div className="text-white ml-[30px]">{code}</div>
-                  </p>
-                </div>
-              ))}
+              <CopyBlock
+                text={board.content}
+                language="cpp javascript"
+                theme={customTheme}
+                showLineNumbers={true}
+                wrapLines
+              />
             </div>
           </div>
         </div>
