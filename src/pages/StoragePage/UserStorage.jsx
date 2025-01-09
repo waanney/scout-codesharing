@@ -1,5 +1,6 @@
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
+import CommentCard from '../../components/comment_card.jsx';
 
 export default function UserStorage() {
   return (
@@ -10,7 +11,7 @@ export default function UserStorage() {
           {' '}
           {/* Để căn giữa nội dung nếu cần */}
           <h1 className="text-2xl font-bold my-12 text-center text-white">
-            STORAGE
+            <CommentCard />
           </h1>{' '}
           {/* Tiêu đề */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
