@@ -45,7 +45,7 @@ function PostGetID() {
     return <div>Không tìm thấy bảng.</div>;
   }
 
-  return <Post board={board} />;
+  return <Post board={board} boardId={boardId} />;
 }
 
 export default PostGetID;
