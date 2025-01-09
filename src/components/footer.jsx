@@ -1,3 +1,5 @@
+/*trang web có 3 phần chính, header-body-footer, thì đây là code của footer*/
+
 export default function FooterAllPage() {
   return (
     <footer className=" text-center text-surface/75 bg-[#05143c] dark:text-white/75 lg:text-left">

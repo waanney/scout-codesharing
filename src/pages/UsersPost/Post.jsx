@@ -6,8 +6,10 @@ import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { fetchUserData_API } from '../../api/index.js';
 import { commentPost } from '../../redux/apiRequest.js';
+import { useState, useEffect } from 'react';
+import { formatMillisecondsToDate } from '../../utils/formater.js';
 
 function Post({ board, boardId }) {
   const currentUser =
@@ -35,6 +37,40 @@ function Post({ board, boardId }) {
     ...hybrid,
     backgroundColor: 'transparent',
   };
+
+  //
+  const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
+  const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
+  const [error, setError] = useState(null); // State để xử lý lỗi
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // Bắt đầu loading
+      try {
+        const data = await fetchUserData_API(board.userID);
+        setUserData(data);
+      } catch (err) {
+        setError(err);
+        console.error('Error fetching user data:', err);
+      } finally {
+        setLoading(false); // Kết thúc loading
+      }
+    };
+
+    fetchData();
+  }, [board.userID]); // Dependency array: useEffect sẽ chạy lại nếu post.userID thay đổi
+
+  if (loading) {
+    return <div>Đang tải user data</div>; // Hiển thị thông báo loading
+  }
+
+  if (error) {
+    return <div>Error: {error.message || 'Failed to load user data.'}</div>; // Hiển thị thông báo lỗi
+  }
+
+  if (!userData) {
+    return <div>Không tồn tại user data.</div>; // Trường hợp userData là null sau khi đã loading xong
+  }
+
   return (
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
@@ -56,10 +92,10 @@ function Post({ board, boardId }) {
                 </div>
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
-                    {currentUser.username}
+                    {userData.username}
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
-                    hh:mm dd/mm/yyyy
+                    {formatMillisecondsToDate(board.createdAt)}
                   </div>
                 </div>
               </div>

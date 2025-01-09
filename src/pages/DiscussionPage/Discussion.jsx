@@ -4,7 +4,7 @@ import PostCard from '../../components/post_card';
 
 function Discussion({
   board,
-  posts,
+  Boards,
   paginate,
   postsPerPage,
   totalPosts,
@@ -14,7 +14,7 @@ function Discussion({
     return <div>Không có dữ liệu bảng.</div>;
   }
 
-  if (!posts || posts.length === 0) {
+  if (!Boards || Boards.length === 0) {
     return <div>Không có bài đăng.</div>;
   }
 
@@ -32,11 +32,11 @@ function Discussion({
         </div>
         {/* Hiển thị danh sách bài đăng */}
         <ul className="cards grid grid-cols-2 gap-[66px] place-items-center">
-          {posts.map(post => (
-            <li key={post._id}>
+          {Boards.map(Boards => (
+            <li key={Boards._id}>
               {' '}
               {/* Đảm bảo mỗi post có key duy nhất */}
-              <PostCard post={post} />
+              <PostCard post={Boards} />
             </li>
           ))}
         </ul>

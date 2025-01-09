@@ -1,6 +1,9 @@
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
 import { CodeBlock, hybrid } from 'react-code-blocks';
+import { fetchUserData_API } from '../api/index.js';
+import { useState, useEffect } from 'react';
+import { formatMillisecondsToDate } from '../utils/formater.js';
 
 const PostCard = ({ post }) => {
   const SendClick = () => {
@@ -10,6 +13,43 @@ const PostCard = ({ post }) => {
     ...hybrid,
     backgroundColor: 'transparent',
   };
+
+  const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
+  const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
+  const [error, setError] = useState(null); // State để xử lý lỗi
+
+  // lấy data username và những data như upvote, downvote sau này sẽ thêm vào
+  useEffect(() => {
+    const fetchData = async () => {
+      setLoading(true); // Bắt đầu loading
+      try {
+        const data = await fetchUserData_API(post.userID);
+        setUserData(data);
+      } catch (err) {
+        setError(err);
+        console.error('Error fetching user data:', err);
+      } finally {
+        setLoading(false); // Kết thúc loading
+      }
+    };
+
+    fetchData();
+  }, [post.userID]); // Dependency array: useEffect sẽ chạy lại nếu post.userID thay đổi
+
+  if (loading) {
+    return <div>Đang tải user data</div>; // Hiển thị thông báo loading
+  }
+
+  if (error) {
+    return <div>Error: {error.message || 'Failed to load user data.'}</div>; // Hiển thị thông báo lỗi
+  }
+
+  if (!userData) {
+    return <div>Không tồn tại user data.</div>; // Trường hợp userData là null sau khi đã loading xong
+  }
+
+  //
+
   return (
     <div
       className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
@@ -29,10 +69,10 @@ const PostCard = ({ post }) => {
           </div>
           <div className="flex flex-col">
             <div className="ml-[10px] text-white font-bold text-[16px]">
-              userName
+              {userData.username}
             </div>
             <div className="ml-[10px] text-white text-[8px] font-normal">
-              hh:mm dd/mm/yyyy
+              {formatMillisecondsToDate(post.createdAt)}
             </div>
           </div>
         </div>

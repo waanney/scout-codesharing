@@ -22,7 +22,7 @@ function Board() {
           const sortedPosts = [...data.boards].sort(
             (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
           );
-          setBoard({ ...data, posts: sortedPosts }); // Cập nhật state với dữ liệu đã sắp xếp
+          setBoard({ ...data, boards: sortedPosts }); // Cập nhật state với dữ liệu đã sắp xếp
         } else {
           setBoard(data); // Vẫn set data nếu không có posts (ví dụ: chỉ có thông tin board)
         }
@@ -37,8 +37,8 @@ function Board() {
   const indexOfLastPost = currentPage * postsPerPage;
   const indexOfFirstPost = indexOfLastPost - postsPerPage;
   const currentPosts =
-    board && board.posts
-      ? board.posts.slice(indexOfFirstPost, indexOfLastPost)
+    board && board.boards
+      ? board.boards.slice(indexOfFirstPost, indexOfLastPost)
       : [];
 
   const paginate = pageNumber => setCurrentPage(pageNumber);
@@ -54,10 +54,10 @@ function Board() {
   return (
     <Discussion
       board={board}
-      posts={currentPosts}
+      Boards={currentPosts}
       paginate={paginate}
       postsPerPage={postsPerPage}
-      totalPosts={board && board.posts ? board.posts.length : 0}
+      totalPosts={board && board.boards ? board.boards.length : 0}
       currentPage={currentPage}
     />
   );
