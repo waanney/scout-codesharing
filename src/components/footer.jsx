@@ -3,7 +3,7 @@ export default function FooterAllPage() {
     <footer className=" text-center text-surface/75 bg-[#05143c] dark:text-white/75 lg:text-left">
       <div className="flex items-center justify-center border-b-2 border-neutral-200 p-6 dark:border-white/10 lg:justify-between">
         <div className="me-12 hidden lg:block">
-          <span>Get connected with us on social networks:</span>
+          <span>If website get stuck or error, please contact us:</span>
         </div>
 
         <div className="flex justify-center">
@@ -71,48 +71,42 @@ export default function FooterAllPage() {
                   xmlns="http://www.w3.org/2000/svg"
                   viewBox="0 0 24 24"
                   fill="currentColor"
-                >
-                  <path d="M12.378 1.602a.75.75 0 00-.756 0L3 6.632l9 5.25 9-5.25-8.622-5.03zM21.75 7.93l-9 5.25v9l8.628-5.032a.75.75 0 00.372-.648V7.93zM11.25 22.18v-9l-9-5.25v8.57a.75.75 0 00.372.648l8.628 5.033z" />
-                </svg>
+                ></svg>
               </span>
-              TW Elements
+              SCOUT: Source Code Open
             </h6>
+          </div>
+
+          <div>
+            <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
+              Members
+            </h6>
+            <p className="mb-4">
+              <a href="#!">Thanh Binh</a>
+            </p>
+            <p className="mb-4">
+              <a href="#!">Cong Minh</a>
+            </p>
+            <p className="mb-4">
+              <a href="https://www.facebook.com/minh.quan.56650">Minh Quan</a>
+            </p>
             <p>
-              Here you can use rows and columns to organize your footer content.
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit.
+              <a href="#!">Dang Khoi</a>
             </p>
           </div>
 
           <div>
             <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-              Products
+              GDSC: HCMUT
             </h6>
             <p className="mb-4">
-              <a href="#!">Angular</a>
+              <a href="https://fessior.com/tools">Fessior Page</a>
             </p>
             <p className="mb-4">
-              <a href="#!">React</a>
+              <a href="https://discord.gg/Rw6YCEKEBy">Discord</a>
             </p>
             <p className="mb-4">
-              <a href="#!">Vue</a>
-            </p>
-            <p>
-              <a href="#!">Laravel</a>
-            </p>
-          </div>
-
-          <div>
-            <h6 className="mb-4 flex justify-center font-semibold uppercase md:justify-start">
-              Useful links
-            </h6>
-            <p className="mb-4">
-              <a href="#!">Pricing</a>
-            </p>
-            <p className="mb-4">
-              <a href="#!">Settings</a>
-            </p>
-            <p className="mb-4">
-              <a href="#!">Orders</a>
+              <a href="https://www.facebook.com/groups/gdschcmut">Community</a>
             </p>
             <p>
               <a href="#!">Help</a>
@@ -134,7 +128,7 @@ export default function FooterAllPage() {
                   <path d="M12 5.432l8.159 8.159c.03.03.06.058.091.086v6.198c0 1.035-.84 1.875-1.875 1.875H15a.75.75 0 01-.75-.75v-4.5a.75.75 0 00-.75-.75h-3a.75.75 0 00-.75.75V21a.75.75 0 01-.75.75H5.625a1.875 1.875 0 01-1.875-1.875v-6.198a2.29 2.29 0 00.091-.086L12 5.43z" />
                 </svg>
               </span>
-              New York, NY 10012, US
+              268 Lý Thường Kiệt, Phường 14, Quận 10, Hồ Chí Minh
             </p>
             <p className="mb-4 flex items-center justify-center md:justify-start">
               <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
@@ -165,31 +159,8 @@ export default function FooterAllPage() {
               </span>
               + 01 234 567 88
             </p>
-            <p className="flex items-center justify-center md:justify-start">
-              <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  viewBox="0 0 24 24"
-                  fill="currentColor"
-                >
-                  <path
-                    fillRule="evenodd"
-                    d="M7.875 1.5C6.839 1.5 6 2.34 6 3.375v2.99c-.426.053-.851.11-1.274.174-1.454.218-2.476 1.483-2.476 2.917v6.294a3 3 0 003 3h.27l-.155 1.705A1.875 1.875 0 007.232 22.5h9.536a1.875 1.875 0 001.867-2.045l-.155-1.705h.27a3 3 0 003-3V9.456c0-1.434-1.022-2.7-2.476-2.917A48.716 48.716 0 0018 6.366V3.375c0-1.036-.84-1.875-1.875-1.875h-8.25zM16.5 6.205v-2.83A.375.375 0 0016.125 3h-8.25a.375.375 0 00-.375.375v2.83a49.353 49.353 0 019 0zm-.217 8.265c.178.018.317.16.333.337l.526 5.784a.375.375 0 01-.374.409H7.232a.375.375 0 01-.374-.409l.526-5.784a.373.373 0 01.333-.337 41.741 41.741 0 018.566 0zm.967-3.97a.75.75 0 01.75-.75h.008a.75.75 0 01.75.75v.008a.75.75 0 01-.75.75H18a.75.75 0 01-.75-.75V10.5zM15 9.75a.75.75 0 00-.75.75v.008c0 .414.336.75.75.75h.008a.75.75 0 00.75-.75V10.5a.75.75 0 00-.75-.75H15z"
-                    clipRule="evenodd"
-                  />
-                </svg>
-              </span>
-              + 01 234 567 89
-            </p>
           </div>
         </div>
-      </div>
-
-      <div className="bg-black/5 p-6 text-center">
-        <span>© 2023 Copyright:</span>
-        <a className="font-semibold" href="https://tw-elements.com/">
-          TW Elements
-        </a>
       </div>
     </footer>
   );
