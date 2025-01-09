@@ -70,7 +70,7 @@ const PostCard = ({ post }) => {
       >
         <CodeBlock
           text={post.content}
-          language="cpp javascript"
+          language="cpp"
           theme={customTheme}
           showLineNumbers={true}
           wrapLines

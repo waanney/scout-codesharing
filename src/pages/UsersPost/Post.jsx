@@ -122,7 +122,7 @@ function Post({ board }) {
             >
               <CopyBlock
                 text={board.content}
-                language="cpp javascript"
+                language="cpp"
                 theme={customTheme}
                 showLineNumbers={true}
                 wrapLines
