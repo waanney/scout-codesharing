@@ -124,8 +124,8 @@ const HeaderForAllPages = () => {
               </Link>
 
               <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <a className="section" href="#projects">
-                  Projects
+                <a className="section" href="#storage">
+                  Storage
                 </a>
               </div>
 
