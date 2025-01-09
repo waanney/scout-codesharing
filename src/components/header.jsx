@@ -7,7 +7,9 @@ import useRestoreState from '../redux/useRestoreState';
 
 const HeaderForAllPages = () => {
   useRestoreState();
-  const currentUser = useSelector(state => state.auth.login.currentUser) || JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+  const currentUser =
+    useSelector(state => state.auth.login.currentUser) ||
+    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
   const { isFetching, error } = useSelector(state => state.auth.logout);
 
   const [open, setOpen] = useState(false);
@@ -17,9 +19,8 @@ const HeaderForAllPages = () => {
   const handleLogout = () => {
     logoutUser(dispatch, navigate);
 
-    localStorage.removeItem('currentUser');//xóa thông tin trong localStorage
+    localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
   };
-
 
   return (
     <div className="fixed w-full px-[10px] z-20 ">
@@ -50,7 +51,7 @@ const HeaderForAllPages = () => {
 
               <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
                 <a className="section" href="#projects">
-                  Projects
+                  Storage
                 </a>
               </div>
 
