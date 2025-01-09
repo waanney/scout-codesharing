@@ -4,8 +4,30 @@ import { Share } from 'lucide-react';
 import { CopyBlock, hybrid } from 'react-code-blocks';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { commentPost } from '../../redux/apiRequest.js';
 
-function Post({ board }) {
+function Post({ board, boardId }) {
+  const currentUser =
+    useSelector(state => state.auth.login.currentUser) ||
+    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+  const [content, setContent] = useState('');
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+  const userId = currentUser ? currentUser._id : '';
+
+  const handleComment = e => {
+    e.preventDefault();
+    const newComment = {
+      content: content,
+      userId: userId,
+      boardId: boardId,
+    };
+    commentPost(newComment, dispatch, navigate);
+  };
+
   const SendClick = () => {
     alert('Button clicked!');
   };
@@ -34,7 +56,7 @@ function Post({ board }) {
                 </div>
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
-                    userName
+                    {currentUser.username}
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
                     hh:mm dd/mm/yyyy
@@ -96,8 +118,12 @@ function Post({ board }) {
               ))}
             </div>
             {/* Comment Input */}
-            <div className="flex flex-row px-[20px] py-[20px]">
+            <form
+              onSubmit={handleComment}
+              className="flex flex-row px-[20px] py-[20px]"
+            >
               <input
+                onChange={e => setContent(e.target.value)}
                 className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
                 placeholder="  Add your comment..."
                 type="text"
@@ -111,7 +137,7 @@ function Post({ board }) {
               >
                 <Send className="h-[30px] w-[30px] hover:scale-110" />
               </button>
-            </div>
+            </form>
           </div>
           {/* Code Space */}
           <div className="card rounded-[10px] h-[636px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
