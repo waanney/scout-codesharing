@@ -180,7 +180,7 @@ function MyProfile() {
               onChange={e => setDescription(e.target.value)}
               className="w-[845px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
               type="text"
-              placeholder="What do you want to share today?"
+              placeholder="Describe your problem..."
               required
             ></input>
 

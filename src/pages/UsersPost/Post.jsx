@@ -23,8 +23,13 @@ function Post({ board, boardId }) {
 
   const handleComment = async e => {
     e.preventDefault();
+    if (!content.trim()) {
+      alert('Bình luận phải có ít nhất 1 ký tự.');
+      return;
+    }
+
     const newComment = {
-      content: content,
+      content: content.trim(),
       userId: userId,
       boardId: boardId,
     };
@@ -35,7 +40,7 @@ function Post({ board, boardId }) {
         ...prevComments,
         {
           userId,
-          content,
+          content: content.trim(),
           username: currentUser.username,
         },
       ]);
@@ -140,9 +145,7 @@ function Post({ board, boardId }) {
                 {board?.title}
               </div>
             </div>
-            <div
-              className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
-            >
+            <div className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin">
               {comments.map((comment, index) => (
                 <div key={index} className="mb-4">
                   <div className="text-white text-2xl font-bold leading-9">
@@ -174,9 +177,7 @@ function Post({ board, boardId }) {
             </form>
           </div>
           <div className="card rounded-[10px] h-[636px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            <div
-              className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
-            >
+            <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <CopyBlock
                 text={board.content}
                 language="cpp"
