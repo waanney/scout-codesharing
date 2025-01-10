@@ -42,8 +42,8 @@ function MyProfile() {
   return( 
   <>
     <HeaderForAllPages/>
-    <div className="flex ">
-    <div className="flex flex-col w-full justify-between">
+    <div className="flex min-h-screen">
+    <div className="flex flex-col w-full justify-between pb-[50px]">
       <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[50px] rounded-[10px]">
         <a className="flex flex-col items-center">
           <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">{currentUser.username}</h2>
@@ -84,7 +84,7 @@ function MyProfile() {
       </div>
     </div>
     
-    <div className="mt-[125px] mr-[50px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
+    <div className="mt-[125px] mr-[50px] w-[1000px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
       <div className="relative rounded-[10px]">
         <div className="flex justify-between mt-[10px] mx-[10px]">
           <div className=" flex items-center space-x-1">
@@ -101,21 +101,21 @@ function MyProfile() {
         </div>
         <input 
             onChange={(e)=>setTitle(e.target.value)}
-            className="w-[845px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px] pl-[15px] mt-[8px] mx-[28px] text-wrap"
+            className="w-[950px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px] pl-[15px] mt-[8px] mx-[25px] text-wrap"
             type="text"
             placeholder="Add your title here!" 
             required>
         </input>
         <input 
             onChange={(e)=>setDescription(e.target.value)}
-            className="w-[845px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
+            className="w-[950px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[25px] text-wrap"
             type="text"
             placeholder="What do you want to share today?" 
             required>
         </input>
         
         
-        <div className="flex bg-black bg-opacity-50 mx-[28px] mt-[8px]">
+        <div className="flex bg-black bg-opacity-50 rounded-[10px] mx-[25px] mt-[8px]">
           {/* Line numbers */}
           <div 
             className="py-2 px-2 text-right bg-muted font-mono select-none overflow-hidden"
@@ -171,7 +171,7 @@ function MyProfile() {
               overflowY: "auto",
             }}
             aria-label="Numbered text editor"
-          />
+            />
         </div>
       </div>
     </div>
