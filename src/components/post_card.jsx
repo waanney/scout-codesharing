@@ -104,9 +104,8 @@ const PostCard = ({ post }) => {
       </div>
       {/*Code display*/}
       <div
-        className=" font-mono text-[12px] w-[80%] h-[81%] mt-[10px] bg-[#00000080] rounded-[5px] mx-auto
-                    overflow-x-auto overflow-y-hidden snap-y snap-mandatory
-                    scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
+        className=" font-mono text-[12px] w-[80%] h-[81%] bg-[#00000080] rounded-[5px] mt-[10px] mx-auto
+                    overflow-hidden"
       >
         <CodeBlock
           text={post.content}
@@ -114,6 +113,7 @@ const PostCard = ({ post }) => {
           theme={customTheme}
           showLineNumbers={true}
           wrapLines
+          customStyle={{ overflow: 'hidden' }}
         />
       </div>
     </div>

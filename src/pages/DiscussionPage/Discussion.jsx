@@ -41,14 +41,17 @@ function Discussion({
           ))}
         </ul>
         {/* Phân trang */}
-        <nav>
-          <ul className="pagination">
+        <nav className="mx-auto text-[30px]">
+          <ul className="pagination flex flex-row space-x-4">
             {pageNumbers.map(number => (
               <li
                 key={number}
                 className={`page-item ${currentPage === number ? 'active' : ''}`}
               >
-                <button onClick={() => paginate(number)} className="page-link">
+                <button
+                  onClick={() => paginate(number)}
+                  className="page-link hover:underline "
+                >
                   {number}
                 </button>
               </li>
