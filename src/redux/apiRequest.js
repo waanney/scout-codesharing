@@ -60,10 +60,10 @@ export const createPost = async (boards, dispatch, navigate) => {
   }
 };
 
-export const commentPost = async (comment, dispatch, navigate) => {
+export const commentPost = async (commentData, dispatch) => {
   dispatch(commentStart());
   try {
-    await axios.post('http://localhost:8017/v1/Comment/', comment);
+    await axios.post('http://localhost:8017/v1/Comment/', commentData);
     dispatch(commentSuccess());
   } catch (err) {
     dispatch(commentFailed(err.response?.data?.message));

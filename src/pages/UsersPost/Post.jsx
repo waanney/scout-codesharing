@@ -32,6 +32,7 @@ function Post({ board, boardId }) {
       content: content.trim(),
       userId: userId,
       boardId: boardId,
+      username: currentUser.username,
     };
 
     try {
@@ -80,6 +81,22 @@ function Post({ board, boardId }) {
     fetchData();
   }, [board.userID]);
 
+  useEffect(() => {
+    const fetchCommentsWithUsernames = async () => {
+      setLoading(true);
+      try {
+        const initialComments = board.comments || [];
+        setComments(initialComments); // Comment đã chứa username
+      } catch (err) {
+        setError(err);
+        console.error('Error fetching comments:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchCommentsWithUsernames();
+  }, [board.comments]);
   if (loading) {
     return <div>Đang tải user data</div>;
   }
