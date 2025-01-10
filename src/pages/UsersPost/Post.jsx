@@ -1,7 +1,7 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
-import { CopyBlock, hybrid } from 'react-code-blocks';
+import { CodeBlock, hybrid } from 'react-code-blocks';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -57,7 +57,7 @@ function Post({ board, boardId }) {
 
   const customTheme = {
     ...hybrid,
-    backgroundColor: 'transparent',
+    backgroundColor: '',
   };
 
   const [userData, setUserData] = useState(null);
@@ -195,7 +195,7 @@ function Post({ board, boardId }) {
           </div>
           <div className="card rounded-[10px] h-[636px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
             <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
-              <CopyBlock
+              <CodeBlock
                 text={board.content}
                 language="cpp"
                 theme={customTheme}

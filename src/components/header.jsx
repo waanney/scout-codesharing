@@ -37,24 +37,24 @@ const HeaderForAllPages = () => {
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
 
-            <div className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]">
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
+            <div className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px] ">
+              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
                 <Link to="/" className="section">
                   Home
                 </Link>
               </div>
 
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
+              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
                 <Link to="/discussion" className="section">
                   Discussion
                 </Link>
               </div>
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
+              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
                 <Link to="/mystorage" className="section">
                   Storage
                 </Link>
               </div>
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
+              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
                 <Link to="/myprofile" className="section">
                   Profile
                 </Link>
