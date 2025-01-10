@@ -24,7 +24,7 @@ function Post({ board, boardId }) {
   const handleComment = async e => {
     e.preventDefault();
     if (!content.trim()) {
-      alert('Bình luận phải có ít nhất 1 ký tự.');
+      alert('Comment must have at least 1 letter.');
       return;
     }
 
