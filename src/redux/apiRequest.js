@@ -65,7 +65,6 @@ export const commentPost = async (comment, dispatch, navigate) => {
   try {
     await axios.post('http://localhost:8017/v1/Comment/', comment);
     dispatch(commentSuccess());
-    navigate('/post/:boardId');
   } catch (err) {
     dispatch(commentFailed(err.response?.data?.message));
   }

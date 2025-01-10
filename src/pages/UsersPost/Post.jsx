@@ -14,73 +14,85 @@ import { formatMillisecondsToDate } from '../../utils/formater.js';
 function Post({ board, boardId }) {
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+    JSON.parse(localStorage.getItem('currentUser'));
   const [content, setContent] = useState('');
+  const [comments, setComments] = useState([]); // State để lưu danh sách comment
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userId = currentUser ? currentUser._id : '';
 
-  const handleComment = e => {
+  const handleComment = async e => {
     e.preventDefault();
     const newComment = {
       content: content,
       userId: userId,
       boardId: boardId,
     };
-    commentPost(newComment, dispatch, navigate);
+
+    try {
+      await commentPost(newComment, dispatch, navigate);
+      setComments(prevComments => [
+        ...prevComments,
+        {
+          userId,
+          content,
+          username: currentUser.username,
+        },
+      ]);
+      setContent('');
+    } catch (error) {
+      console.error('Error posting comment:', error);
+    }
   };
 
   const SendClick = () => {
     alert('Button clicked!');
   };
+
   const customTheme = {
     ...hybrid,
     backgroundColor: 'transparent',
   };
 
-  //
-  const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
-  const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
-  const [error, setError] = useState(null); // State để xử lý lỗi
+  const [userData, setUserData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
-      setLoading(true); // Bắt đầu loading
+      setLoading(true);
       try {
         const data = await fetchUserData_API(board.userID);
         setUserData(data);
+        setComments(board.comments || []); // Giả sử board.comments chứa danh sách comment ban đầu
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);
       } finally {
-        setLoading(false); // Kết thúc loading
+        setLoading(false);
       }
     };
 
     fetchData();
-  }, [board.userID]); // Dependency array: useEffect sẽ chạy lại nếu post.userID thay đổi
+  }, [board.userID]);
 
   if (loading) {
-    return <div>Đang tải user data</div>; // Hiển thị thông báo loading
+    return <div>Đang tải user data</div>;
   }
 
   if (error) {
-    return <div>Error: {error.message || 'Failed to load user data.'}</div>; // Hiển thị thông báo lỗi
+    return <div>Error: {error.message || 'Failed to load user data.'}</div>;
   }
 
   if (!userData) {
-    return <div>Không tồn tại user data.</div>; // Trường hợp userData là null sau khi đã loading xong
+    return <div>Không tồn tại user data.</div>;
   }
 
   return (
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
-        {/* Header*/}
         <HeaderForAllPages />
-        {/* body */}
         <div className="cards grid grid-cols-[2fr_3fr] gap-[34px] place-items-center overflow-hidden px-5 lg:mt-16 lg:flex-row lg:items-stretch lg:px-[calc(160px-(1920px-100vw)/3)]">
-          {/* thẻ thông tin */}
           <div className="card rounded-[10px] h-[636px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            {/* User Info */}
             <div className="cards grid grid-cols-2 gap-[10px] mt-[37px]">
               <div className="card flex flex-row">
                 <div className="ml-[37px] h-[50px] w-[50px]">
@@ -120,7 +132,6 @@ function Post({ board, boardId }) {
                 </div>
               </div>
             </div>
-            {/* Problem Title */}
             <div className="mx-[38px] text-white">
               <div className="text-center text-2xl font-bold leading-[150%]">
                 Problem solving
@@ -129,58 +140,42 @@ function Post({ board, boardId }) {
                 {board?.title}
               </div>
             </div>
-            {/* Comments Section */}
             <div
-              className="w-[80%] h-[60%] mx-auto px-[10px]
-                      overflow-x-auto overflow-y-auto snap-y snap-mandatory 
-                      scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
+              className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin"
             >
-              {[1, 2, 3, 4, 5, 6].map(num => (
-                <div key={num} className="mb-4">
+              {comments.map((comment, index) => (
+                <div key={index} className="mb-4">
                   <div className="text-white text-2xl font-bold leading-9">
-                    User{num}
+                    {comment.username || `User${index + 1}`}
                   </div>
                   <div className="text-white text-[15px] font-normal leading-[150%]">
-                    {num === 1 && 'afdsafsadf'}
-                    {num === 2 && 'Code này quá tệ'}
-                    {num === 3 && 'Tôi sẽ copy code về dùng'}
-                    {num === 4 && 'Tự bơi đi bro'}
-                    {num === 5 &&
-                      'Demo_text_comment Demo_text_comment Demo_text_comment'}
-                    {num === 6 &&
-                      'Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment Demo_text_comment'}
+                    {comment.content}
                   </div>
                 </div>
               ))}
             </div>
-            {/* Comment Input */}
             <form
               onSubmit={handleComment}
               className="flex flex-row px-[20px] py-[20px]"
             >
               <input
+                value={content}
                 onChange={e => setContent(e.target.value)}
                 className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
                 placeholder="  Add your comment..."
                 type="text"
               />
               <button
-                onClick={SendClick}
                 type="submit"
-                name="comment"
-                value="user_input_comment"
                 className="text-white align-middle ml-[10px] rotate-45"
               >
                 <Send className="h-[30px] w-[30px] hover:scale-110" />
               </button>
             </form>
           </div>
-          {/* Code Space */}
           <div className="card rounded-[10px] h-[636px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
             <div
-              className="font-mono w-[100%] h-[100%] bg-[#00000080]
-                        overflow-x-auto overflow-y-auto snap-y snap-mandatory 
-                        scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
+              className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin"
             >
               <CopyBlock
                 text={board.content}
@@ -193,7 +188,6 @@ function Post({ board, boardId }) {
           </div>
         </div>
       </div>
-      {/* foot*/}
       <FooterAllPage />
     </>
   );
