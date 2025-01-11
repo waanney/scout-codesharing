@@ -12,6 +12,7 @@ import Login from './Login';
 import Signup from './Signup';
 import PostGetID from './UsersPost/_id';
 import UserStorage from './StoragePage/UserStorage';
+import Changepassword from './Changepassword';
 
 const router = createBrowserRouter([
   {
@@ -41,6 +42,10 @@ const router = createBrowserRouter([
   {
     path: '/mystorage',
     element: <UserStorage />,
+  },
+  {
+    path: '/changepassword',
+    element: <Changepassword />,
   },
 ]);
 
