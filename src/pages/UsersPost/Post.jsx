@@ -115,7 +115,7 @@ function Post({ board, boardId }) {
         <HeaderForAllPages />
         <div className="cards grid grid-cols-[2fr_3fr] gap-[34px] place-items-center overflow-hidden px-5 lg:mt-16 lg:flex-row lg:items-stretch lg:px-[calc(160px-(1920px-100vw)/3)]">
           <div className="card rounded-[10px] h-[636px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px] mx-auto">
+            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 <img
                   className="rounded-full h-[50px] w-[50px]"
