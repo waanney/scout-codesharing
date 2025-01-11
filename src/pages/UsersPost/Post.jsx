@@ -115,15 +115,14 @@ function Post({ board, boardId }) {
         <HeaderForAllPages />
         <div className="cards grid grid-cols-[2fr_3fr] gap-[34px] place-items-center overflow-hidden px-5 lg:mt-16 lg:flex-row lg:items-stretch lg:px-[calc(160px-(1920px-100vw)/3)]">
           <div className="card rounded-[10px] h-[636px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px]">
+            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px] mx-auto">
               <div className="card flex flex-row">
-                <div className="ml-[37px] h-[50px] w-[50px]">
-                  <img
-                    className="rounded-full"
-                    src="..\src\assets\demo_avatar.png"
-                    alt="User Avatar"
-                  />
-                </div>
+                <img
+                  className="rounded-full h-[50px] w-[50px]"
+                  src="..\src\assets\demo_avatar.png"
+                  alt="User Avatar"
+                />
+
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
                     {userData.username}
@@ -133,8 +132,8 @@ function Post({ board, boardId }) {
                   </div>
                 </div>
               </div>
-              <div className="card flex flex-col items-end mr-[40px]">
-                <div className="w-[100px]">
+              <div className="card flex flex-col items-end">
+                <div>
                   <button
                     onClick={SendClick}
                     className="text-white flex flex-row items-center hover:scale-110"
@@ -143,7 +142,7 @@ function Post({ board, boardId }) {
                     Share
                   </button>
                 </div>
-                <div className="w-[100px]">
+                <div>
                   <button
                     onClick={SendClick}
                     className="text-white flex flex-row items-center hover:scale-110"
@@ -193,7 +192,7 @@ function Post({ board, boardId }) {
               </button>
             </form>
           </div>
-          <div className="card rounded-[10px] h-[636px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative w-full swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
+          <div className="card rounded-[10px] h-[636px] w-[1000px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
             <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <CodeBlock
                 text={board.content}
