@@ -13,6 +13,11 @@ import {
 import axiosJWT from './axiosJWT';
 import { createStart, createFailed, createSuccess } from './uppostSlice';
 import { commentStart, commentSuccess, commentFailed } from './commentSlice';
+import {
+  myProfileStart,
+  myProfileSuccess,
+  myProfileFailed,
+} from './myProfileSlice';
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -67,5 +72,15 @@ export const commentPost = async (commentData, dispatch) => {
     dispatch(commentSuccess());
   } catch (err) {
     dispatch(commentFailed(err.response?.data?.message));
+  }
+};
+
+export const myProfile = async (myProfileData, dispatch) => {
+  dispatch(myProfileStart());
+  try {
+    await axios.post('http://localhost:8017/v1/myProfile/', myProfileData);
+    dispatch(myProfileSuccess());
+  } catch (err) {
+    dispatch(myProfileFailed(err.response?.data?.message));
   }
 };
