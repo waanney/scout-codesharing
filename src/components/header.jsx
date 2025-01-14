@@ -82,16 +82,19 @@ const HeaderForAllPages = () => {
                 }`}
               >
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
-                  <p className="font-medium">Change Password</p>
+                  <Link to="/changepassword" className="clickchangepassword">
+                    <p className="font-medium">Change Password</p>
+                  </Link>
                 </button>
-                <Link to="/" className="clicklogout">
-                  <button
-                    onClick={handleLogout}
-                    className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all"
-                  >
+
+                <button
+                  onClick={handleLogout}
+                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all"
+                >
+                  <Link to="/" className="clicklogout">
                     <p className="font-medium">Log out</p>
-                  </button>
-                </Link>
+                  </Link>
+                </button>
                 {isFetching && <p>Logging out...</p>}
                 {error}
               </div>
