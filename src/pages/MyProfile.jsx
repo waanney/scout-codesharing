@@ -149,6 +149,18 @@ function MyProfile() {
                   </div>
                   <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[10px]">
                     {isEditing ? (
+                      
+                        field === 'age'?(
+                        <input
+                        type="number"
+                        value={editableProfile[field]} // Bind input value to state
+                        onChange={e =>
+                          handleProfileChange(field, e.target.value)
+                        }
+                        className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                        style={{ border: 'solid 2px #EAEBF6' }}
+                        />
+                      ):(
                       <input
                         type="text"
                         value={editableProfile[field]} // Bind input value to state
@@ -158,7 +170,7 @@ function MyProfile() {
                         className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
                         style={{ border: 'solid 2px #EAEBF6' }}
                       />
-                    ) : (
+                    )) : (
                       editableProfile[field]
                     )}
                   </div>
