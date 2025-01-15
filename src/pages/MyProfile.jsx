@@ -52,7 +52,7 @@ function MyProfile() {
     const newmyProfile = {
       userId: userId,
       username: currentUser.username,
-      age: editableProfile.age, // Ensure age and other fields are included
+      age: editableProfile.age,
       education: editableProfile.education,
       occupation: editableProfile.occupation,
       location: editableProfile.location,
@@ -63,12 +63,19 @@ function MyProfile() {
   };
 
   const [isEditing, setIsEditing] = useState(false);
-  const [editableProfile, setEditableProfile] = useState({
-    age: currentUser?.age|| '',
-    education: currentUser?.education|| '',
-    occupation: currentUser?.occupation|| '',
-    location: currentUser?.location|| '',
+  const [editableProfile, setEditableProfile] = useState(() => {
+    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
+    return savedProfile || {
+      age: currentUser?.age || '',
+      education: currentUser?.education || '',
+      occupation: currentUser?.occupation || '',
+      location: currentUser?.location || '',
+    };
   });
+
+  useEffect(() => {
+    localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
+  }, [editableProfile]);
 
   const handleProfileChange = (field, value) => {
     setEditableProfile(prev => ({
