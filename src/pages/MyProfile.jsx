@@ -1,3 +1,4 @@
+ 
 import React from 'react';
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
@@ -5,6 +6,7 @@ import { createPost } from '../redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { myProfile } from '../redux/apiRequest.js';
 
 function MyProfile() {
   const currentUser =
@@ -21,6 +23,29 @@ function MyProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  //biến cho createmyProfile
+  //const [age, setAge] = useState('')
+  //const [education, setEducation] = useState('')
+  //const [occupation, setOccupation] = useState('')
+  //const [location, setLocation] = useState('')
+  const [intro, setIntro] = useState('');
+  const [personality, setpersonality] = useState([]);
+
+  const handlecreatemyProfile = e => {
+    e.preventDefault();
+    const newmyProfile = {
+      userId: userId,
+      username: currentUser.username,
+      //age: age,
+      //education: education,
+      //occupation: occupation,
+      location: location,
+      personality: personality,
+      Introduction: intro,
+    };
+    myProfile(newmyProfile, dispatch, navigate);
+  };
+
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState({
     age: currentUser?.age,
@@ -28,9 +53,6 @@ function MyProfile() {
     occupation: currentUser?.occupation,
     location: currentUser?.location,
   });
-  const [intro, setIntro] = useState('');
-  const [personality, setpersonality] = useState([]);
-
 
   // Update line numbers when text changes
   useEffect(() => {
@@ -88,19 +110,24 @@ function MyProfile() {
     <>
       <HeaderForAllPages />
       <div className="flex ">
-        <div className="flex min-h-screen flex-col">
+        <form
+          onSubmit={handlecreatemyProfile}
+          className="flex min-h-screen flex-col"
+        >
           <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
-            <div className="relative flex items-center justify-center w-full">
-                  <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
-                    {currentUser.username}
-                  </h2>
+              <div className="relative flex items-center justify-center w-full">
+                <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
+                  {currentUser.username}
+                </h2>
                 <button
                   className="absolute right-[5px] mt-[10px]"
                   onClick={isEditing ? handleSaveClick : handleEditClick}
                 >
                   <img
-                    src={isEditing ? 'src/assets/save.svg' : 'src/assets/edit.svg'}
+                    src={
+                      isEditing ? 'src/assets/save.svg' : 'src/assets/edit.svg'
+                    }
                     alt={isEditing ? 'Save icon' : 'Edit icon'}
                   />
                 </button>
@@ -125,8 +152,11 @@ function MyProfile() {
                       <input
                         type="text"
                         value={editableProfile[field]} // Bind input value to state
-                        onChange={e => handleProfileChange(field, e.target.value)}
+                        onChange={e =>
+                          handleProfileChange(field, e.target.value)
+                        }
                         className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                        style={{ border: 'solid 2px #EAEBF6' }}
                       />
                     ) : (
                       editableProfile[field]
@@ -141,7 +171,7 @@ function MyProfile() {
               className="h-[13px] w-[14px] m-[11px]"
               src="src/assets/Content.svg"
             ></img>
-            
+
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
               {isEditing ? (
                 <textarea
@@ -160,18 +190,18 @@ function MyProfile() {
                   }}
                 />
               ) : (
-              <div
-                className="bg-transparent text-white rounded-[2px] text-[11px] w-full"
-                style={{
-                  whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
-                  wordBreak: 'break-word', // Handle long strings
-                  lineHeight: '1.5rem',
-                  padding: '5px',
-                }}
-              >
-                {intro}
-              </div>
-            )}
+                <div
+                  className="bg-transparent text-white rounded-[2px] text-[11px] w-full"
+                  style={{
+                    whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
+                    wordBreak: 'break-word', // Handle long strings
+                    lineHeight: '1.5rem',
+                    padding: '5px',
+                  }}
+                >
+                  {intro}
+                </div>
+              )}
             </div>
           </div>
           <div className="h-[100px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
@@ -179,53 +209,55 @@ function MyProfile() {
               PERSONALITY
             </span>
             <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto">
-            {isEditing ? (
-              <>
-                {personality.map((trait, index) => (
+              {isEditing ? (
+                <>
+                  {personality.map((trait, index) => (
+                    <div
+                      key={index}
+                      className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative"
+                    >
+                      <input
+                        value={trait}
+                        onChange={e => {
+                          const newTraits = [...personality];
+                          newTraits[index] = e.target.value;
+                          setpersonality(newTraits);
+                        }}
+                        className="bg-transparent border-none outline-none text-center text-sm"
+                        style={{ width: '100%', padding: '0' }}
+                      />
+                      <button
+                        className="relative flex right-[2px] text-red-500 font-bold text-xs"
+                        onClick={() =>
+                          setpersonality(
+                            personality.filter((_, i) => i !== index),
+                          )
+                        }
+                      >
+                        x
+                      </button>
+                    </div>
+                  ))}
+                  <div
+                    className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
+                    onClick={() => setpersonality([...personality, ''])}
+                  >
+                    +
+                  </div>
+                </>
+              ) : (
+                personality.map((trait, index) => (
                   <div
                     key={index}
-                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative"
-                  >   
-                    <input
-                      value={trait}
-                      onChange={(e) => {
-                        const newTraits = [...personality];
-                        newTraits[index] = e.target.value;
-                        setpersonality(newTraits);
-                      }}
-                      className="bg-transparent border-none outline-none text-center text-sm"
-                      style={{ width: '100%', padding: '0' }}
-                    />
-                    <button
-                      className="relative flex right-[2px] text-red-500 font-bold text-xs"
-                      onClick={() =>
-                        setpersonality(personality.filter((_, i) => i !== index))
-                      }
-                    >
-                      x
-                    </button>
+                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
+                  >
+                    {trait}
                   </div>
-                ))}
-              <div
-                className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
-                onClick={() => setpersonality([...personality, ''])}
-              >
-                +
-              </div>
-              </>
-            ) : (
-              personality.map((trait, index) => (
-              <div
-                key={index}
-                className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
-              >
-                {trait}
-              </div>
-              ))
-            )}
+                ))
+              )}
             </div>
           </div>
-        </div>
+        </form>
 
         <div className="mt-[125px] ml-[30px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
           <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
