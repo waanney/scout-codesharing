@@ -1,4 +1,3 @@
- 
 import React from 'react';
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
@@ -23,37 +22,6 @@ function MyProfile() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  //biến cho createmyProfile
-  //const [age, setAge] = useState('')
-  //const [education, setEducation] = useState('')
-  //const [occupation, setOccupation] = useState('')
-  //const [location, setLocation] = useState('')
-  const [intro, setIntro] = useState('');
-  const [personality, setpersonality] = useState([]);
-
-  const handlecreatemyProfile = e => {
-    e.preventDefault();
-    const newmyProfile = {
-      userId: userId,
-      username: currentUser.username,
-      //age: age,
-      //education: education,
-      //occupation: occupation,
-      location: location,
-      personality: personality,
-      Introduction: intro,
-    };
-    myProfile(newmyProfile, dispatch, navigate);
-  };
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableProfile, setEditableProfile] = useState({
-    age: currentUser?.age,
-    education: currentUser?.education,
-    occupation: currentUser?.occupation,
-    location: currentUser?.location,
-  });
-
   // Update line numbers when text changes
   useEffect(() => {
     const lines = text.split('\n');
@@ -70,6 +38,37 @@ function MyProfile() {
     };
     createPost(newPost, dispatch, navigate);
   };
+
+  //biến cho createmyProfile
+  //const [age, setAge] = useState('')
+  //const [education, setEducation] = useState('')
+  //const [occupation, setOccupation] = useState('')
+  //const [location, setLocation] = useState('')
+  const [intro, setIntro] = useState('');
+  const [personality, setpersonality] = useState([]);
+
+  const handlecreatemyProfile = e => {
+    e.preventDefault();
+    const newmyProfile = {
+      userId: userId,
+      username: currentUser.username,
+      //age: age,
+      //education: education,
+      //occupation: occupation,
+      //location: location,
+      personality: personality,
+      Introduction: intro,
+    };
+    myProfile(newmyProfile, dispatch, navigate);
+  };
+
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableProfile, setEditableProfile] = useState({
+    age: currentUser?.age,
+    education: currentUser?.education,
+    occupation: currentUser?.occupation,
+    location: currentUser?.location,
+  });
 
   const handleProfileChange = (field, value) => {
     setEditableProfile(prev => ({
@@ -149,28 +148,28 @@ function MyProfile() {
                   </div>
                   <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[10px]">
                     {isEditing ? (
-                      
-                        field === 'age'?(
+                      field === 'age' ? (
                         <input
-                        type="number"
-                        value={editableProfile[field]} // Bind input value to state
-                        onChange={e =>
-                          handleProfileChange(field, e.target.value)
-                        }
-                        className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
-                        style={{ border: 'solid 2px #EAEBF6' }}
+                          type="number"
+                          value={editableProfile[field]} // Bind input value to state
+                          onChange={e =>
+                            handleProfileChange(field, e.target.value)
+                          }
+                          className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                          style={{ border: 'solid 2px #EAEBF6' }}
                         />
-                      ):(
-                      <input
-                        type="text"
-                        value={editableProfile[field]} // Bind input value to state
-                        onChange={e =>
-                          handleProfileChange(field, e.target.value)
-                        }
-                        className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
-                        style={{ border: 'solid 2px #EAEBF6' }}
-                      />
-                    )) : (
+                      ) : (
+                        <input
+                          type="text"
+                          value={editableProfile[field]} // Bind input value to state
+                          onChange={e =>
+                            handleProfileChange(field, e.target.value)
+                          }
+                          className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                          style={{ border: 'solid 2px #EAEBF6' }}
+                        />
+                      )
+                    ) : (
                       editableProfile[field]
                     )}
                   </div>
