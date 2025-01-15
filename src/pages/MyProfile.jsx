@@ -36,10 +36,10 @@ function MyProfile() {
     const newmyProfile = {
       userId: userId,
       username: currentUser.username,
-      //age: age,
-      //education: education,
-      //occupation: occupation,
-      location: location,
+      age: editableProfile.age, // Ensure age and other fields are included
+      education: editableProfile.education,
+      occupation: editableProfile.occupation,
+      location: editableProfile.location,
       personality: personality,
       Introduction: intro,
     };
@@ -48,10 +48,10 @@ function MyProfile() {
 
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState({
-    age: currentUser?.age,
-    education: currentUser?.education,
-    occupation: currentUser?.occupation,
-    location: currentUser?.location,
+    age: currentUser?.age|| '',
+    education: currentUser?.education|| '',
+    occupation: currentUser?.occupation|| '',
+    location: currentUser?.location|| '',
   });
 
   // Update line numbers when text changes

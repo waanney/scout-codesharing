@@ -77,10 +77,17 @@ export const commentPost = async (commentData, dispatch) => {
 
 export const myProfile = async (myProfileData, dispatch) => {
   dispatch(myProfileStart());
+  // Pre-validation: Check for required fields
+  if (!myProfileData.age || !myProfileData.education || !myProfileData.occupation) {
+    dispatch(myProfileFailed("All fields are required"));
+    return;
+  }
+
   try {
-    await axios.post('http://localhost:8017/v1/myProfile/', myProfileData);
-    dispatch(myProfileSuccess());
+    const res = await axios.post('http://localhost:8017/v1/myProfile/', myProfileData);
+    dispatch(myProfileSuccess(res.data));
   } catch (err) {
-    dispatch(myProfileFailed(err.response?.data?.message));
+    dispatch(myProfileFailed(err.response?.data?.message ));
   }
 };
+
