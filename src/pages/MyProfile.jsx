@@ -151,6 +151,7 @@ function MyProfile() {
                   style={{
                     lineHeight: '1.5rem',
                     padding: '5px',
+                    border: 'solid 2px #EAEBF6',
                   }}
                   rows={1} // Initial row count
                   onInput={e => {
