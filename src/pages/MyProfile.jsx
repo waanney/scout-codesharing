@@ -58,7 +58,7 @@ function MyProfile() {
 
   return (
     <>
-      <HeaderForAllPages />
+      <HeaderForAllPages className="sticky" />
       <div className="flex ">
         <div className="flex min-h-screen flex-col">
           <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">

@@ -5,7 +5,7 @@ import CommentCard from '../../components/comment_card.jsx';
 export default function UserStorage() {
   return (
     <>
-      <HeaderForAllPages />
+      <HeaderForAllPages className="sticky" />
       <div className="bg-navy-900 min-h-screen p-8 bg-[#0b2878] padding">
         <div className="container mx-auto">
           {' '}

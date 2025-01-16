@@ -32,6 +32,7 @@ export default [
       'react/jsx-no-target-blank': 'off',
       'react/prop-types': 0,
       'react-hooks/exhaustive-deps': 'off',
+      'react/no-unescaped-entities': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },

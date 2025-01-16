@@ -24,7 +24,7 @@ const HeaderForAllPages = () => {
   };
 
   return (
-    <div className="fixed w-full px-[10px] z-20 ">
+    <div className=" w-full px-[10px] z-20 fixed">
       {currentUser ? (
         <>
           <div className="mx-auto flex items-center justify-between">

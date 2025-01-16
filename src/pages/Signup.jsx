@@ -1,20 +1,19 @@
 import HeaderForAllPages from '../components/header.jsx';
 import { Link } from 'react-router-dom';
 import { registerUser } from '../redux/apiRequest.js';
-import { useState, useEffect } from 'react'; 
-import { useDispatch, useSelector } from 'react-redux'; 
-import { useNavigate } from 'react-router-dom'; 
+import { useState, useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
 
 function Signup() {
-  const [Username, setUsername] = useState("");
-  const [UserID, setUserid] = useState("");
-  const [Password, setPassword] = useState("");
-  const [ConfirmPassword, setConfirmPassword] = useState("");
+  const [Username, setUsername] = useState('');
+  const [UserID, setUserid] = useState('');
+  const [Password, setPassword] = useState('');
+  const [ConfirmPassword, setConfirmPassword] = useState('');
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const error = useSelector((state) => state.auth.register.error);
-
+  const error = useSelector(state => state.auth.register.error);
 
   const handleRegister = e => {
     e.preventDefault();
@@ -32,7 +31,7 @@ function Signup() {
   // Effect to show the error message when it appears
   useEffect(() => {
     if (error) {
-      setShowError(true);  // Show the error immediately
+      setShowError(true); // Show the error immediately
       setFadeError(false); // Reset the fade-out effect
 
       // After 2 seconds, start fading out the error message
@@ -43,7 +42,7 @@ function Signup() {
       // After 3 seconds, hide the error completely
       const hideTimer = setTimeout(() => {
         setShowError(false); // Hide the error message after fade
-        setFadeError(false);  // Reset fade effect
+        setFadeError(false); // Reset fade effect
       }, 3000);
 
       return () => {
@@ -51,17 +50,19 @@ function Signup() {
         clearTimeout(hideTimer);
       };
     } else {
-      setShowError(false);  // Hide the error message if there's no error
-      setFadeError(false);   // Reset fade effect
+      setShowError(false); // Hide the error message if there's no error
+      setFadeError(false); // Reset fade effect
     }
   }, [error]); // Trigger when error changes
 
   return (
     <>
       <div className="flex min-h-screen flex-col">
-        <HeaderForAllPages />
+        <HeaderForAllPages className="sticky" />
         <div className="flex flex-col items-center justify-center px-4 mt-[100px]">
-          <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">Create an account</h1>
+          <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">
+            Create an account
+          </h1>
           {showError && error && (
             <div className="fixed inset-0 flex items-center justify-center z-10">
               <div
@@ -75,7 +76,10 @@ function Signup() {
               </div>
             </div>
           )}
-          <form onSubmit={handleRegister} className="flex flex-grow flex-col h-[600px] w-[500px] bg-black bg-opacity-50 rounded-[10px]">
+          <form
+            onSubmit={handleRegister}
+            className="flex flex-grow flex-col h-[600px] w-[500px] bg-black bg-opacity-50 rounded-[10px]"
+          >
             <div className="mt-[22px] ml-[8px]">
               <label
                 className="font-Inter font-bold text-[18px]"
