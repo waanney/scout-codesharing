@@ -31,12 +31,31 @@ export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginFailed(err.response?.data?.message));
   }
 };
+
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-    await axios.post('http://localhost:8017/v1/Auth/', user);
-    dispatch(registerSuccess());
-    navigate('/login');
+    axios
+      .post('http://localhost:8017/v1/Auth/', user)
+      .then(res => {
+        localStorage.setItem('currentUser', JSON.stringify(res.data));
+        dispatch(registerSuccess(res.data));
+
+        // Lấy _id của user vừa tạo từ response (kiểu ObjectId)
+        const owner = res.data._id;
+
+        // Gọi API myProfile
+        const newmyProfile = {
+          username: res.data.username,
+          owner: owner,
+        };
+        myProfile(newmyProfile, dispatch, navigate);
+
+        navigate('/myProfile');
+      })
+      .catch(err => {
+        dispatch(registerFailed(err.response?.data?.message));
+      });
   } catch (err) {
     dispatch(registerFailed(err.response?.data?.message));
   }
@@ -79,11 +98,8 @@ export const myProfile = async (myProfileData, dispatch) => {
   dispatch(myProfileStart());
 
   try {
-    const res = await axios.post(
-      'http://localhost:8017/v1/myProfile/',
-      myProfileData,
-    );
-    dispatch(myProfileSuccess(res.data));
+    await axios.post('http://localhost:8017/v1/myProfile/', myProfileData);
+    dispatch(myProfileSuccess(myProfileData));
   } catch (err) {
     dispatch(myProfileFailed(err.response?.data?.message));
   }
