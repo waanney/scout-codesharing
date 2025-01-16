@@ -352,7 +352,7 @@ function MyProfile() {
                   }
                 }}
                 className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
-                placeholder="Press Enter to create new numbered lines..."
+                placeholder="Put your codes here..."
                 style={{
                   lineHeight,
                   height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
