@@ -51,7 +51,7 @@ export const registerUser = async (user, dispatch, navigate) => {
         };
         myProfile(newmyProfile, dispatch, navigate);
 
-        navigate('/myProfile');
+        navigate('/profile');
       })
       .catch(err => {
         dispatch(registerFailed(err.response?.data?.message));
