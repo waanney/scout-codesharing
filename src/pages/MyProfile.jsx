@@ -5,7 +5,6 @@ import { createPost } from '../redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { myProfile } from '../redux/apiRequest.js';
 
 function MyProfile() {
   const currentUser =
@@ -55,21 +54,6 @@ function MyProfile() {
     );
   });
 
-  const handlecreatemyProfile = e => {
-    e.preventDefault();
-    const newmyProfile = {
-      userId: userId,
-      username: currentUser.username,
-      age: editableProfile.age,
-      education: editableProfile.education,
-      occupation: editableProfile.occupation,
-      location: editableProfile.location,
-      personality: personality,
-      Introduction: intro,
-    };
-    myProfile(newmyProfile, dispatch, navigate);
-  };
-
   useEffect(() => {
     localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
   }, [editableProfile]);
@@ -113,10 +97,7 @@ function MyProfile() {
     <>
       <HeaderForAllPages />
       <div className="flex ">
-        <form
-          onSubmit={handlecreatemyProfile}
-          className="flex min-h-screen flex-col"
-        >
+        <div className="flex min-h-screen flex-col">
           <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
@@ -272,7 +253,7 @@ function MyProfile() {
               )}
             </div>
           </div>
-        </form>
+        </div>
 
         <div className="mt-[125px] ml-[30px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
           <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
