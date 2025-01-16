@@ -40,12 +40,20 @@ function MyProfile() {
   };
 
   //biến cho createmyProfile
-  //const [age, setAge] = useState('')
-  //const [education, setEducation] = useState('')
-  //const [occupation, setOccupation] = useState('')
-  //const [location, setLocation] = useState('')
   const [intro, setIntro] = useState('');
   const [personality, setpersonality] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableProfile, setEditableProfile] = useState(() => {
+    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
+    return (
+      savedProfile || {
+        age: currentUser?.age || ' ',
+        education: currentUser?.education || ' ',
+        occupation: currentUser?.occupation || ' ',
+        location: currentUser?.location || ' ',
+      }
+    );
+  });
 
   const handlecreatemyProfile = e => {
     e.preventDefault();
@@ -61,17 +69,6 @@ function MyProfile() {
     };
     myProfile(newmyProfile, dispatch, navigate);
   };
-
-  const [isEditing, setIsEditing] = useState(false);
-  const [editableProfile, setEditableProfile] = useState(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
-    return savedProfile || {
-      age: currentUser?.age || '',
-      education: currentUser?.education || '',
-      occupation: currentUser?.occupation || '',
-      location: currentUser?.location || '',
-    };
-  });
 
   useEffect(() => {
     localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
