@@ -8,6 +8,7 @@ import useRestoreState from '../redux/useRestoreState';
 
 const HeaderForAllPages = () => {
   useRestoreState();
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
@@ -37,28 +38,27 @@ const HeaderForAllPages = () => {
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
 
-            <div className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]">
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <Link to="/" className="section">
-                  Home
+            <div
+              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              onMouseLeave={() => setHoveredIndex(null)} 
+            >
+              {hoveredIndex !== null && (
+                <div
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
+                  style={{ width: "25%", transform: `translateX(calc(100% * ${hoveredIndex}))` }}
+                ></div>
+              )}
+              {["Home", "Discussion", "Storage", "Profile"].map((item, index) => (
+                <div
+                  key={index}
+                  className="w-[25%] hover:underline hover:font-bold cursor-pointer text-center z-10"
+                  onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                >
+                <Link to={`/${item.toLowerCase()}`} className="section">
+                 {item}
                 </Link>
-              </div>
-
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <Link to="/discussion" className="section">
-                  Discussion
-                </Link>
-              </div>
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <Link to="/mystorage" className="section">
-                  Storage
-                </Link>
-              </div>
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <Link to="/myprofile" className="section">
-                  Profile
-                </Link>
-              </div>
+                </div>
+              ))}
             </div>
 
             <div
