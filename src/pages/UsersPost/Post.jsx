@@ -10,8 +10,18 @@ import { fetchUserData_API } from '../../api/index.js';
 import { commentPost } from '../../redux/apiRequest.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
+import hljs from 'highlight.js';
 
 function Post({ board, boardId }) {
+  const language = hljs.highlightAuto(board.content).language;
+  const SendClick = () => {
+    alert('Button clicked!');
+  };
+  const customTheme = {
+    ...hybrid,
+    backgroundColor: 'transparent',
+  };
+
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser'));
@@ -49,15 +59,6 @@ function Post({ board, boardId }) {
     } catch (error) {
       console.error('Error posting comment:', error);
     }
-  };
-
-  const SendClick = () => {
-    alert('Button clicked!');
-  };
-
-  const customTheme = {
-    ...hybrid,
-    backgroundColor: 'transparent',
   };
 
   const [userData, setUserData] = useState(null);
@@ -115,7 +116,7 @@ function Post({ board, boardId }) {
         <HeaderForAllPages />
         <div className="cards grid grid-cols-[2fr_3fr] gap-[34px] place-items-center overflow-hidden px-5 lg:mt-16 lg:flex-row lg:items-stretch lg:px-[calc(160px-(1920px-100vw)/3)]">
           <div className="card rounded-[10px] h-[636px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px] mx-auto">
+            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 <img
                   className="rounded-full h-[50px] w-[50px]"
@@ -196,7 +197,7 @@ function Post({ board, boardId }) {
             <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <CopyBlock
                 text={board.content}
-                language="cpp"
+                language={language}
                 theme={customTheme}
                 showLineNumbers={true}
                 wrapLines
