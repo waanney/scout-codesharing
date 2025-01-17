@@ -8,6 +8,7 @@ import useRestoreState from '../redux/useRestoreState';
 
 const HeaderForAllPages = () => {
   useRestoreState();
+  const [hoveredIndex, setHoveredIndex] = useState(null);
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
@@ -19,12 +20,12 @@ const HeaderForAllPages = () => {
 
   const handleLogout = () => {
     logoutUser(dispatch, navigate);
-
+    localStorage.removeItem('editableProfile');
     localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
   };
 
   return (
-    <div className=" w-full px-[10px] z-20 fixed">
+    <div className="fixed w-full px-[10px] z-20 ">
       {currentUser ? (
         <>
           <div className="mx-auto flex items-center justify-between">
@@ -37,28 +38,35 @@ const HeaderForAllPages = () => {
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
 
-            <div className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px] ">
-              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
-                <Link to="/" className="section">
-                  Home
-                </Link>
-              </div>
-
-              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
-                <Link to="/discussion" className="section">
-                  Discussion
-                </Link>
-              </div>
-              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
-                <Link to="/mystorage" className="section">
-                  Storage
-                </Link>
-              </div>
-              <div className="mx-[30px] hover:translate-y-[-4px] hover:shadow-lg cursor-pointer hover:rounded hover:scale-125">
-                <Link to="/myprofile" className="section">
-                  Profile
-                </Link>
-              </div>
+            <div
+              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {hoveredIndex !== null && (
+                <div
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
+                  style={{
+                    width: '25%',
+                    transform: `translateX(calc(100% * ${hoveredIndex}))`,
+                  }}
+                ></div>
+              )}
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="w-[25%] hover:underline hover:font-bold cursor-pointer text-center z-10"
+                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                  >
+                    <Link
+                      to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                      className="section"
+                    >
+                      {item}
+                    </Link>
+                  </div>
+                ),
+              )}
             </div>
 
             <div
@@ -82,16 +90,19 @@ const HeaderForAllPages = () => {
                 }`}
               >
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
-                  <p className="font-medium">Change Password</p>
+                  <Link to="/changepassword" className="clickchangepassword">
+                    <p className="font-medium">Change Password</p>
+                  </Link>
                 </button>
-                <Link to="/" className="clicklogout">
-                  <button
-                    onClick={handleLogout}
-                    className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all"
-                  >
+
+                <button
+                  onClick={handleLogout}
+                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all"
+                >
+                  <Link to="/" className="clicklogout">
                     <p className="font-medium">Log out</p>
-                  </button>
-                </Link>
+                  </Link>
+                </button>
                 {isFetching && <p>Logging out...</p>}
                 {error}
               </div>
@@ -109,30 +120,32 @@ const HeaderForAllPages = () => {
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
-            <div className="flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]">
-              <Link to="/" className="clickHome">
-                <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                  Home
-                </div>
-              </Link>
-
-              <Link to="/login" className="discussion-nologin">
-                <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                  Discussion
-                </div>
-              </Link>
-
-              <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                <a className="section" href="">
-                  Storage
-                </a>
-              </div>
-
-              <Link to="/login" className="clickProfile-nologin">
-                <div className="mx-[30px] hover:underline hover:font-bold cursor-pointer">
-                  Profile
-                </div>
-              </Link>
+            <div
+              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {hoveredIndex !== null && (
+                <div
+                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
+                  style={{
+                    width: '25%',
+                    transform: `translateX(calc(100% * ${hoveredIndex}))`,
+                  }}
+                ></div>
+              )}
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="w-[25%] hover:underline hover:font-bold cursor-pointer text-center z-10"
+                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                  >
+                    <Link to="/login" className="section">
+                      {item}
+                    </Link>
+                  </div>
+                ),
+              )}
             </div>
 
             <div className="justify-between space-x-1">
