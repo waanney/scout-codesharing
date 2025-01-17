@@ -40,7 +40,7 @@ const router = createBrowserRouter([
     element: <PostGetID />,
   },
   {
-    path: '/mystorage',
+    path: '/storage',
     element: <UserStorage />,
   },
   {

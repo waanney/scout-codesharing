@@ -20,7 +20,7 @@ const HeaderForAllPages = () => {
 
   const handleLogout = () => {
     logoutUser(dispatch, navigate);
-
+    localStorage.removeItem('editableProfile');
     localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
   };
 
@@ -59,6 +59,22 @@ const HeaderForAllPages = () => {
                     onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
                   >
                     <Link to={`/${item.toLowerCase()}`} className="section">
+                      {item}
+                    </Link>
+                  </div>
+                ),
+              )}
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="w-[25%] hover:underline hover:font-bold cursor-pointer text-center z-10"
+                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                  >
+                    <Link
+                      to={item === 'Home' ? '/' : `/${item.toLowerCase()}`}
+                      className="section"
+                    >
                       {item}
                     </Link>
                   </div>
