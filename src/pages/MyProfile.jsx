@@ -1,9 +1,11 @@
+import React from 'react';
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import { createPost } from '../redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function MyProfile() {
   const currentUser =
@@ -37,6 +39,101 @@ function MyProfile() {
     createPost(newPost, dispatch, navigate);
   };
 
+  //biến cho myProfile
+  const [intro, setIntro] = useState('');
+  const [profileId, setProfileId] = useState('');
+  const [personality, setPersonality] = useState([]);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editableProfile, setEditableProfile] = useState(() => {
+    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
+    return (
+      savedProfile || {
+        age: currentUser?.age || ' ',
+        education: currentUser?.education || ' ',
+        occupation: currentUser?.occupation || ' ',
+        location: currentUser?.location || ' ',
+      }
+    );
+  });
+
+  // Fetch profile data when currentUser changes
+  useEffect(() => {
+    const fetchProfile = async () => {
+      if (currentUser) {
+        try {
+          // Fetch profile dựa trên owner (là _id của user)
+          const response = await axios.get(
+            `http://localhost:8017/v1/myProfile?owner=${currentUser._id}`,
+          );
+          const profileData = response.data;
+          // Lưu _id của profile vào state
+          setProfileId(profileData._id);
+          // Update the state with the fetched profile data
+          setEditableProfile({
+            age: profileData.age || '',
+            education: profileData.education || '',
+            occupation: profileData.occupation || '',
+            location: profileData.location || '',
+            Introduction: profileData.Introduction || '',
+            personality: profileData.personality || [],
+          });
+          setIntro(profileData.Introduction || '');
+          setPersonality(profileData.personality || []);
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
+      } else {
+        // Reset editableProfile when there is no currentUser (e.g., after logout)
+        setEditableProfile({
+          age: '',
+          education: '',
+          occupation: '',
+          location: '',
+          Introduction: '',
+          personality: [],
+        });
+        setIntro('');
+        setPersonality();
+      }
+    };
+
+    fetchProfile();
+  }, [currentUser]); // Run useEffect when currentUser changes
+
+  /*  useEffect(() => {
+    localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
+  }, [editableProfile]);*/
+
+  const handleProfileChange = (field, value) => {
+    setEditableProfile(prev => ({
+      ...prev,
+      [field]: value,
+    }));
+  };
+
+  const handleUpdateProfile = async () => {
+    try {
+      // Sử dụng profileId để cập nhật profile
+      await axios.put(
+        `http://localhost:8017/v1/myProfile/${profileId}`,
+        editableProfile,
+      );
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi cho người dùng)
+    }
+  };
+
+  const handleEditClick = () => {
+    setIsEditing(true);
+  };
+
+  const handleSaveClick = async () => {
+    console.log('Updated profile:', editableProfile);
+    await handleUpdateProfile(); // Gọi hàm handleUpdateProfile để cập nhật profile
+    setIsEditing(false); // Chuyển sang chế độ xem profile
+  };
+
   const handleKeyDown = e => {
     if (e.key === 'Enter') {
       const newLineNumbers = [...lineNumbers];
@@ -63,9 +160,22 @@ function MyProfile() {
         <div className="flex min-h-screen flex-col">
           <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
-              <h2 className="font-Manrope font-extrabold text-[16px] text-center mt-[16px]">
-                {currentUser.username}
-              </h2>
+              <div className="relative flex items-center justify-center w-full">
+                <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
+                  {currentUser.username}
+                </h2>
+                <button
+                  className="absolute right-[5px] mt-[10px]"
+                  onClick={isEditing ? handleSaveClick : handleEditClick}
+                >
+                  <img
+                    src={
+                      isEditing ? 'src/assets/save.svg' : 'src/assets/edit.svg'
+                    }
+                    alt={isEditing ? 'Save icon' : 'Edit icon'}
+                  />
+                </button>
+              </div>
               <svg
                 className="my-[12px]"
                 height="142"
@@ -76,42 +186,40 @@ function MyProfile() {
               </svg>
             </a>
             <div className="grid grid-cols-2">
-              <div className="text-[8px] font-Manrope text-[#A3A3A3] ml-[15px] ">
-                AGE
-              </div>
-              <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">
-                27
-              </div>
-              <div className="text-[8px] font-Manrope text-[#A3A3A3] ml-[15px]">
-                EDUCATION
-              </div>
-              <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">
-                Master in Business
-              </div>
-              <div className="text-[8px] font-Manrope text-[#A3A3A3] ml-[15px]">
-                STATUS
-              </div>
-              <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">
-                Single
-              </div>
-              <div className="text-[8px] font-Manrope text-[#A3A3A3] ml-[15px]">
-                OCCUPATION
-              </div>
-              <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">
-                Sale Manager
-              </div>
-              <div className="text-[8px] font-Manrope text-[#A3A3A3] ml-[15px]">
-                LOCATION
-              </div>
-              <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">
-                Sydney
-              </div>
-              <div className="text-[8px] font-Manrope text-[#A3A3A3] ml-[15px]">
-                High
-              </div>
-              <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px]">
-                27
-              </div>
+              {['age', 'education', 'occupation', 'location'].map(field => (
+                <React.Fragment key={field}>
+                  <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[10px]">
+                    {field.toUpperCase()}
+                  </div>
+                  <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[10px]">
+                    {isEditing ? (
+                      field === 'age' ? (
+                        <input
+                          type="number"
+                          value={editableProfile[field]} // Bind input value to state
+                          onChange={e =>
+                            handleProfileChange(field, e.target.value)
+                          }
+                          className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                          style={{ border: 'solid 2px #EAEBF6' }}
+                        />
+                      ) : (
+                        <input
+                          type="text"
+                          value={editableProfile[field]} // Bind input value to state
+                          onChange={e =>
+                            handleProfileChange(field, e.target.value)
+                          }
+                          className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                          style={{ border: 'solid 2px #EAEBF6' }}
+                        />
+                      )
+                    ) : (
+                      editableProfile[field]
+                    )}
+                  </div>
+                </React.Fragment>
+              ))}
             </div>
           </div>
           <div className="flex h-[92px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
@@ -119,28 +227,90 @@ function MyProfile() {
               className="h-[13px] w-[14px] m-[11px]"
               src="src/assets/Content.svg"
             ></img>
-            <span className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
-              I am used to with online service and I usually do my online
-              shopping from Instagram.
-            </span>
+
+            <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
+              {isEditing ? (
+                <textarea
+                  value={intro} // Bind the textarea value
+                  onChange={e => setIntro(e.target.value)}
+                  className="bg-transparent text-white rounded-[2px] text-[11px] w-[170px] h-[70px] resize-none overflow-hidden"
+                  style={{
+                    lineHeight: '1.5rem',
+                    padding: '5px',
+                    border: 'solid 2px #EAEBF6',
+                  }}
+                  rows={1} // Initial row count
+                  onInput={e => {
+                    e.target.style.height = 'auto'; // Reset height
+                    e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height dynamically
+                  }}
+                />
+              ) : (
+                <div
+                  className="bg-transparent text-white rounded-[2px] text-[11px] w-full"
+                  style={{
+                    whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
+                    wordBreak: 'break-word', // Handle long strings
+                    lineHeight: '1.5rem',
+                    padding: '5px',
+                  }}
+                >
+                  {intro}
+                </div>
+              )}
+            </div>
           </div>
           <div className="h-[100px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
-            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px]">
-              <div className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium ">
-                Introvert
-              </div>
-              <div className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium ">
-                Thinker
-              </div>
-              <div className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium ">
-                Spender
-              </div>
-              <div className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium ">
-                Tech-savvy
-              </div>
+            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto">
+              {isEditing ? (
+                <>
+                  {personality.map((trait, index) => (
+                    <div
+                      key={index}
+                      className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative"
+                    >
+                      <input
+                        value={trait}
+                        onChange={e => {
+                          const newTraits = [...personality];
+                          newTraits[index] = e.target.value;
+                          setPersonality(newTraits);
+                        }}
+                        className="bg-transparent border-none outline-none text-center text-sm"
+                        style={{ width: '100%', padding: '0' }}
+                      />
+                      <button
+                        className="relative flex right-[2px] text-red-500 font-bold text-xs"
+                        onClick={() =>
+                          setPersonality(
+                            personality.filter((_, i) => i !== index),
+                          )
+                        }
+                      >
+                        x
+                      </button>
+                    </div>
+                  ))}
+                  <div
+                    className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
+                    onClick={() => setPersonality([...personality, ''])}
+                  >
+                    +
+                  </div>
+                </>
+              ) : (
+                personality.map((trait, index) => (
+                  <div
+                    key={index}
+                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
+                  >
+                    {trait}
+                  </div>
+                ))
+              )}
             </div>
           </div>
         </div>
@@ -242,7 +412,7 @@ function MyProfile() {
                   }
                 }}
                 className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
-                placeholder="Press Enter to create new numbered lines..."
+                placeholder="Put your codes here..."
                 style={{
                   lineHeight,
                   height: `calc(${lineHeight} * ${numberOfVisibleLines})`,

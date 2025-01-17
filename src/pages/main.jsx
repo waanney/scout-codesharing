@@ -12,6 +12,7 @@ import Login from './Login';
 import Signup from './Signup';
 import PostGetID from './UsersPost/_id';
 import UserStorage from './StoragePage/UserStorage';
+import Changepassword from './Changepassword';
 
 const router = createBrowserRouter([
   {
@@ -31,7 +32,7 @@ const router = createBrowserRouter([
     element: <Board />,
   },
   {
-    path: '/myprofile',
+    path: '/profile',
     element: <MyProfile />,
   },
   {
@@ -39,8 +40,12 @@ const router = createBrowserRouter([
     element: <PostGetID />,
   },
   {
-    path: '/mystorage',
+    path: '/storage',
     element: <UserStorage />,
+  },
+  {
+    path: '/changepassword',
+    element: <Changepassword />,
   },
 ]);
 
