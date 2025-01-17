@@ -5,6 +5,7 @@ import { createPost } from '../redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 function MyProfile() {
   const currentUser =
@@ -38,9 +39,10 @@ function MyProfile() {
     createPost(newPost, dispatch, navigate);
   };
 
-  //biến cho createmyProfile
+  //biến cho myProfile
   const [intro, setIntro] = useState('');
-  const [personality, setpersonality] = useState([]);
+  const [profileId, setProfileId] = useState('');
+  const [personality, setPersonality] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState(() => {
     const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
@@ -54,9 +56,53 @@ function MyProfile() {
     );
   });
 
+  // Fetch profile data when currentUser changes
   useEffect(() => {
+    const fetchProfile = async () => {
+      if (currentUser) {
+        try {
+          // Fetch profile dựa trên owner (là _id của user)
+          const response = await axios.get(
+            `http://localhost:8017/v1/myProfile?owner=${currentUser._id}`,
+          );
+          const profileData = response.data;
+          // Lưu _id của profile vào state
+          setProfileId(profileData._id);
+          // Update the state with the fetched profile data
+          setEditableProfile({
+            age: profileData.age || '',
+            education: profileData.education || '',
+            occupation: profileData.occupation || '',
+            location: profileData.location || '',
+            Introduction: profileData.Introduction || '',
+            personality: profileData.personality || [],
+          });
+          setIntro(profileData.Introduction || '');
+          setPersonality(profileData.personality || []);
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+        }
+      } else {
+        // Reset editableProfile when there is no currentUser (e.g., after logout)
+        setEditableProfile({
+          age: '',
+          education: '',
+          occupation: '',
+          location: '',
+          Introduction: '',
+          personality: [],
+        });
+        setIntro('');
+        setPersonality();
+      }
+    };
+
+    fetchProfile();
+  }, [currentUser]); // Run useEffect when currentUser changes
+
+  /*  useEffect(() => {
     localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
-  }, [editableProfile]);
+  }, [editableProfile]);*/
 
   const handleProfileChange = (field, value) => {
     setEditableProfile(prev => ({
@@ -65,13 +111,27 @@ function MyProfile() {
     }));
   };
 
+  const handleUpdateProfile = async () => {
+    try {
+      // Sử dụng profileId để cập nhật profile
+      await axios.put(
+        `http://localhost:8017/v1/myProfile/${profileId}`,
+        editableProfile,
+      );
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi cho người dùng)
+    }
+  };
+
   const handleEditClick = () => {
     setIsEditing(true);
   };
 
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     console.log('Updated profile:', editableProfile);
-    setIsEditing(false);
+    await handleUpdateProfile(); // Gọi hàm handleUpdateProfile để cập nhật profile
+    setIsEditing(false); // Chuyển sang chế độ xem profile
   };
 
   const handleKeyDown = e => {
@@ -217,7 +277,7 @@ function MyProfile() {
                         onChange={e => {
                           const newTraits = [...personality];
                           newTraits[index] = e.target.value;
-                          setpersonality(newTraits);
+                          setPersonality(newTraits);
                         }}
                         className="bg-transparent border-none outline-none text-center text-sm"
                         style={{ width: '100%', padding: '0' }}
@@ -225,7 +285,7 @@ function MyProfile() {
                       <button
                         className="relative flex right-[2px] text-red-500 font-bold text-xs"
                         onClick={() =>
-                          setpersonality(
+                          setPersonality(
                             personality.filter((_, i) => i !== index),
                           )
                         }
@@ -236,7 +296,7 @@ function MyProfile() {
                   ))}
                   <div
                     className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
-                    onClick={() => setpersonality([...personality, ''])}
+                    onClick={() => setPersonality([...personality, ''])}
                   >
                     +
                   </div>
