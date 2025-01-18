@@ -18,11 +18,12 @@ import {
   myProfileSuccess,
   myProfileFailed,
 } from './myProfileSlice';
+import { API_ROOT } from '../utils/constant';
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
   try {
-    const res = await axios.post('http://localhost:8017/v1/Auth/login', user);
+    const res = await axios.post(`${API_ROOT}/v1/Auth/login`, user);
     // Lưu thông tin user vào localStorage
     localStorage.setItem('currentUser', JSON.stringify(res.data));
     dispatch(loginSuccess(res.data));
@@ -36,7 +37,7 @@ export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
     axios
-      .post('http://localhost:8017/v1/Auth/', user)
+      .post(`${API_ROOT}/v1/Auth/`, user)
       .then(res => {
         localStorage.setItem('currentUser', JSON.stringify(res.data));
         dispatch(registerSuccess(res.data));
@@ -64,7 +65,7 @@ export const registerUser = async (user, dispatch, navigate) => {
 export const logoutUser = async (dispatch, navigate) => {
   dispatch(logoutStart());
   try {
-    await axiosJWT.post('http://localhost:8017/v1/Auth/logout', {});
+    await axiosJWT.post(`${API_ROOT}/v1/Auth/logout`, {});
     dispatch(logoutSuccess());
     navigate('/');
   } catch (err) {
@@ -76,7 +77,7 @@ export const logoutUser = async (dispatch, navigate) => {
 export const createPost = async (boards, dispatch, navigate) => {
   dispatch(createStart());
   try {
-    await axios.post('http://localhost:8017/v1/boards', boards);
+    await axios.post(`${API_ROOT}/v1/boards`, boards);
     dispatch(createSuccess());
     navigate('/discussion');
   } catch (err) {
@@ -87,7 +88,7 @@ export const createPost = async (boards, dispatch, navigate) => {
 export const commentPost = async (commentData, dispatch) => {
   dispatch(commentStart());
   try {
-    await axios.post('http://localhost:8017/v1/Comment/', commentData);
+    await axios.post(`${API_ROOT}/v1/Comment/`, commentData);
     dispatch(commentSuccess());
   } catch (err) {
     dispatch(commentFailed(err.response?.data?.message));
@@ -98,7 +99,7 @@ export const myProfile = async (myProfileData, dispatch) => {
   dispatch(myProfileStart());
 
   try {
-    await axios.post('http://localhost:8017/v1/myProfile/', myProfileData);
+    await axios.post(`${API_ROOT}/v1/myProfile/`, myProfileData);
     dispatch(myProfileSuccess(myProfileData));
   } catch (err) {
     dispatch(myProfileFailed(err.response?.data?.message));

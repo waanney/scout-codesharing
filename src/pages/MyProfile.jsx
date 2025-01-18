@@ -6,6 +6,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { API_ROOT } from '../utils/constant.js';
 
 function MyProfile() {
   const currentUser =
@@ -63,7 +64,7 @@ function MyProfile() {
         try {
           // Fetch profile dựa trên owner (là _id của user)
           const response = await axios.get(
-            `http://localhost:8017/v1/myProfile?owner=${currentUser._id}`,
+            `${API_ROOT}/v1/myProfile?owner=${currentUser._id}`,
           );
           const profileData = response.data;
           // Lưu _id của profile vào state
@@ -114,10 +115,7 @@ function MyProfile() {
   const handleUpdateProfile = async () => {
     try {
       // Sử dụng profileId để cập nhật profile
-      await axios.put(
-        `http://localhost:8017/v1/myProfile/${profileId}`,
-        editableProfile,
-      );
+      await axios.put(`${API_ROOT}/v1/myProfile/${profileId}`, editableProfile);
     } catch (error) {
       console.error('Error updating profile:', error);
       // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi cho người dùng)
