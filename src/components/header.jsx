@@ -25,7 +25,7 @@ const HeaderForAllPages = () => {
   };
 
   return (
-    <div className="py-[10px] fixed w-full px-[10px] z-20 bg-[#0b2878]">
+    <div className="fixed w-full px-[10px] z-20 bg-[#0b2878] h-[80px]">
       {currentUser ? (
         <>
           <div className="mx-auto flex items-center justify-between">
@@ -39,7 +39,7 @@ const HeaderForAllPages = () => {
             </a>
 
             <div
-              className="relative flex items-center justify-center bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {hoveredIndex !== null && (
@@ -122,7 +122,7 @@ const HeaderForAllPages = () => {
             </a>
             
             <div
-              className="relative flex items-center justify-center bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {hoveredIndex !== null && (
