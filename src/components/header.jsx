@@ -122,7 +122,7 @@ const HeaderForAllPages = () => {
             </a>
             
             <div
-              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              className="relative flex items-center justify-center bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {hoveredIndex !== null && (
@@ -132,19 +132,22 @@ const HeaderForAllPages = () => {
                     width: '25%',
                     transform: `translateX(calc(100% * ${hoveredIndex}))`,
                   }}
-                  
                 ></div>
               )}
               {['Home', 'Discussion', 'Storage', 'Profile'].map(
                 (item, index) => (
-                  <Link to="/login" className="section">
                   <div
                     key={index}
-                    className="w-[25%] hover:font-bold cursor-pointer text-center z-10"
+                    className="w-[25%]  hover:font-bold cursor-pointer text-center z-10"
+                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
                   >
+                    <Link
+                      to="/login"
+                      className="section"
+                    >
                       {item}
+                    </Link>
                   </div>
-                  </Link>
                 ),
               )}
             </div>
