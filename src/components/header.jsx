@@ -119,6 +119,16 @@ const HeaderForAllPages = () => {
               className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
+              {['Home', 'Discussion', 'Storage', 'Profile'].map((item, index) => (
+                <div
+                  key={index}
+                  className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
+                  onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                  onClick={() => navigate('/login')}
+                >
+                  <span>{item}</span>
+                </div>
+              ))}
               {hoveredIndex !== null && (
                 <div
                   className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
@@ -127,22 +137,6 @@ const HeaderForAllPages = () => {
                     transform: `translateX(calc(100% * ${hoveredIndex}))`,
                   }}
                 ></div>
-              )}
-              {['Home', 'Discussion', 'Storage', 'Profile'].map(
-                (item, index) => (
-                  <div
-                    key={index}
-                    className="w-[25%]  hover:font-bold cursor-pointer text-center z-10"
-                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                  >
-                    <Link
-                      to="/login"
-                      className="section"
-                    >
-                      {item}
-                    </Link>
-                  </div>
-                ),
               )}
             </div>
 
