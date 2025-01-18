@@ -1,7 +1,7 @@
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import PostCard from '../../components/post_card';
-
+import ScrollTop from '../../components/scrollTop';
 function Discussion({
   board,
   Boards,
@@ -23,11 +23,16 @@ function Discussion({
     pageNumbers.push(i);
   }
 
+  window.scrollTo({
+    top: 0,
+    behavior: 'auto',
+  });
+
   return (
     <>
       <div className="flex flex-col min-h-screen bg-[#0b2878]">
         <HeaderForAllPages />
-        <div className="mx-auto mt-[103px] font-raleway text-[48px] text-white font-bold ">
+        <div className="mx-auto mt-[103px] mb-[20px] font-raleway text-[48px] text-white font-bold ">
           What is on?
         </div>
         {/* Hiển thị danh sách bài đăng */}
@@ -50,7 +55,7 @@ function Discussion({
               >
                 <button
                   onClick={() => paginate(number)}
-                  className={`page-link ${currentPage === number ? 'hover:underline' : ''}`}
+                  className={`page-link ${currentPage === number ? 'underline' : ''}`}
                 >
                   {number}
                 </button>
@@ -58,6 +63,7 @@ function Discussion({
             ))}
           </ul>
         </nav>
+        <ScrollTop />
       </div>
       <FooterAllPage />
     </>

@@ -8,6 +8,7 @@ import hljs from 'highlight.js';
 
 const PostCard = ({ post }) => {
   const language = hljs.highlightAuto(post.content).language;
+
   const SendClick = () => {
     alert('Button clicked!');
   };
