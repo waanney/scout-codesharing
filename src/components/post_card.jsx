@@ -114,7 +114,6 @@ const PostCard = ({ post }) => {
           language={language}
           theme={customTheme}
           showLineNumbers={true}
-          wrapLines
           customStyle={{ overflow: 'hidden' }}
         />
       </div>

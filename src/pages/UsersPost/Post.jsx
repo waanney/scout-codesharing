@@ -200,7 +200,6 @@ function Post({ board, boardId }) {
                 language={language}
                 theme={customTheme}
                 showLineNumbers={true}
-                wrapLines
               />
             </div>
           </div>

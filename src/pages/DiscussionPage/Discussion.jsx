@@ -50,7 +50,7 @@ function Discussion({
               >
                 <button
                   onClick={() => paginate(number)}
-                  className="page-link hover:underline "
+                  className={`page-link ${currentPage === number ? 'hover:underline' : ''}`}
                 >
                   {number}
                 </button>
