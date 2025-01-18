@@ -25,7 +25,7 @@ const HeaderForAllPages = () => {
   };
 
   return (
-    <div className="fixed w-full px-[10px] z-20 ">
+    <div className="py-[10px] fixed w-full px-[10px] z-20 bg-[#0b2878]">
       {currentUser ? (
         <>
           <div className="mx-auto flex items-center justify-between">
@@ -39,7 +39,7 @@ const HeaderForAllPages = () => {
             </a>
 
             <div
-              className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              className="relative flex items-center justify-center bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {hoveredIndex !== null && (
@@ -90,14 +90,14 @@ const HeaderForAllPages = () => {
                 }`}
               >
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
-                  <Link to="/changepassword" className="clickchangepassword">
+                  <Link to="/changepassword" className="clickchangepassword hover:cursor-pointer">
                     <p className="font-medium">Change Password</p>
                   </Link>
                 </button>
 
                 <button
                   onClick={handleLogout}
-                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all"
+                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all hover:cursor-pointer"
                 >
                   <Link to="/" className="clicklogout">
                     <p className="font-medium">Log out</p>
@@ -120,6 +120,7 @@ const HeaderForAllPages = () => {
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
+            
             <div
               className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
@@ -131,19 +132,19 @@ const HeaderForAllPages = () => {
                     width: '25%',
                     transform: `translateX(calc(100% * ${hoveredIndex}))`,
                   }}
+                  
                 ></div>
               )}
               {['Home', 'Discussion', 'Storage', 'Profile'].map(
                 (item, index) => (
+                  <Link to="/login" className="section">
                   <div
                     key={index}
                     className="w-[25%] hover:font-bold cursor-pointer text-center z-10"
-                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
                   >
-                    <Link to="/login" className="section">
                       {item}
-                    </Link>
                   </div>
+                  </Link>
                 ),
               )}
             </div>
