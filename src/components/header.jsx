@@ -55,7 +55,7 @@ const HeaderForAllPages = () => {
                 (item, index) => (
                   <div
                     key={index}
-                    className="w-[25%] hover:underline hover:font-bold cursor-pointer text-center z-10"
+                    className="w-[25%]  hover:font-bold cursor-pointer text-center z-10"
                     onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
                   >
                     <Link
@@ -137,7 +137,7 @@ const HeaderForAllPages = () => {
                 (item, index) => (
                   <div
                     key={index}
-                    className="w-[25%] hover:underline hover:font-bold cursor-pointer text-center z-10"
+                    className="w-[25%] hover:font-bold cursor-pointer text-center z-10"
                     onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
                   >
                     <Link to="/login" className="section">
