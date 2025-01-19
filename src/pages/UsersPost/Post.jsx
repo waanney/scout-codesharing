@@ -1,7 +1,7 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
-import { CopyBlock, hybrid } from 'react-code-blocks';
+
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import { useDispatch, useSelector } from 'react-redux';
@@ -11,15 +11,15 @@ import { commentPost } from '../../redux/apiRequest.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
+import 'highlight.js/styles/github.css';
 
 function Post({ board, boardId }) {
   const language = hljs.highlightAuto(board.content).language;
+
+  const sourceCode = board.content.match(/[^\r\n]*(?:\r?\n|$)/g) || [];
+
   const SendClick = () => {
     alert('Button clicked!');
-  };
-  const customTheme = {
-    ...hybrid,
-    backgroundColor: 'transparent',
   };
 
   const currentUser =
@@ -195,12 +195,29 @@ function Post({ board, boardId }) {
           </div>
           <div className="card rounded-[10px] h-[636px] w-[1000px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
             <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
-              <CopyBlock
-                text={board.content}
-                language={language}
-                theme={customTheme}
-                showLineNumbers={true}
-              />
+              {sourceCode.map((code, lineNum) => (
+                <div key={lineNum} className="flex flex-row hover:bg-gray-600">
+                  <div className="w-[40px] text-center text-gray-400">
+                    {lineNum}
+                  </div>
+                  <div
+                    dangerouslySetInnerHTML={{
+                      __html: hljs.highlight(code, { language: language })
+                        .value,
+                    }}
+                    className="w-[1000px]"
+                  />
+                  <button
+                    onClick={() => {
+                      alert('buttonclick');
+                    }}
+                    className="text-end mr-[10px]"
+                  >
+                    {' '}
+                    o{' '}
+                  </button>
+                </div>
+              ))}
             </div>
           </div>
         </div>

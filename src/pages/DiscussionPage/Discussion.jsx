@@ -35,16 +35,6 @@ function Discussion({
         <div className="mx-auto mt-[103px] mb-[20px] font-raleway text-[48px] text-white font-bold ">
           What is on?
         </div>
-        {/* Hiển thị danh sách bài đăng */}
-        <ul className="cards grid grid-cols-2 gap-[66px] place-items-center">
-          {Boards.map(Boards => (
-            <li key={Boards._id}>
-              {' '}
-              {/* Đảm bảo mỗi post có key duy nhất */}
-              <PostCard post={Boards} />
-            </li>
-          ))}
-        </ul>
         {/* Phân trang */}
         <nav className="mx-auto text-[30px]">
           <ul className="pagination flex flex-row space-x-4">
@@ -63,6 +53,17 @@ function Discussion({
             ))}
           </ul>
         </nav>
+        {/* Hiển thị danh sách bài đăng */}
+        <ul className="cards grid grid-cols-2 gap-[66px] place-items-center">
+          {Boards.map(Boards => (
+            <li key={Boards._id}>
+              {' '}
+              {/* Đảm bảo mỗi post có key duy nhất */}
+              <PostCard post={Boards} />
+            </li>
+          ))}
+        </ul>
+
         <ScrollTop />
       </div>
       <FooterAllPage />
