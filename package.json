@@ -29,7 +29,8 @@
     "react-router-dom": "^7.1.1",
     "redux": "^5.0.1",
     "rollup": "^4.29.2",
-    "tailwind-scrollbar": "^3.1.0"
+    "tailwind-scrollbar": "^3.1.0",
+    "vanilla-tilt": "^1.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.15.0",
