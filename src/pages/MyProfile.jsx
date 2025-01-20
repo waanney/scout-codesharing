@@ -42,7 +42,7 @@ function MyProfile() {
 
   //biến cho myProfile
   const [intro, setIntro] = useState('');
-  const [profileId, setProfileId] = useState('');
+  //const [profileId, setProfileId] = useState('');
   const [personality, setPersonality] = useState([]);
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState(() => {
@@ -64,22 +64,22 @@ function MyProfile() {
         try {
           // Fetch profile dựa trên owner (là _id của user)
           const response = await axios.get(
-            `${API_ROOT}/v1/myProfile?owner=${currentUser._id}`,
+            `${API_ROOT}/v1/myProfile/${currentUser._id}`,
           );
           const profileData = response.data;
           // Lưu _id của profile vào state
-          setProfileId(profileData._id);
+          //setProfileId(profileData._id);
           // Update the state with the fetched profile data
           setEditableProfile({
-            age: profileData.age || '',
-            education: profileData.education || '',
-            occupation: profileData.occupation || '',
-            location: profileData.location || '',
-            Introduction: profileData.Introduction || '',
-            personality: profileData.personality || [],
+            age: profileData?.age || '',
+            education: profileData?.education || '',
+            occupation: profileData?.occupation || '',
+            location: profileData?.location || '',
+            Introduction: profileData?.Introduction || '',
+            personality: profileData?.personality || [],
           });
-          setIntro(profileData.Introduction || '');
-          setPersonality(profileData.personality || []);
+          setIntro(profileData?.Introduction || '');
+          setPersonality(profileData?.personality || []);
         } catch (error) {
           console.error('Error fetching profile:', error);
         }
@@ -114,11 +114,26 @@ function MyProfile() {
 
   const handleUpdateProfile = async () => {
     try {
-      // Sử dụng profileId để cập nhật profile
-      await axios.put(`${API_ROOT}/v1/myProfile/${profileId}`, editableProfile);
+      // Chỉ gửi các trường cần cập nhật
+      const updatedFields = {
+        age: editableProfile.age,
+        education: editableProfile.education,
+        occupation: editableProfile.occupation,
+        location: editableProfile.location,
+        Introduction: intro,
+        personality: personality,
+        username: currentUser?.username,
+        updatedAt: new Date().getTime(), // Sử dụng getTime() để lấy timestamp
+        owner: currentUser._id, // Thêm trường owner
+      };
+      console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên
+      await axios.put(
+        `${API_ROOT}/v1/myProfile/${currentUser._id}`,
+        updatedFields,
+      );
     } catch (error) {
       console.error('Error updating profile:', error);
-      // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi cho người dùng)
+      console.error('Response từ server:', error.response.data);
     }
   };
 

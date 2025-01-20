@@ -13,11 +13,11 @@ import {
 import axiosJWT from './axiosJWT';
 import { createStart, createFailed, createSuccess } from './uppostSlice';
 import { commentStart, commentSuccess, commentFailed } from './commentSlice';
-import {
+/*import {
   myProfileStart,
   myProfileSuccess,
   myProfileFailed,
-} from './myProfileSlice';
+} from './myProfileSlice';*/
 import { API_ROOT } from '../utils/constant';
 
 export const loginUser = async (user, dispatch, navigate) => {
@@ -41,7 +41,7 @@ export const registerUser = async (user, dispatch, navigate) => {
       .then(res => {
         localStorage.setItem('currentUser', JSON.stringify(res.data));
         dispatch(registerSuccess(res.data));
-
+        /*
         // Lấy _id của user vừa tạo từ response (kiểu ObjectId)
         const owner = res.data._id;
 
@@ -51,7 +51,7 @@ export const registerUser = async (user, dispatch, navigate) => {
           owner: owner,
         };
         myProfile(newmyProfile, dispatch, navigate);
-
+        */
         navigate('/profile');
       })
       .catch(err => {
@@ -95,7 +95,7 @@ export const commentPost = async (commentData, dispatch) => {
   }
 };
 
-export const myProfile = async (myProfileData, dispatch) => {
+/*export const myProfile = async (myProfileData, dispatch) => {
   dispatch(myProfileStart());
 
   try {
@@ -104,4 +104,4 @@ export const myProfile = async (myProfileData, dispatch) => {
   } catch (err) {
     dispatch(myProfileFailed(err.response?.data?.message));
   }
-};
+};*/
