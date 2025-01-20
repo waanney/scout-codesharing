@@ -4,8 +4,11 @@ import { CodeBlock, hybrid } from 'react-code-blocks';
 import { fetchUserData_API } from '../api/index.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../utils/formater.js';
+import hljs from 'highlight.js';
 
 const PostCard = ({ post }) => {
+  const language = hljs.highlightAuto(post.content).language;
+
   const SendClick = () => {
     alert('Button clicked!');
   };
@@ -109,10 +112,9 @@ const PostCard = ({ post }) => {
       >
         <CodeBlock
           text={post.content}
-          language="cpp"
+          language={language}
           theme={customTheme}
           showLineNumbers={true}
-          wrapLines
           customStyle={{ overflow: 'hidden' }}
         />
       </div>
