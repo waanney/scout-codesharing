@@ -54,7 +54,7 @@ function Discussion({
           </ul>
         </nav>
         {/* Hiển thị danh sách bài đăng */}
-        <ul className="cards grid grid-cols-2 gap-[66px] place-items-center">
+        <ul className="cards grid grid-cols-2 gap-[66px] place-items-center mb-[50px]">
           {Boards.map(Boards => (
             <li key={Boards._id}>
               {' '}

@@ -10,12 +10,13 @@ import { commentPost } from '../../redux/apiRequest.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
+import 'highlight.js/styles/customeStyle.css';
 
 function Post({ board, boardId }) {
   const language = hljs.highlightAuto(board.content).language;
 
-  const sourceCode = board.content.match(/[^\r\n]*(?:\r?\n|$)/g) || [];
+  const sourceCode = board.content.split('\n');
+  hljs.highlightAll();
 
   const SendClick = () => {
     alert('Button clicked!');
@@ -122,7 +123,6 @@ function Post({ board, boardId }) {
                   src="..\src\assets\demo_avatar.png"
                   alt="User Avatar"
                 />
-
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
                     {userData.username}
@@ -197,15 +197,12 @@ function Post({ board, boardId }) {
               {sourceCode.map((code, lineNum) => (
                 <div key={lineNum} className="flex flex-row hover:bg-gray-600">
                   <div className="w-[40px] text-center text-gray-400">
-                    {lineNum}
+                    {lineNum + 1}
                   </div>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: hljs.highlight(code, { language: language })
-                        .value,
-                    }}
-                    className="w-[1000px]"
-                  />
+                  <pre className="w-[4000px]">
+                    <code className={`language-${language}`}>{code}</code>
+                  </pre>
+
                   <button
                     onClick={() => {
                       alert('buttonclick');

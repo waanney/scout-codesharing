@@ -1,20 +1,18 @@
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
-import { CodeBlock, hybrid } from 'react-code-blocks';
 import { fetchUserData_API } from '../api/index.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../utils/formater.js';
+import 'highlight.js/styles/customeStyle.css';
 import hljs from 'highlight.js';
 
 const PostCard = ({ post }) => {
   const language = hljs.highlightAuto(post.content).language;
+  const sourceCode = post.content.split('\n');
+  hljs.highlightAll();
 
   const SendClick = () => {
     alert('Button clicked!');
-  };
-  const customTheme = {
-    ...hybrid,
-    backgroundColor: 'transparent',
   };
 
   const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
@@ -110,13 +108,14 @@ const PostCard = ({ post }) => {
         className=" font-mono text-[12px] w-[80%] h-[81%] bg-[#00000080] rounded-[5px] mt-[10px] mx-auto
                     overflow-hidden"
       >
-        <CodeBlock
-          text={post.content}
-          language={language}
-          theme={customTheme}
-          showLineNumbers={true}
-          customStyle={{ overflow: 'hidden' }}
-        />
+        {sourceCode.map((code, lineNum) => (
+          <div key={lineNum} className="flex flex-row hover:bg-gray-600">
+            <div className="w-[40px] text-center text-gray-400">{lineNum}</div>
+            <pre className="w-[1000px] bg-transparent">
+              <code className={`language-${language}`}>{code}</code>
+            </pre>
+          </div>
+        ))}
       </div>
     </div>
   );
