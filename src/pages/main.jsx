@@ -13,8 +13,13 @@ import Signup from './Signup';
 import PostGetID from './UsersPost/_id';
 import UserStorage from './StoragePage/UserStorage';
 import Changepassword from './Changepassword';
+import LoadingAnimation from '../components/loading';
 
 const router = createBrowserRouter([
+  {
+    path: '/LoadingAnimation',
+    element: <LoadingAnimation />,
+  },
   {
     path: '/',
     element: <HomePage />,
