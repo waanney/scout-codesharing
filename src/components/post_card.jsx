@@ -55,7 +55,7 @@ const PostCard = ({ post }) => {
 
   return (
     <div
-      className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
+      className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
       onClick={() =>
         (window.location.href = `http://localhost:5173/post/${post._id}`)
       }

@@ -64,7 +64,7 @@ const HeaderForAllPages = () => {
             </div>
 
             <div
-              className="h-[30px] w-[150px] flex relative items-center space-x-1 justify-end"
+              className="h-[30px] w-[150px] flex relative items-center space-x-1 cursor-pointer justify-end"
               onClick={() => setOpen(!open)}
             >
               <a className="flex items-center">
