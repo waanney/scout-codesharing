@@ -211,7 +211,7 @@ function Post({ board, boardId }) {
                   key={lineNum}
                   className="flex flex-row hover:bg-gray-600 relative"
                 >
-                  <div className="w-[40px] text-center text-gray-400">
+                  <div className="w-[10px] mx-[10px] text-gray-400">
                     {lineNum + 1}
                   </div>
                   <pre className="w-[4000px]">
@@ -229,7 +229,7 @@ function Post({ board, boardId }) {
                     <MessageSquareText className="opacity-30" />
                   </button>
                   <div
-                    className={`absolute w-[500px] h-[400px] bg-gray-800 right-[20px] top-[20px] z-10 transition-all transform ${open[lineNum] ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-5 pointer-events-none'}`}
+                    className={`absolute w-[500px] h-[400px] rounded-[10px] bg-blue-950 right-[20px] top-[20px] z-10 transition-all duration-300 transform ${open[lineNum] ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-5 pointer-events-none'}`}
                   >
                     <div className="text-center text-[20px] mx-[10px]">
                       Comment line {lineNum + 1} placeholder
@@ -264,8 +264,7 @@ function Post({ board, boardId }) {
                       <input
                         value={line_content}
                         onChange={e => setLineContent(e.target.value)}
-                        className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]
-                                  focus:border-blue-500 focus:ring focus:ring-blue-300 focus:outline-none"
+                        className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
                         placeholder="  Add your comment..."
                         type="text"
                       />
