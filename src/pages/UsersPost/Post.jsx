@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
+import CommentRating from '../../components/comment_rating.jsx';
 
 function Post({ board, boardId }) {
   const language = hljs.highlightAuto(board.content).language;
@@ -170,6 +171,7 @@ function Post({ board, boardId }) {
                   <div className="text-white text-[15px] font-normal leading-[150%]">
                     {comment.content}
                   </div>
+                  <CommentRating/>
                 </div>
               ))}
             </div>

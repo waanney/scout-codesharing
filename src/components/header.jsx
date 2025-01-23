@@ -32,7 +32,7 @@ const HeaderForAllPages = () => {
             <a className="flex justify-between items-center mt-[10px]" href="/">
               <img
                 className="h-[37px] w-[37px] mr-[5px]"
-                src="src/assets/Scout.ico"
+                src="../src/assets/Scout.ico"
                 alt="Scout Logo"
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
