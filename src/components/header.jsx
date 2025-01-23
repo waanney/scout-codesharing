@@ -42,16 +42,20 @@ const HeaderForAllPages = () => {
               className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile'].map((item, index) => (
-                <div
-                  key={index}
-                  className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
-                  onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                  onClick={() => navigate(item === 'Home' ? '/' : `/${item.toLowerCase()}`)}
-                >
-                  <span>{item}</span>
-                </div>
-              ))}
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
+                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                    onClick={() =>
+                      navigate(item === 'Home' ? '/' : `/${item.toLowerCase()}`)
+                    }
+                  >
+                    <span>{item}</span>
+                  </div>
+                ),
+              )}
               {hoveredIndex !== null && (
                 <div
                   className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
@@ -84,7 +88,10 @@ const HeaderForAllPages = () => {
                 }`}
               >
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
-                  <Link to="/changepassword" className="clickchangepassword hover:cursor-pointer">
+                  <Link
+                    to="/changepassword"
+                    className="clickchangepassword hover:cursor-pointer"
+                  >
                     <p className="font-medium">Change Password</p>
                   </Link>
                 </button>
@@ -114,21 +121,23 @@ const HeaderForAllPages = () => {
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
-            
+
             <div
               className="absolute left-1/2 -translate-x-1/2 mt-[20px] flex items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile'].map((item, index) => (
-                <div
-                  key={index}
-                  className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
-                  onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                  onClick={() => navigate('/login')}
-                >
-                  <span>{item}</span>
-                </div>
-              ))}
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
+                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
+                    onClick={() => navigate('/login')}
+                  >
+                    <span>{item}</span>
+                  </div>
+                ),
+              )}
               {hoveredIndex !== null && (
                 <div
                   className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"

@@ -1,4 +1,4 @@
-const CommentCard = ({ image, title, description }) => {
+const CommentCard = ({ image, title, comment }) => {
   return (
     <div className="bg-[#0b2878] rounded-lg shadow-md overflow-hidden transition transform hover:translate-y-[-4px] hover:shadow-lg w-full md:w-80 m-4">
       {image && (
@@ -9,10 +9,9 @@ const CommentCard = ({ image, title, description }) => {
         />
       )}
       <div className="p-6">
-        <h3 className="text-xl font-semibold mb-2">Bui minh quan</h3>
-        <p className="text-gray-600 text-sm">code like this</p>
+        <h3 className="text-xl font-semibold mb-2">{comment.username}</h3>
       </div>
-      {description}
+      {comment.content}
     </div>
   );
 };

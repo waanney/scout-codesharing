@@ -11,6 +11,7 @@ import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import 'highlight.js/styles/github.css';
+import CommentCard from '../../components/comment_card.jsx';
 
 function Post({ board, boardId }) {
   const language = hljs.highlightAuto(board.content).language;
@@ -97,6 +98,22 @@ function Post({ board, boardId }) {
 
     fetchCommentsWithUsernames();
   }, [board.comments]);
+
+  // comment inline
+  const [commentsByLine, setCommentsByLine] = useState({});
+  useEffect(() => {
+    // Group comments by lineNumber whenever commentsInline changes
+    const groupedComments = board?.commentsInline.reduce((acc, comment) => {
+      if (!acc[comment.lineNumber]) {
+        acc[comment.lineNumber] = [];
+      }
+      acc[comment.lineNumber].push(comment);
+      return acc;
+    }, {});
+    setCommentsByLine(groupedComments);
+  }, [board?.commentsInline]);
+
+  // end
   if (loading) {
     return <div>Đang tải user data</div>;
   }
@@ -215,6 +232,13 @@ function Post({ board, boardId }) {
                     {' '}
                     o{' '}
                   </button>
+                  {(commentsByLine[lineNum + 1] || []).map(comment => (
+                    <CommentCard
+                      key={comment._id}
+                      comment={comment}
+                      className="z-30"
+                    />
+                  ))}
                 </div>
               ))}
             </div>

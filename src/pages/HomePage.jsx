@@ -8,20 +8,20 @@ function HomePage() {
 
   useEffect(() => {
     if (cardRefs.current.length) {
-      cardRefs.current.forEach((card) => {
+      cardRefs.current.forEach(card => {
         if (card) {
           VanillaTilt.init(card, {
-            max: 10, 
-            speed: 800, 
-            glare: true, 
-            'max-glare': 0.2, 
+            max: 10,
+            speed: 800,
+            glare: true,
+            'max-glare': 0.2,
           });
         }
       });
     }
 
     return () => {
-      cardRefs.current.forEach((card) => {
+      cardRefs.current.forEach(card => {
         if (card?.vanillaTilt) {
           card.vanillaTilt.destroy();
         }
@@ -95,7 +95,7 @@ function HomePage() {
           {cardDetails.map((card, index) => (
             <div
               key={index}
-              ref={(el) => (cardRefs.current[index] = el)}
+              ref={el => (cardRefs.current[index] = el)}
               className={`card ${
                 card.isTall ? 'h-[536px] row-span-2' : 'h-[252px]'
               } w-[280px] bg-[#274494] rounded-[10px] border border-[#3653a3] text-left shadow-md`}

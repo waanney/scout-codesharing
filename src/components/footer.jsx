@@ -102,13 +102,22 @@ export default function FooterAllPage() {
               GDSC: HCMUT
             </h6>
             <p className="mb-4">
-              <a target="_blank" href="https://fessior.com/tools">Fessior Page</a>
+              <a target="_blank" href="https://fessior.com/tools">
+                Fessior Page
+              </a>
             </p>
             <p className="mb-4">
-              <a target="_blank" href="https://discord.gg/Rw6YCEKEBy">Discord</a>
+              <a target="_blank" href="https://discord.gg/Rw6YCEKEBy">
+                Discord
+              </a>
             </p>
             <p className="mb-4">
-              <a target="_blank" href="https://www.facebook.com/groups/gdschcmut">Community</a>
+              <a
+                target="_blank"
+                href="https://www.facebook.com/groups/gdschcmut"
+              >
+                Community
+              </a>
             </p>
             <p>
               <a href="#!">Help</a>
