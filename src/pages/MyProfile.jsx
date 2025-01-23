@@ -39,7 +39,6 @@ function MyProfile() {
     };
     createPost(newPost, dispatch, navigate);
   };
-
   //biến cho myProfile
   const [intro, setIntro] = useState('');
   //const [profileId, setProfileId] = useState('');
@@ -99,7 +98,7 @@ function MyProfile() {
     };
 
     fetchProfile();
-  }, [currentUser]); // Run useEffect when currentUser changes
+  }, []); // Run useEffect when currentUser changes
 
   /*  useEffect(() => {
     localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
