@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Send } from 'lucide-react';
-export default function LineComment() {
+export default function LineComment({commentByLine}) {
   const [line_content, setLineContent] = useState('');
   const handleComment2 = async e => {
     e.preventDefault();

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import  { useState } from "react";
 
 const CommentRating = () => {
   const [upScore, setUpScore] = useState(0);
