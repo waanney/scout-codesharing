@@ -11,7 +11,7 @@ import { commentPost } from '../../redux/apiRequest.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/customeStyle.css';
+import '../../utils/customeStyle.css';
 import CommentRating from '../../components/comment_rating.jsx';
 
 function Post({ board, boardId }) {
