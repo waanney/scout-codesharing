@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import { fetchBoardCollection_API } from '../../api/index';
 import Discussion from './Discussion.jsx';
+import LoadingAnimation from '../../components/loading.jsx';
 
 function Board() {
   const [board, setBoard] = useState(null);
@@ -44,7 +45,7 @@ function Board() {
   const paginate = pageNumber => setCurrentPage(pageNumber);
 
   if (loading) {
-    return <div>Loading...</div>; // Hiển thị thông báo loading
+    return <LoadingAnimation />; // Hiển thị thông báo loading
   }
 
   if (error) {

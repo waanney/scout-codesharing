@@ -4,34 +4,33 @@ import { Share } from 'lucide-react';
 import { MessageSquareText } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
-import LineComment from '../../components/lineComment.jsx';
+import CommentCard from '../../components/comment_card.jsx';
+
 import CommentRating from '../../components/comment_rating.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData_API } from '../../api/index.js';
-import { commentPost } from '../../redux/apiRequest.js';
+import {
+  commentPost_API,
+  commentInlinePost_API,
+} from '../../redux/apiRequest.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
 
 function Post({ board, boardId }) {
-  const language = hljs.highlightAuto(board.content).language;
-
-  const sourceCode = board.content.split('\n');
-  hljs.highlightAll();
-
-  const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
-
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser'));
   const [content, setContent] = useState('');
-  const [comments, setComments] = useState([]); // State để lưu danh sách comment
+  const [comments, setComments] = useState([]);
+  // State để lưu danh sách comment
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const userId = currentUser ? currentUser._id : '';
 
+  // handle comment outline
   const handleComment = async e => {
     e.preventDefault();
     if (!content.trim()) {
@@ -47,7 +46,7 @@ function Post({ board, boardId }) {
     };
 
     try {
-      await commentPost(newComment, dispatch, navigate);
+      await commentPost_API(newComment, dispatch, navigate);
       setComments(prevComments => [
         ...prevComments,
         {
@@ -61,7 +60,7 @@ function Post({ board, boardId }) {
       console.error('Error posting comment:', error);
     }
   };
-
+  // lấy data user
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -82,6 +81,7 @@ function Post({ board, boardId }) {
 
     fetchData();
   }, [board.userID]);
+  // lấy data có tên
 
   useEffect(() => {
     const fetchCommentsWithUsernames = async () => {
@@ -100,8 +100,15 @@ function Post({ board, boardId }) {
     fetchCommentsWithUsernames();
   }, [board.comments]);
 
-  // comment inline
-  const [commentsByLine, setCommentsByLine] = useState({});
+  // handle comment inline
+
+  const [line_content, setLineContent] = useState('');
+  const language = hljs.highlightAuto(board.content).language;
+  const sourceCode = board.content.split('\n');
+  hljs.highlightAll();
+  const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
+  const [commentsByLine, setCommentsByLine] = useState([]);
+
   useEffect(() => {
     // Group comments by lineNumber whenever commentsInline changes
     const groupedComments = board?.commentsInline.reduce((acc, comment) => {
@@ -114,7 +121,69 @@ function Post({ board, boardId }) {
     setCommentsByLine(groupedComments);
   }, [board?.commentsInline]);
 
-  // end
+  // summit code
+  const handleInlineComment = async (e, lineNumber) => {
+    e.preventDefault();
+    if (!line_content.trim()) {
+      alert('Comment must have at least 1 lettr.');
+      return;
+    }
+
+    const newLineComment = {
+      content: line_content.trim(),
+      userId: userId,
+      boardId: boardId,
+      username: currentUser.username,
+      lineNumber: lineNumber,
+    };
+    // api
+    try {
+      const response = await commentInlinePost_API(
+        newLineComment,
+        dispatch,
+        navigate,
+      );
+      const createdComment = response?.data?.createdComment;
+
+      setComments(prevComments => {
+        if (!Array.isArray(prevComments)) {
+          console.error('prevComments is not an array:', prevComments);
+          return createdComment ? [createdComment] : []; // Trả về mảng mới nếu prevComments không phải mảng
+        }
+        return createdComment
+          ? [...prevComments, createdComment]
+          : prevComments;
+      });
+
+      // Cập nhật commentsByLine một cách chính xác
+      setCommentsByLine(prevCommentsByLine => {
+        const updatedLineComments = prevCommentsByLine[lineNumber]
+          ? [...prevCommentsByLine[lineNumber]]
+          : [];
+        if (createdComment) {
+          updatedLineComments.push(createdComment);
+        } else {
+          updatedLineComments.push({
+            ...newLineComment,
+            _id: `temp_${Date.now()}`,
+            createdAt: Date.now(),
+            updatedAt: null,
+          });
+        }
+        return {
+          ...prevCommentsByLine,
+          [lineNumber]: updatedLineComments,
+        };
+      });
+
+      setLineContent('');
+    } catch (error) {
+      console.error('Error posting comment:', error);
+      alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.'); // Thông báo lỗi cho người dùng
+    }
+  };
+
+  //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
   }
@@ -227,6 +296,44 @@ function Post({ board, boardId }) {
                   <pre className="w-[4000px]">
                     <code className={`language-${language}`}>{code}</code>
                   </pre>
+                  <div
+                    className={`z-10 transition-all w-[500px] h-[30px] duration-300 transform ${open[lineNum] ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-5 pointer-events-none'}`}
+                  >
+                    <div className="w-[500px] h-[400px] bg-blue-950 rounded-[10px]">
+                      <div className=" ">
+                        <p className="text-center font-bold leading-[150%] text-2x1 ">
+                          {' '}
+                          This is line {lineNum + 1}
+                        </p>
+                      </div>
+                      <div className="w-[95%] h-[75%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+                        {(commentsByLine[lineNum + 1] || []).map(comment => (
+                          <CommentCard key={comment._id} comment={comment} />
+                        ))}
+                      </div>
+                      <div>
+                        <form
+                          onSubmit={e => handleInlineComment(e, lineNum + 1)}
+                          className="flex flex-row px-[20px] py-[20px]"
+                        >
+                          <input
+                            value={line_content}
+                            onChange={e => setLineContent(e.target.value)}
+                            className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
+                            placeholder="  Add your comment..."
+                            type="text"
+                          />
+                          <button
+                            type="submit"
+                            className="text-white align-middle ml-[10px] rotate-45"
+                          >
+                            <Send className="h-[30px] w-[30px] hover:scale-110" />
+                          </button>
+                        </form>
+                      </div>
+                    </div>
+                  </div>
+
                   <button
                     onClick={() => {
                       const NewOpen = new Array(sourceCode.length).fill(false);
@@ -235,21 +342,8 @@ function Post({ board, boardId }) {
                     }}
                     className="text-end mr-[10px]"
                   >
-                    <MessageSquareText className="opacity-30" />
+                    <MessageSquareText className="opacity-30 z-50" />
                   </button>
-                  <div
-                    className={`z-10 transition-all duration-300 transform ${open[lineNum] ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-5 pointer-events-none'}`}
-                  >
-                    <div className="z-50 bg-black">
-                      {(commentsByLine[lineNum + 1] || []).map(comment => (
-                        <LineComment
-                          key={comment._id}
-                          comment={comment}
-                          className="flex"
-                        />
-                      ))}
-                    </div>
-                  </div>
                 </div>
               ))}
             </div>

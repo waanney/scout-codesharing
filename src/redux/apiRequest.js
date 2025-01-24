@@ -85,10 +85,22 @@ export const createPost = async (boards, dispatch, navigate) => {
   }
 };
 
-export const commentPost = async (commentData, dispatch) => {
+export const commentPost_API = async (commentData, dispatch) => {
   dispatch(commentStart());
   try {
     await axios.post(`${API_ROOT}/v1/Comment/`, commentData);
+    dispatch(commentSuccess());
+  } catch (err) {
+    dispatch(commentFailed(err.response?.data?.message));
+  }
+};
+
+// comment inline
+
+export const commentInlinePost_API = async (commentData, dispatch) => {
+  dispatch(commentStart());
+  try {
+    await axios.post(`${API_ROOT}/v1/commentinline/`, commentData);
     dispatch(commentSuccess());
   } catch (err) {
     dispatch(commentFailed(err.response?.data?.message));
