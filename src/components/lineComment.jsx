@@ -1,9 +1,6 @@
 import { useState } from 'react';
 import { Send } from 'lucide-react';
 export default function LineComment() {
-  {
-    ('test');
-  }
   const [line_content, setLineContent] = useState('');
   const handleComment2 = async e => {
     e.preventDefault();
@@ -12,13 +9,34 @@ export default function LineComment() {
       return;
     }
   };
-  {
-    ('/test');
-  }
+
   return (
-    <div>
-      <div className="w-[80%] h-[100%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin">
-        comment display
+    <div className="absolute w-[500px] h-[400px] rounded-[10px] bg-blue-950 right-[20px] top-[20px]">
+      <div className="text-center text-[20px] mx-[10px]">
+        Comment line placeholder
+      </div>
+      <div className="w-[90%] h-[75%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
+        <p>Comment content</p>
       </div>
       <form
         onSubmit={handleComment2}
