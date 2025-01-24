@@ -242,7 +242,11 @@ function Post({ board, boardId }) {
                   >
                     <div className="z-50 bg-black">
                       {(commentsByLine[lineNum + 1] || []).map(comment => (
-                        <LineComment key={comment._id} comment={comment} />
+                        <LineComment
+                          key={comment._id}
+                          comment={comment}
+                          className="flex"
+                        />
                       ))}
                     </div>
                   </div>

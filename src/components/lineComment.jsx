@@ -16,7 +16,7 @@ export default function LineComment({ comment }) {
         Comment line placeholder
       </div>
       <div className="w-[90%] h-[75%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-        {comment.content[1]}
+        {comment.content}
       </div>
       <form
         onSubmit={handleComment2}
