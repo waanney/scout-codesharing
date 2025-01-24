@@ -1,8 +1,11 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
+import { MessageSquareText } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
+import LineComment from '../../components/lineComment.jsx';
+import CommentRating from '../../components/comment_rating.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData_API } from '../../api/index.js';
@@ -10,17 +13,15 @@ import { commentPost } from '../../redux/apiRequest.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
-import 'highlight.js/styles/github.css';
-import CommentCard from '../../components/comment_card.jsx';
+import '../../utils/customeStyle.css';
 
 function Post({ board, boardId }) {
   const language = hljs.highlightAuto(board.content).language;
 
-  const sourceCode = board.content.match(/[^\r\n]*(?:\r?\n|$)/g) || [];
+  const sourceCode = board.content.split('\n');
+  hljs.highlightAll();
 
-  const SendClick = () => {
-    alert('Button clicked!');
-  };
+  const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
 
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
@@ -139,7 +140,6 @@ function Post({ board, boardId }) {
                   src="..\src\assets\demo_avatar.png"
                   alt="User Avatar"
                 />
-
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
                     {userData.username}
@@ -152,7 +152,9 @@ function Post({ board, boardId }) {
               <div className="card flex flex-col items-end">
                 <div>
                   <button
-                    onClick={SendClick}
+                    onClick={() => {
+                      alert('Button clicked!');
+                    }}
                     className="text-white flex flex-row items-center hover:scale-110"
                   >
                     <Share className="h-[30px] w-[30px]" />
@@ -161,7 +163,9 @@ function Post({ board, boardId }) {
                 </div>
                 <div>
                   <button
-                    onClick={SendClick}
+                    onClick={() => {
+                      alert('Button clicked!');
+                    }}
                     className="text-white flex flex-row items-center hover:scale-110"
                   >
                     <Save className="h-[30px] w-[30px]" />
@@ -178,7 +182,7 @@ function Post({ board, boardId }) {
                 {board?.title}
               </div>
             </div>
-            <div className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#05143c] scrollbar-thin">
+            <div className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map((comment, index) => (
                 <div key={index} className="mb-4">
                   <div className="text-white text-2xl font-bold leading-9">
@@ -187,6 +191,7 @@ function Post({ board, boardId }) {
                   <div className="text-white text-[15px] font-normal leading-[150%]">
                     {comment.content}
                   </div>
+                  <CommentRating />
                 </div>
               ))}
             </div>
@@ -212,33 +217,31 @@ function Post({ board, boardId }) {
           <div className="card rounded-[10px] h-[636px] w-[1000px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
             <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               {sourceCode.map((code, lineNum) => (
-                <div key={lineNum} className="flex flex-row hover:bg-gray-600">
-                  <div className="w-[40px] text-center text-gray-400">
-                    {lineNum}
+                <div
+                  key={lineNum}
+                  className="flex flex-row hover:bg-gray-600 relative"
+                >
+                  <div className="w-[10px] mx-[10px] text-gray-400">
+                    {lineNum + 1}
                   </div>
-                  <div
-                    dangerouslySetInnerHTML={{
-                      __html: hljs.highlight(code, { language: language })
-                        .value,
-                    }}
-                    className="w-[1000px]"
-                  />
+                  <pre className="w-[4000px]">
+                    <code className={`language-${language}`}>{code}</code>
+                  </pre>
                   <button
                     onClick={() => {
-                      alert('buttonclick');
+                      const NewOpen = new Array(sourceCode.length).fill(false);
+                      NewOpen[lineNum] = !open[lineNum];
+                      setOpen(NewOpen);
                     }}
                     className="text-end mr-[10px]"
                   >
-                    {' '}
-                    o{' '}
+                    <MessageSquareText className="opacity-30" />
                   </button>
-                  {(commentsByLine[lineNum + 1] || []).map(comment => (
-                    <CommentCard
-                      key={comment._id}
-                      comment={comment}
-                      className="z-30"
-                    />
-                  ))}
+                  <div
+                    className={`z-10 transition-all duration-300 transform ${open[lineNum] ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-5 pointer-events-none'}`}
+                  >
+                    <LineComment />
+                  </div>
                 </div>
               ))}
             </div>

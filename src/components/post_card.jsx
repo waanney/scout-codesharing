@@ -1,21 +1,13 @@
-import { Save } from 'lucide-react';
-import { Share } from 'lucide-react';
-import { CodeBlock, hybrid } from 'react-code-blocks';
 import { fetchUserData_API } from '../api/index.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../utils/formater.js';
+import '../utils/customeStyle.css';
 import hljs from 'highlight.js';
 
 const PostCard = ({ post }) => {
   const language = hljs.highlightAuto(post.content).language;
-
-  const SendClick = () => {
-    alert('Button clicked!');
-  };
-  const customTheme = {
-    ...hybrid,
-    backgroundColor: 'transparent',
-  };
+  const sourceCode = post.content.split('\n');
+  hljs.highlightAll();
 
   const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
   const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
@@ -55,7 +47,7 @@ const PostCard = ({ post }) => {
 
   return (
     <div
-      className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
+      className="card bg-[#05143c] w-[543px] h-[600px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
       onClick={() =>
         (window.location.href = `http://localhost:5173/post/${post._id}`)
       }
@@ -70,34 +62,12 @@ const PostCard = ({ post }) => {
               alt="User Avatar"
             />
           </div>
-          <div className="flex flex-col">
-            <div className="ml-[10px] text-white font-bold text-[16px]">
-              {userData.username}
-            </div>
-            <div className="ml-[10px] text-white text-[8px] font-normal">
-              {formatMillisecondsToDate(post.createdAt)}
-            </div>
+          <div className="ml-[10px] text-white font-bold text-[20px]">
+            {userData.username}
           </div>
         </div>
-        <div className="card flex flex-col items-end">
-          <div className="w-[100px]">
-            <button
-              onClick={SendClick}
-              className="text-white flex flex-row items-center hover:scale-110"
-            >
-              <Share className="h-[20px] w-[20px]" />
-              Share
-            </button>
-          </div>
-          <div className="w-[100px]">
-            <button
-              onClick={SendClick}
-              className="text-white flex flex-row items-center hover:scale-110"
-            >
-              <Save className="h-[20px] w-[20px]" />
-              Save
-            </button>
-          </div>
+        <div className="ml-[10px] text-end text-white text-[16px] font-normal">
+          {formatMillisecondsToDate(post.createdAt)}
         </div>
       </div>
 
@@ -110,13 +80,14 @@ const PostCard = ({ post }) => {
         className=" font-mono text-[12px] w-[80%] h-[81%] bg-[#00000080] rounded-[5px] mt-[10px] mx-auto
                     overflow-hidden"
       >
-        <CodeBlock
-          text={post.content}
-          language={language}
-          theme={customTheme}
-          showLineNumbers={true}
-          customStyle={{ overflow: 'hidden' }}
-        />
+        {sourceCode.map((code, lineNum) => (
+          <div key={lineNum} className="flex flex-row hover:bg-gray-600">
+            <div className="w-[30px] px-[5px] text-gray-400">{lineNum + 1}</div>
+            <pre className="w-[1000px] bg-transparent">
+              <code className={`language-${language}`}>{code}</code>
+            </pre>
+          </div>
+        ))}
       </div>
     </div>
   );

@@ -134,7 +134,7 @@ function Signup() {
                 className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
                 type="password"
                 id="password"
-                placeholder="8+ characters &#40;at least 1 letter & 1 number&#41;"
+                placeholder="8+ characters"
                 required
               ></input>
             </div>
