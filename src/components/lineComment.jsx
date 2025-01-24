@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Send } from 'lucide-react';
-export default function LineComment({commentByLine}) {
+export default function LineComment({ comment }) {
   const [line_content, setLineContent] = useState('');
   const handleComment2 = async e => {
     e.preventDefault();
@@ -16,27 +16,7 @@ export default function LineComment({commentByLine}) {
         Comment line placeholder
       </div>
       <div className="w-[90%] h-[75%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
-        <p>Comment content</p>
+        {comment.content[1]}
       </div>
       <form
         onSubmit={handleComment2}
