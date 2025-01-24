@@ -2,6 +2,7 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import { ProtectedRoute } from '../services/protectedRoutes.jsx';
 import { Provider } from 'react-redux'; // Import Provider
 import store from '../redux/store'; // Import store once
 
@@ -28,24 +29,29 @@ const router = createBrowserRouter([
     element: <Login />,
   },
   {
-    path: '/discussion',
-    element: <Board />,
-  },
-  {
-    path: '/profile',
-    element: <MyProfile />,
-  },
-  {
-    path: '/post/:boardId',
-    element: <PostGetID />,
-  },
-  {
-    path: '/storage',
-    element: <UserStorage />,
-  },
-  {
-    path: '/changepassword',
-    element: <Changepassword />,
+    element: <ProtectedRoute />, // Bảo vệ các route bên trong
+    children: [
+      {
+        path: '/discussion',
+        element: <Board />,
+      },
+      {
+        path: '/profile',
+        element: <MyProfile />,
+      },
+      {
+        path: '/post/:boardId',
+        element: <PostGetID />,
+      },
+      {
+        path: '/storage',
+        element: <UserStorage />,
+      },
+      {
+        path: '/changepassword',
+        element: <Changepassword />,
+      },
+    ],
   },
 ]);
 
