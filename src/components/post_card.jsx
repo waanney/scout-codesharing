@@ -1,7 +1,7 @@
 import { fetchUserData_API } from '../api/index.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../utils/formater.js';
-import 'highlight.js/styles/customeStyle.css';
+import '../utils/customeStyle.css';
 import hljs from 'highlight.js';
 
 const PostCard = ({ post }) => {
