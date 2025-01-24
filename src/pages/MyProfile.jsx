@@ -15,13 +15,19 @@ function MyProfile() {
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [text, setText] = useState('');
-  const [lineNumbers, setLineNumbers] = useState([]);
+  const [lineNumbers, setLineNumbers] = useState([true]);
   const textareaRef = useRef(null);
   const lineHeight = '1.5rem';
   const numberOfVisibleLines = 18;
   const userId = currentUser ? currentUser._id : '';
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  // Update line numbers when text changes
+  useEffect(() => {
+    const lines = text.split('\n');
+    setLineNumbers(lines.map(() => true));
+  }, [text]);
 
   const handleCreatepost = e => {
     e.preventDefault();
@@ -140,36 +146,24 @@ function MyProfile() {
     setIsEditing(false); // Chuyển sang chế độ xem profile
   };
 
-  const updateLineNumbers = () => {
-    if (textareaRef.current) {
-      const lineCount = Math.ceil(
-        textareaRef.current.scrollHeight / parseInt(lineHeight)
-      );
-
-      if (lineCount > lineNumbers.length) {
-        setLineNumbers(Array.from({ length: lineCount }, (_, i) => i + 1));
-      }
+  const handleKeyDown = e => {
+    if (e.key === 'Enter') {
+      const newLineNumbers = [...lineNumbers];
+      newLineNumbers.push(true);
+      setLineNumbers(newLineNumbers);
     }
   };
-
-  useEffect(() => {
-    updateLineNumbers(); // Update line numbers whenever `text` changes
-  }, [text]);
 
   const handleTextChange = e => {
     const newText = e.target.value;
     setText(newText);
-    setHasText(true); // User has started typing, set `hasText` to true
-    updateLineNumbers(); // Recalculate line numbers after text changes
-  };
 
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
-      updateLineNumbers(); // Trigger line number update when Enter is pressed
+    // Handle backspace/delete that removes lines
+    const currentLines = newText.split('\n');
+    if (currentLines.length < lineNumbers.length) {
+      setLineNumbers(prev => prev.slice(0, currentLines.length));
     }
   };
-  
-  
 
   return (
     <>
@@ -389,18 +383,27 @@ function MyProfile() {
                       : 'none',
                   }}
                 >
-                  {lineNumbers.map((lineNumber) => (
-                    <div
-                      key={lineNumber}
-                      className="text-muted-foreground"
-                      style={{
-                        height: `${lineHeight}px`,
-                        lineHeight: `${lineHeight}px`,
-                      }}
-                    >
-                      {lineNumber.toString().padStart(2, '0')}
-                    </div>
-                  ))}
+                  {Array.from(
+                    {
+                      length: Math.max(
+                        numberOfVisibleLines,
+                        lineNumbers.length,
+                      ),
+                    },
+                    (_, index) => (
+                      <div
+                        key={index}
+                        className="text-muted-foreground"
+                        style={{
+                          height: lineHeight,
+                          lineHeight,
+                          opacity: index < lineNumbers.length ? 1 : 0,
+                        }}
+                      >
+                        {(index + 1).toString().padStart(2, '0')}
+                      </div>
+                    ),
+                  )}
                 </div>
               </div>
               {/* Text area */}
