@@ -249,11 +249,11 @@ function Post({ board, boardId }) {
             </div>
             <div className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
-                <div key={comment._id} className="mb-4">
+                <div key={comment._id} className="mb-4 p-[15px 5px] bg-slate-200">
                   <div className="text-white text-2xl font-bold leading-9">
                     {comment.username}
                   </div>
-                  <div className="text-white text-[15px] font-normal leading-[150%]">
+                  <div className="text-white text-[20px] font-normal leading-[150%]">
                     {comment.content}
                   </div>
                   <CommentRating
