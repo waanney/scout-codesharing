@@ -17,6 +17,11 @@ export const initialState = {
     isFetching: false,
     error: false,
   },
+  changePassword: {
+    isFetching: false,
+    error: false,
+    success: false,
+  },
 };
 
 const authSlice = createSlice({
@@ -63,6 +68,21 @@ const authSlice = createSlice({
       state.logout.isFetching = false;
       state.logout.error = true;
     },
+    changePasswordStart: state => {
+      state.changePassword.isFetching = true;
+      state.changePassword.error = false;
+      state.changePassword.success = false;
+    },
+    changePasswordSuccess: state => {
+      state.changePassword.isFetching = false;
+      state.changePassword.error = false;
+      state.changePassword.success = true;
+    },
+    changePasswordFailed: (state, action) => {
+      state.changePassword.isFetching = false;
+      state.changePassword.error = action.payload;
+      state.changePassword.success = false;
+    },
 
     // New clearError reducer
     clearError: state => {
@@ -83,6 +103,9 @@ export const {
   logoutStart,
   logoutFailed,
   logoutSuccess,
+  changePasswordStart,
+  changePasswordSuccess,
+  changePasswordFailed,
   clearError, // Export the clearError action
 } = authSlice.actions;
 

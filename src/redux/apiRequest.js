@@ -9,6 +9,9 @@ import {
   logoutStart,
   logoutFailed,
   logoutSuccess,
+  changePasswordStart,
+  changePasswordSuccess,
+  changePasswordFailed,
 } from './authSlice';
 import axiosJWT from './axiosJWT';
 import { createStart, createFailed, createSuccess } from './uppostSlice';
@@ -67,10 +70,24 @@ export const logoutUser = async (dispatch, navigate) => {
   try {
     await axiosJWT.post(`${API_ROOT}/v1/Auth/logout`, {});
     dispatch(logoutSuccess());
-    navigate('/');
+
+    // Xóa currentUser khỏi localStorage
+    localStorage.removeItem('currentUser');
+
+    navigate('/login');
   } catch (err) {
     dispatch(logoutFailed());
     console.error('Logout Error:', err.message);
+  }
+};
+
+export const changePassword = async (data, dispatch, userId) => {
+  dispatch(changePasswordStart()); // Sử dụng action từ authSlice
+  try {
+    await axios.put(`${API_ROOT}/v1/Auth/change-password/${userId}`, data);
+    dispatch(changePasswordSuccess()); // Sử dụng action từ authSlice
+  } catch (err) {
+    dispatch(changePasswordFailed(err.response?.data?.message)); // Sử dụng action từ authSlice
   }
 };
 

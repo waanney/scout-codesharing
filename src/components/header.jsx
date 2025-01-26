@@ -21,7 +21,7 @@ const HeaderForAllPages = () => {
   const handleLogout = () => {
     logoutUser(dispatch, navigate);
     localStorage.removeItem('editableProfile');
-    localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
+    // localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
   };
 
   return (
