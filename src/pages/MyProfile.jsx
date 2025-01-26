@@ -154,16 +154,32 @@ function MyProfile() {
     }
   };
 
-  const handleTextChange = e => {
-    const newText = e.target.value;
-    setText(newText);
-
-    // Handle backspace/delete that removes lines
-    const currentLines = newText.split('\n');
-    if (currentLines.length < lineNumbers.length) {
-      setLineNumbers(prev => prev.slice(0, currentLines.length));
-    }
+  const handleInputChange = (e) => {
+    const maxCharsPerLine = 80;
+    let value = e.target.value;
+  
+    // Split the input text into an array of lines
+    const lines = value.split("\n");
+    
+    // Process each line to enforce the character limit and break lines
+    const updatedLines = lines.map((line) => {
+      if (line.length > maxCharsPerLine) {
+        // Break the line at maxCharsPerLine if it's longer
+        const chunks = [];
+        while (line.length > maxCharsPerLine) {
+          chunks.push(line.slice(0, maxCharsPerLine));
+          line = line.slice(maxCharsPerLine);
+        }
+        if (line.length > 0) chunks.push(line); // Append the remaining part of the line
+        return chunks.join("\n");
+      }
+      return line; // No modification if within the limit
+    });
+  
+    // Join the updated lines and set it as the new value
+    setText(updatedLines.join("\n"));
   };
+  
 
   return (
     <>
@@ -327,7 +343,7 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="mt-[125px] ml-[30px] w-[900px] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
+        <div className="mt-[125px] ml-[30px] w-[75%] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
           <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
             <div className="flex justify-between mt-[10px] mx-[10px]">
               <div className=" flex items-center space-x-1">
@@ -353,14 +369,14 @@ function MyProfile() {
             </div>
             <input
               onChange={e => setTitle(e.target.value)}
-              className="w-[845px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px] pl-[15px] mt-[8px] mx-[28px] text-wrap"
+              className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px] pl-[15px] mt-[8px] mx-[28px] text-wrap"
               type="text"
               placeholder="Add your title here!"
               required
             ></input>
             <input
               onChange={e => setDescription(e.target.value)}
-              className="w-[845px] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
+              className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
               type="text"
               placeholder="Describe your problem..."
               required
@@ -410,7 +426,7 @@ function MyProfile() {
               <textarea
                 ref={textareaRef}
                 value={text}
-                onChange={handleTextChange}
+                onChange={handleInputChange}
                 onKeyDown={handleKeyDown}
                 onScroll={e => {
                   // Force re-render to update line numbers position
