@@ -75,7 +75,7 @@ export default function FooterAllPage() {
                   fill="currentColor"
                 ></svg>
               </span>
-              SCOUT: Source Code Open
+              SCOUT: Source Code Open for Universal Testing
             </h6>
           </div>
 
@@ -84,16 +84,31 @@ export default function FooterAllPage() {
               Members
             </h6>
             <p className="mb-4">
-              <a href="https://www.facebook.com/binh.ta.35380399">Thanh Binh</a>
+              <a
+                target="_blank"
+                href="https://www.facebook.com/binh.ta.35380399"
+              >
+                Thanh Binh
+              </a>
             </p>
             <p className="mb-4">
-              <a href="https://www.facebook.com/minh.171106">Cong Minh</a>
+              <a target="_blank" href="https://www.facebook.com/minh.171106">
+                Cong Minh
+              </a>
             </p>
             <p className="mb-4">
-              <a href="https://www.facebook.com/minh.quan.56650">Minh Quan</a>
+              <a
+                target="_blank"
+                href="https://www.facebook.com/minh.quan.56650"
+              >
+                Minh Quan
+              </a>
             </p>
             <p>
-              <a href="https://www.facebook.com/profile.php?id=100025176580454">
+              <a
+                target="_blank"
+                href="https://www.facebook.com/profile.php?id=100025176580454"
+              >
                 Dang Khoi
               </a>
             </p>

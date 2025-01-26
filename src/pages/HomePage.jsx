@@ -40,7 +40,7 @@ function HomePage() {
       img: 'src/assets/Scout.svg',
       title: 'Scout',
       description:
-        'It means Source Code Open for Universal Testing. We discuss about C++ - a coding language on this website.',
+        'It means Source Code Open for Universal Testing. We discuss about coding languages on this website.',
     },
     {
       img: 'src/assets/Profile.svg',
@@ -63,14 +63,14 @@ function HomePage() {
     },
     {
       img: 'src/assets/Newfeed.svg',
-      title: 'Newfeed',
-      description: 'All the posts of everyone will be here for you to surf.',
+      title: 'Rating Comments',
+      description: 'You can rate the comments of others.',
     },
     {
       img: 'src/assets/Posts.svg',
       title: 'Posts',
       description:
-        'When you have a C++ problem or you want to share your C++ code with everyone, you can post them on Discussion.',
+        'When you have a coding problem or you want to share your codes with everyone, you can post them on Discussion.',
     },
   ];
 
