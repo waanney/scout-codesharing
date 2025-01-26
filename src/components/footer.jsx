@@ -84,16 +84,18 @@ export default function FooterAllPage() {
               Members
             </h6>
             <p className="mb-4">
-              <a href="#!">Thanh Binh</a>
+              <a href="https://www.facebook.com/binh.ta.35380399">Thanh Binh</a>
             </p>
             <p className="mb-4">
-              <a href="#!">Cong Minh</a>
+              <a href="https://www.facebook.com/minh.171106">Cong Minh</a>
             </p>
             <p className="mb-4">
               <a href="https://www.facebook.com/minh.quan.56650">Minh Quan</a>
             </p>
             <p>
-              <a href="#!">Dang Khoi</a>
+              <a href="https://www.facebook.com/profile.php?id=100025176580454">
+                Dang Khoi
+              </a>
             </p>
           </div>
 
