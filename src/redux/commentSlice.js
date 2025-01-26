@@ -1,6 +1,6 @@
 import { createSlice } from '@reduxjs/toolkit';
 
-// Define the initial state separately for reuse
+//finIndex và map chỉ hoạt động trong mảng
 export const initialState = {
   comment: {
     isFetching: false,
@@ -26,6 +26,16 @@ const commentSlice = createSlice({
       state.comment.error = action.payload || true;
       state.comment.success = false;
     },
+    // updateComment: (state, action) => {
+    //   const updatedComment = action.payload;
+    //   const index = state.commentsList.findIndex(
+    //     (comment) => comment._id === updatedComment._id
+    //   );
+    //   if (index !== -1) {
+    //     // Cập nhật comment trong danh sách
+    //     state.commentsList[index] = updatedComment;
+    //   }
+    // },
   },
 });
 

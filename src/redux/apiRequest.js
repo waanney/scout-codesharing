@@ -88,8 +88,9 @@ export const createPost = async (boards, dispatch, navigate) => {
 export const commentPost_API = async (commentData, dispatch) => {
   dispatch(commentStart());
   try {
-    await axios.post(`${API_ROOT}/v1/Comment/`, commentData);
+    const response = await axios.post(`${API_ROOT}/v1/Comment`, commentData);
     dispatch(commentSuccess());
+    return response; // Phải trả về response để lấy _id của comment
   } catch (err) {
     dispatch(commentFailed(err.response?.data?.message));
   }
