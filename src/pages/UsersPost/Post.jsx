@@ -285,69 +285,68 @@ function Post({ board, boardId }) {
             </form>
           </div>
           <div className="card rounded-[10px] h-[636px] w-[1000px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            <div className="font-mono w-[100%] h-[100%] bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
-              {sourceCode.map((code, lineNum) => (
-                <div
-                  key={lineNum}
-                  className="flex flex-row hover:bg-gray-600 relative"
-                >
-                  <div className="w-[10px] mx-[10px] text-gray-400">
-                    {lineNum + 1}
-                  </div>
-                  <pre className="w-[4000px]">
-                    <code className={`language-${language}`}>{code}</code>
-                  </pre>
-                  <div
-                    className={`z-10 transition-all w-[500px] h-[30px] duration-300 transform ${open[lineNum] ? 'opacity-100 translate-y-0 pointer-events-auto' : 'opacity-0 -translate-y-5 pointer-events-none'}`}
-                  >
-                    <div className="w-[500px] h-[400px] bg-blue-950 rounded-[10px]">
-                      <div className=" ">
-                        <p className="text-center font-bold leading-[150%] text-2x1 ">
-                          {' '}
-                          This is line {lineNum + 1}
-                        </p>
-                      </div>
-                      <div className="w-[95%] h-[75%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-                        {(commentsByLine[lineNum + 1] || []).map(comment => (
-                          <CommentCard key={comment._id} comment={comment} />
-                        ))}
-                      </div>
-                      <div>
-                        <form
-                          onSubmit={e => handleInlineComment(e, lineNum + 1)}
-                          className="flex flex-row px-[20px] py-[20px]"
-                        >
-                          <input
-                            value={line_content}
-                            onChange={e => setLineContent(e.target.value)}
-                            className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
-                            placeholder="  Add your comment..."
-                            type="text"
-                          />
-                          <button
-                            type="submit"
-                            className="text-white align-middle ml-[10px] rotate-45"
-                          >
-                            <Send className="h-[30px] w-[30px] hover:scale-110" />
-                          </button>
-                        </form>
-                      </div>
-                    </div>
-                  </div>
+          <div className="font-mono w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
+  {sourceCode.map((code, lineNum) => (
+    <div
+      key={lineNum}
+      className="flex flex-row hover:bg-gray-600 relative"
+    >
+      {/* Line Number */}
+      <div className="w-[30px] text-gray-400 text-right pr-[10px]">
+        {lineNum + 1}
+      </div>
 
-                  <button
-                    onClick={() => {
-                      const NewOpen = new Array(sourceCode.length).fill(false);
-                      NewOpen[lineNum] = !open[lineNum];
-                      setOpen(NewOpen);
-                    }}
-                    className="text-end mr-[10px]"
-                  >
-                    <MessageSquareText className="opacity-30 z-50" />
-                  </button>
-                </div>
-              ))}
-            </div>
+      {/* Code Content */}
+      <pre className="flex-grow">
+        <code className={`language-${language}`}>{code}</code>
+      </pre>
+
+      {/* Popover */}
+      {open[lineNum] && (
+        <div
+          className="absolute top-0 right-[30px] z-50 w-[500px] h-[400px] bg-blue-950 rounded-[10px] shadow-lg p-4"
+        >
+          <p className="text-center font-bold leading-[150%] text-2xl">
+            This is line {lineNum + 1}
+          </p>
+          <div className="w-full h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+            {(commentsByLine[lineNum + 1] || []).map((comment) => (
+              <CommentCard key={comment._id} comment={comment} />
+            ))}
+          </div>
+          <form
+            onSubmit={(e) => handleInlineComment(e, lineNum + 1)}
+            className="flex items-center mt-4"
+          >
+            <input
+              value={line_content}
+              onChange={(e) => setLineContent(e.target.value)}
+              className="flex-grow h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal px-[10px] focus:outline-none"
+              placeholder="Add your comment..."
+              type="text"
+            />
+            <button type="submit" className="ml-[10px]">
+              <Send className="h-[30px] w-[30px] text-gray-500 hover:text-white" />
+            </button>
+          </form>
+        </div>
+      )}
+
+      {/* Button */}
+      <button
+        onClick={() => {
+          const NewOpen = new Array(sourceCode.length).fill(false);
+          NewOpen[lineNum] = !open[lineNum];
+          setOpen(NewOpen);
+        }}
+        className="text-gray-500 hover:text-white ml-[10px]"
+      >
+        <MessageSquareText className="h-[20px] w-[20px]" />
+      </button>
+    </div>
+  ))}
+</div>
+
           </div>
         </div>
       </div>

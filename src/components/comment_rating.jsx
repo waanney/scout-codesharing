@@ -54,7 +54,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           onClick={() => handleVote('up')}
           className={`cursor-pointer p-2 rounded ${
             userVote === 'up'
-              ? 'bg-gray-100 text-blue-500'
+              ? 'text-blue-500 hover:bg-gray-100'
               : 'hover:bg-gray-100'
           }`}
           aria-label="Upvote"
@@ -70,7 +70,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           onClick={() => handleVote('down')}
           className={`cursor-pointer p-2 rounded ${
             userVote === 'down'
-              ? 'bg-gray-100 text-orange-500'
+              ? 'text-orange-500 hover:bg-gray-100'
               : 'hover:bg-gray-100'
           }`}
           aria-label="Downvote"
