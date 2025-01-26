@@ -121,7 +121,7 @@ function MyProfile() {
         updatedAt: new Date().getTime(), // Sử dụng getTime() để lấy timestamp
         owner: currentUser._id, // Thêm trường owner
       };
-      console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên
+      //console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên(để debug)
       await axios.put(
         `${API_ROOT}/v1/myProfile/${currentUser._id}`,
         updatedFields,
@@ -150,15 +150,15 @@ function MyProfile() {
     }
   };
 
-  const handleInputChange = (e) => {
+  const handleInputChange = e => {
     const maxCharsPerLine = 80;
     let value = e.target.value;
-  
+
     // Split the input text into an array of lines
-    const lines = value.split("\n");
-    
+    const lines = value.split('\n');
+
     // Process each line to enforce the character limit and break lines
-    const updatedLines = lines.map((line) => {
+    const updatedLines = lines.map(line => {
       if (line.length > maxCharsPerLine) {
         // Break the line at maxCharsPerLine if it's longer
         const chunks = [];
@@ -167,15 +167,14 @@ function MyProfile() {
           line = line.slice(maxCharsPerLine);
         }
         if (line.length > 0) chunks.push(line); // Append the remaining part of the line
-        return chunks.join("\n");
+        return chunks.join('\n');
       }
       return line; // No modification if within the limit
     });
-  
+
     // Join the updated lines and set it as the new value
-    setText(updatedLines.join("\n"));
+    setText(updatedLines.join('\n'));
   };
-  
 
   return (
     <>
