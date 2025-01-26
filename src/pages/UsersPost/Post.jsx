@@ -46,13 +46,22 @@ function Post({ board, boardId }) {
     };
 
     try {
-      await commentPost_API(newComment, dispatch, navigate);
+      const response = await commentPost_API(newComment, dispatch, navigate);
+
+      // Kiểm tra response và response.data
+      if (!response || !response.data) {
+        throw new Error('Không nhận được phản hồi từ server');
+      }
+
       setComments(prevComments => [
         ...prevComments,
         {
+          _id: response.data._id,
           userId,
           content: content.trim(),
           username: currentUser.username,
+          upvote: 0,
+          downvote: 0,
         },
       ]);
       setContent('');
@@ -65,12 +74,12 @@ function Post({ board, boardId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   useEffect(() => {
+    // Lấy thông tin user từ API
     const fetchData = async () => {
       setLoading(true);
       try {
         const data = await fetchUserData_API(board.userID);
         setUserData(data);
-        setComments(board.comments || []); // Giả sử board.comments chứa danh sách comment ban đầu
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);
@@ -80,25 +89,12 @@ function Post({ board, boardId }) {
     };
 
     fetchData();
-  }, [board.userID]);
-  // lấy data có tên
+  }, [board.userID]); // Chỉ chạy khi board.userID thay đổi
 
   useEffect(() => {
-    const fetchCommentsWithUsernames = async () => {
-      setLoading(true);
-      try {
-        const initialComments = board.comments || [];
-        setComments(initialComments); // Comment đã chứa username
-      } catch (err) {
-        setError(err);
-        console.error('Error fetching comments:', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchCommentsWithUsernames();
-  }, [board.comments]);
+    // Cập nhật state comments khi board.comments thay đổi
+    setComments(board.comments || []);
+  }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
 
   // handle comment inline
 
@@ -252,15 +248,20 @@ function Post({ board, boardId }) {
               </div>
             </div>
             <div className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-              {comments.map((comment, index) => (
-                <div key={index} className="mb-4">
+              {comments.map(comment => (
+                <div key={comment._id} className="mb-4">
                   <div className="text-white text-2xl font-bold leading-9">
-                    {comment.username || `User${index + 1}`}
+                    {comment.username}
                   </div>
                   <div className="text-white text-[15px] font-normal leading-[150%]">
                     {comment.content}
                   </div>
-                  <CommentRating />
+                  <CommentRating
+                    commentId={comment._id}
+                    upvote={comment.upvote}
+                    downvote={comment.downvote}
+                    setComments={setComments}
+                  />
                 </div>
               ))}
             </div>

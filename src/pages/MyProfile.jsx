@@ -100,10 +100,6 @@ function MyProfile() {
     fetchProfile();
   }, []); // Run useEffect when currentUser changes
 
-  /*  useEffect(() => {
-    localStorage.setItem('editableProfile', JSON.stringify(editableProfile));
-  }, [editableProfile]);*/
-
   const handleProfileChange = (field, value) => {
     setEditableProfile(prev => ({
       ...prev,
