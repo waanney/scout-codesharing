@@ -287,7 +287,7 @@ function MyProfile() {
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
-            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto">
+            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-hidden">
               {isEditing ? (
                 <>
                   {personality.map((trait, index) => (
@@ -338,7 +338,7 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 justify-items-end mr-[35px] overflow-y-auto">
+        <div className="flex-1 justify-items-end mr-[35px]">
         <div className="mt-[125px] ml-[30px] w-[95%] h-[420px] bg-black bg-opacity-50 rounded-[10px]">
           <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
             <div className="flex justify-between mt-[10px] mx-[10px]">
@@ -447,7 +447,7 @@ function MyProfile() {
             </div>
           </form>
         </div>
-        <div className="mt-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
+        <div className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
           <div className="flex items-center space-x-1">
             <a className="flex items-center ml-[4px] mt-[4px]">
               <svg
