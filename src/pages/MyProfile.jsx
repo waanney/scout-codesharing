@@ -18,7 +18,7 @@ function MyProfile() {
   const [lineNumbers, setLineNumbers] = useState([true]);
   const textareaRef = useRef(null);
   const lineHeight = '1.5rem';
-  const numberOfVisibleLines = 18;
+  const numberOfVisibleLines = 12;
   const userId = currentUser ? currentUser._id : '';
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -179,8 +179,8 @@ function MyProfile() {
   return (
     <>
       <HeaderForAllPages className="sticky" />
-      <div className="flex ">
-        <div className="flex min-h-screen flex-col">
+      <div className="flex">
+        <div className="sticky top-0 flex flex-col h-screen">
           <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
@@ -283,7 +283,7 @@ function MyProfile() {
               )}
             </div>
           </div>
-          <div className="h-[100px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
+          <div className="h-[100px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] mb-[20px] rounded-[10px]">
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
@@ -338,7 +338,8 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="mt-[125px] ml-[30px] w-[75%] h-[570px] bg-black bg-opacity-50 rounded-[10px]">
+        <div className="flex-1 justify-items-end mr-[35px] overflow-y-auto">
+        <div className="mt-[125px] ml-[30px] w-[95%] h-[420px] bg-black bg-opacity-50 rounded-[10px]">
           <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
             <div className="flex justify-between mt-[10px] mx-[10px]">
               <div className=" flex items-center space-x-1">
@@ -445,6 +446,45 @@ function MyProfile() {
               />
             </div>
           </form>
+        </div>
+        <div className="mt-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
+          <div className="flex items-center space-x-1">
+            <a className="flex items-center ml-[4px] mt-[4px]">
+              <svg
+                height="30"
+                width="30"
+                xmlns="http://www.w3.org/2000/svg"
+              >
+                <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+              </svg>
+              <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                {currentUser.username}
+              </h5>
+            </a>
+          </div>
+          <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
+            <div className="flex items-center space-x-1">
+              <a className="flex items-center ml-[4px] mt-[4px]">
+                <svg
+                  height="30"
+                  width="30"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                </svg>
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                  {currentUser.username}
+                </h5>
+              </a>
+            </div>
+            <h1>
+              {/*Title*/}
+            </h1>
+            <h2>
+              {/*Description*/}
+            </h2>
+          </div>
+        </div>
         </div>
       </div>
       <FooterAllPage />
