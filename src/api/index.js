@@ -20,3 +20,10 @@ export const fetchUserData_API = async userID => {
   const response = await axios.get(`${API_ROOT}/v1/Auth/${userID}`);
   return response.data;
 };
+
+export const fetchSharedPostsDetails_API = async boardIds => {
+  const response = await axios.post(`${API_ROOT}/v1/boards/details`, {
+    boardIds,
+  });
+  return response.data;
+};

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ROOT } from '../utils/constant.js';
-import { fetchBoardDetails_API } from '../api/index.js';
+import { fetchSharedPostsDetails_API } from '../api/index.js';
 
 function MyProfile() {
   const currentUser =
@@ -183,11 +183,9 @@ function MyProfile() {
     const fetchSharedPosts = async () => {
       if (currentUser && currentUser.sharedPosts) {
         try {
-          console.log('sharedPosts:', currentUser.sharedPosts);
-          const posts = await Promise.all(
-            currentUser.sharedPosts.map(boardId =>
-              fetchBoardDetails_API(boardId),
-            ),
+          console.log('Fetching shared posts...');
+          const posts = await fetchSharedPostsDetails_API(
+            currentUser.sharedPosts,
           );
           console.log('Fetched posts:', posts);
           setSharedPosts(posts);
@@ -196,7 +194,6 @@ function MyProfile() {
         }
       }
     };
-
     fetchSharedPosts();
   }, []);
 
@@ -508,7 +505,8 @@ function MyProfile() {
                   <li key={post._id}>
                     {/* Hiển thị thông tin bài viết */}
                     <h4>{post.title}</h4>
-                    <p>{post.description}</p>
+                    <h5>{post.description}</h5>
+                    <p>{post.content}</p>
                     {/* ... */}
                   </li>
                 ))}
