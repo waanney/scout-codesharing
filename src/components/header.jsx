@@ -48,14 +48,22 @@ const HeaderForAllPages = () => {
                     key={index}
                     className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
                     onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                    onClick={() =>
-                      navigate(item === 'Home' ? '/' : `/${item.toLowerCase()}`)
-                    }
+                    onClick={() => {
+                      // Kiểm tra nếu item là 'Profile' thì navigate tới `/profile/${currentUser._id}`
+                      if (item === 'Profile') {
+                        navigate(`/profile/${currentUser._id}`);
+                      } else {
+                        navigate(
+                          item === 'Home' ? '/' : `/${item.toLowerCase()}`,
+                        );
+                      }
+                    }}
                   >
                     <span>{item}</span>
                   </div>
                 ),
               )}
+
               {hoveredIndex !== null && (
                 <div
                   className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
