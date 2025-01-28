@@ -124,9 +124,9 @@ const Login = () => {
             <div className="flex items-center justify-center mt-[35px]">
               <button
                 type="submit"
-                className="flex items-center justify-center h-[50px] w-[150px] bg-[#3366cc] bg-opacity-50 font-Inter font-bold text-[25px] rounded-[10px] cursor-pointer"
+                className="cursor-pointer transition-all bg-blue-500 text-white font-bold text-[24px] px-8 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
               >
-                Log In
+                Log in
               </button>
             </div>
             <div className="text-center mt-[28px] text-[20px] text-white text-opacity-70">
