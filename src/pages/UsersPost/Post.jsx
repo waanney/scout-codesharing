@@ -5,7 +5,8 @@ import { MessageSquareText } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import CommentCard from '../../components/comment_card.jsx';
-
+import axios from 'axios';
+import { API_ROOT } from '../../utils/constant.js';
 import CommentRating from '../../components/comment_rating.jsx';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -30,7 +31,7 @@ function Post({ board, boardId }) {
   const navigate = useNavigate();
   const userId = currentUser ? currentUser._id : '';
 
-  // handle comment outline
+  // handle comment post
   const handleComment = async e => {
     e.preventDefault();
     if (!content.trim()) {
@@ -97,7 +98,6 @@ function Post({ board, boardId }) {
   }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
 
   // handle comment inline
-
   const [line_content, setLineContent] = useState('');
   const language = hljs.highlightAuto(board.content).language;
   const sourceCode = board.content.split('\n');
@@ -179,6 +179,20 @@ function Post({ board, boardId }) {
     }
   };
 
+  const handleShare = async () => {
+    try {
+      const response = await axios.post(
+        `${API_ROOT}/v1/boards/${boardId}/share`,
+        { userId: currentUser._id },
+      );
+      // Xử lý kết quả (ví dụ: hiển thị thông báo thành công)
+      console.log(response.data.message);
+    } catch (error) {
+      // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi)
+      console.error('Error sharing post:', error);
+    }
+  };
+
   //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
@@ -217,9 +231,7 @@ function Post({ board, boardId }) {
               <div className="card flex flex-col items-end">
                 <div>
                   <button
-                    onClick={() => {
-                      alert('Button clicked!');
-                    }}
+                    onClick={handleShare}
                     className="text-white flex flex-row items-center hover:scale-110"
                   >
                     <Share className="h-[30px] w-[30px]" />

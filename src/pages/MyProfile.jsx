@@ -7,6 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { API_ROOT } from '../utils/constant.js';
+import { fetchBoardDetails_API } from '../api/index.js';
 
 function MyProfile() {
   const currentUser =
@@ -176,6 +177,29 @@ function MyProfile() {
     setText(updatedLines.join('\n'));
   };
 
+  //biến cho sharedPosts
+  const [sharedPosts, setSharedPosts] = useState([]);
+  useEffect(() => {
+    const fetchSharedPosts = async () => {
+      if (currentUser && currentUser.sharedPosts) {
+        try {
+          console.log('sharedPosts:', currentUser.sharedPosts);
+          const posts = await Promise.all(
+            currentUser.sharedPosts.map(boardId =>
+              fetchBoardDetails_API(boardId),
+            ),
+          );
+          console.log('Fetched posts:', posts);
+          setSharedPosts(posts);
+        } catch (error) {
+          console.error('Error fetching shared posts:', error);
+        }
+      }
+    };
+
+    fetchSharedPosts();
+  }, []);
+
   return (
     <>
       <HeaderForAllPages className="sticky" />
@@ -339,11 +363,131 @@ function MyProfile() {
         </div>
 
         <div className="flex-1 justify-items-end mr-[35px]">
-        <div className="mt-[125px] ml-[30px] w-[95%] h-[420px] bg-black bg-opacity-50 rounded-[10px]">
-          <form onSubmit={handleCreatepost} className="relative rounded-[10px]">
-            <div className="flex justify-between mt-[10px] mx-[10px]">
-              <div className=" flex items-center space-x-1">
-                <a className="flex items-center">
+          <div className="mt-[125px] ml-[30px] w-[95%] h-[420px] bg-black bg-opacity-50 rounded-[10px]">
+            <form
+              onSubmit={handleCreatepost}
+              className="relative rounded-[10px]"
+            >
+              <div className="flex justify-between mt-[10px] mx-[10px]">
+                <div className=" flex items-center space-x-1">
+                  <a className="flex items-center">
+                    <svg
+                      height="30"
+                      width="30"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                    </svg>
+                    <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                      {currentUser.username}
+                    </h5>
+                  </a>
+                </div>
+                <button
+                  type="submit"
+                  className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold"
+                >
+                  Create
+                </button>
+              </div>
+              <input
+                onChange={e => setTitle(e.target.value)}
+                className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px] pl-[15px] mt-[8px] mx-[28px] text-wrap"
+                type="text"
+                placeholder="Add your title here!"
+                required
+              ></input>
+              <input
+                onChange={e => setDescription(e.target.value)}
+                className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
+                type="text"
+                placeholder="Describe your problem..."
+                required
+              ></input>
+
+              <div className="flex bg-black bg-opacity-50 mx-[28px] mt-[8px]">
+                {/* Line numbers */}
+                <div
+                  className="py-2 px-2 text-right bg-muted font-mono select-none overflow-hidden"
+                  style={{
+                    minWidth: '3rem',
+                    height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
+                  }}
+                >
+                  <div
+                    className="h-full"
+                    style={{
+                      transform: textareaRef.current
+                        ? `translateY(-${textareaRef.current.scrollTop}px)`
+                        : 'none',
+                    }}
+                  >
+                    {Array.from(
+                      {
+                        length: Math.max(
+                          numberOfVisibleLines,
+                          lineNumbers.length,
+                        ),
+                      },
+                      (_, index) => (
+                        <div
+                          key={index}
+                          className="text-muted-foreground"
+                          style={{
+                            height: lineHeight,
+                            lineHeight,
+                            opacity: index < lineNumbers.length ? 1 : 0,
+                          }}
+                        >
+                          {(index + 1).toString().padStart(2, '0')}
+                        </div>
+                      ),
+                    )}
+                  </div>
+                </div>
+                {/* Text area */}
+                <textarea
+                  ref={textareaRef}
+                  value={text}
+                  onChange={handleInputChange}
+                  onKeyDown={handleKeyDown}
+                  onScroll={e => {
+                    // Force re-render to update line numbers position
+                    const target = e.target;
+                    if (target) {
+                      const lineNumbersContainer =
+                        target.previousSibling.firstChild;
+                      if (lineNumbersContainer) {
+                        lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`;
+                      }
+                    }
+                  }}
+                  className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
+                  placeholder="Put your codes here..."
+                  style={{
+                    lineHeight,
+                    height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
+                    overflowY: 'auto',
+                  }}
+                  aria-label="Numbered text editor"
+                />
+              </div>
+            </form>
+          </div>
+          <div className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
+            <div className="flex items-center space-x-1">
+              <a className="flex items-center ml-[4px] mt-[4px]">
+                <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
+                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                </svg>
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                  {currentUser.username}
+                </h5>
+              </a>
+            </div>
+            <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
+              <div className="flex items-center space-x-1">
+                <a className="flex items-center ml-[4px] mt-[4px]">
                   <svg
                     height="30"
                     width="30"
@@ -356,135 +500,21 @@ function MyProfile() {
                   </h5>
                 </a>
               </div>
-              <button
-                type="submit"
-                className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold"
-              >
-                Create
-              </button>
+              <h1>{/*Title*/}</h1>
+              <h2>{/*Description*/}</h2>
+              <h3>Bài viết đã chia sẻ</h3>
+              <ul>
+                {sharedPosts.map(post => (
+                  <li key={post._id}>
+                    {/* Hiển thị thông tin bài viết */}
+                    <h4>{post.title}</h4>
+                    <p>{post.description}</p>
+                    {/* ... */}
+                  </li>
+                ))}
+              </ul>
             </div>
-            <input
-              onChange={e => setTitle(e.target.value)}
-              className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px] pl-[15px] mt-[8px] mx-[28px] text-wrap"
-              type="text"
-              placeholder="Add your title here!"
-              required
-            ></input>
-            <input
-              onChange={e => setDescription(e.target.value)}
-              className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
-              type="text"
-              placeholder="Describe your problem..."
-              required
-            ></input>
-
-            <div className="flex bg-black bg-opacity-50 mx-[28px] mt-[8px]">
-              {/* Line numbers */}
-              <div
-                className="py-2 px-2 text-right bg-muted font-mono select-none overflow-hidden"
-                style={{
-                  minWidth: '3rem',
-                  height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                }}
-              >
-                <div
-                  className="h-full"
-                  style={{
-                    transform: textareaRef.current
-                      ? `translateY(-${textareaRef.current.scrollTop}px)`
-                      : 'none',
-                  }}
-                >
-                  {Array.from(
-                    {
-                      length: Math.max(
-                        numberOfVisibleLines,
-                        lineNumbers.length,
-                      ),
-                    },
-                    (_, index) => (
-                      <div
-                        key={index}
-                        className="text-muted-foreground"
-                        style={{
-                          height: lineHeight,
-                          lineHeight,
-                          opacity: index < lineNumbers.length ? 1 : 0,
-                        }}
-                      >
-                        {(index + 1).toString().padStart(2, '0')}
-                      </div>
-                    ),
-                  )}
-                </div>
-              </div>
-              {/* Text area */}
-              <textarea
-                ref={textareaRef}
-                value={text}
-                onChange={handleInputChange}
-                onKeyDown={handleKeyDown}
-                onScroll={e => {
-                  // Force re-render to update line numbers position
-                  const target = e.target;
-                  if (target) {
-                    const lineNumbersContainer =
-                      target.previousSibling.firstChild;
-                    if (lineNumbersContainer) {
-                      lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`;
-                    }
-                  }
-                }}
-                className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
-                placeholder="Put your codes here..."
-                style={{
-                  lineHeight,
-                  height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                  overflowY: 'auto',
-                }}
-                aria-label="Numbered text editor"
-              />
-            </div>
-          </form>
-        </div>
-        <div className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
-          <div className="flex items-center space-x-1">
-            <a className="flex items-center ml-[4px] mt-[4px]">
-              <svg
-                height="30"
-                width="30"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-              </svg>
-              <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                {currentUser.username}
-              </h5>
-            </a>
           </div>
-          <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
-            <div className="flex items-center space-x-1">
-              <a className="flex items-center ml-[4px] mt-[4px]">
-                <svg
-                  height="30"
-                  width="30"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                  {currentUser.username}
-                </h5>
-              </a>
-            </div>
-            <h1>
-              {/*Title*/}
-            </h1>
-            <h2>
-              {/*Description*/}
-            </h2>
-          </div>
-        </div>
         </div>
       </div>
       <FooterAllPage />
