@@ -22,6 +22,7 @@ import { commentStart, commentSuccess, commentFailed } from './commentSlice';
   myProfileFailed,
 } from './myProfileSlice';*/
 import { API_ROOT } from '../utils/constant';
+//import { current } from '@reduxjs/toolkit';
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -55,7 +56,7 @@ export const registerUser = async (user, dispatch, navigate) => {
         };
         myProfile(newmyProfile, dispatch, navigate);
         */
-        navigate('/profile');
+        navigate(`/profile/${res.data._id}`);
       })
       .catch(err => {
         dispatch(registerFailed(err.response?.data?.message));

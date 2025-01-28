@@ -4,12 +4,13 @@ import FooterAllPage from '../components/footer.jsx';
 import { createPost } from '../redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_ROOT } from '../utils/constant.js';
 import { fetchSharedPostsDetails_API } from '../api/index.js';
 
 function MyProfile() {
+  const { owner } = useParams();
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
@@ -44,6 +45,9 @@ function MyProfile() {
   const [intro, setIntro] = useState('');
   //const [profileId, setProfileId] = useState('');
   const [personality, setPersonality] = useState([]);
+  const [profileData, setProfileData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState(() => {
     const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
@@ -60,46 +64,35 @@ function MyProfile() {
   // Fetch profile data when currentUser changes
   useEffect(() => {
     const fetchProfile = async () => {
-      if (currentUser) {
-        try {
-          // Fetch profile dựa trên owner (là _id của user)
-          const response = await axios.get(
-            `${API_ROOT}/v1/myProfile/${currentUser._id}`,
-          );
-          const profileData = response.data;
-          // Lưu _id của profile vào state
-          //setProfileId(profileData._id);
-          // Update the state with the fetched profile data
-          setEditableProfile({
-            age: profileData?.age || '',
-            education: profileData?.education || '',
-            occupation: profileData?.occupation || '',
-            location: profileData?.location || '',
-            Introduction: profileData?.Introduction || '',
-            personality: profileData?.personality || [],
-          });
-          setIntro(profileData?.Introduction || '');
-          setPersonality(profileData?.personality || []);
-        } catch (error) {
-          console.error('Error fetching profile:', error);
-        }
-      } else {
-        // Reset editableProfile when there is no currentUser (e.g., after logout)
-        setEditableProfile({
-          age: '',
-          education: '',
-          occupation: '',
-          location: '',
-          Introduction: '',
-          personality: [],
-        });
-        setIntro('');
-        setPersonality();
+      setLoading(true);
+      setError(null);
+      try {
+        // Fetch profile dựa trên owner
+        const response = await axios.get(`${API_ROOT}/v1/myProfile/${owner}`);
+        setProfileData(response.data);
+        //đưa thay đổi vào editableProfile luôn
+        setEditableProfile(response.data);
+        // Lưu _id của profile vào state
+        //setProfileId(profileData._id);
+        // Update the state with the fetched profile data
+        // setEditableProfile({
+        //   age: profileData?.age || '',
+        //   education: profileData?.education || '',
+        //   occupation: profileData?.occupation || '',
+        //   location: profileData?.location || '',
+        //   Introduction: profileData?.Introduction || '',
+        //   personality: profileData?.personality || [],
+        // });
+        // setIntro(profileData?.Introduction || '');
+        // setPersonality(profileData?.personality || []);
+      } catch (error) {
+        console.error('Error fetching profile:', error);
+      } finally {
+        setLoading(false);
       }
     };
-
     fetchProfile();
-  }, []); // Run useEffect when currentUser changes
+  }, [owner]);
 
   const handleProfileChange = (field, value) => {
     setEditableProfile(prev => ({
@@ -107,6 +100,7 @@ function MyProfile() {
       [field]: value,
     }));
   };
+  //console.log('Editable profile:', editableProfile);// In ra để debug
 
   const handleUpdateProfile = async () => {
     try {
@@ -181,11 +175,13 @@ function MyProfile() {
   const [sharedPosts, setSharedPosts] = useState([]);
   useEffect(() => {
     const fetchSharedPosts = async () => {
-      if (currentUser && currentUser.sharedPosts) {
+      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
+      const currentProfile = getcurrentProfile.data;
+      if (currentProfile && currentProfile.sharedPosts) {
         try {
           console.log('Fetching shared posts...');
           const posts = await fetchSharedPostsDetails_API(
-            currentUser.sharedPosts,
+            currentProfile.sharedPosts,
           );
           console.log('Fetched posts:', posts);
           setSharedPosts(posts);
@@ -197,6 +193,18 @@ function MyProfile() {
     fetchSharedPosts();
   }, []);
 
+  if (loading) {
+    return <div>Đang tải dữ liệu profile...</div>;
+  }
+
+  if (error) {
+    return <div>Lỗi: {error.message || 'Không thể tải dữ liệu profile.'}</div>;
+  }
+
+  if (!profileData) {
+    return <div>Không tải dữ liệu profile.</div>;
+  }
+
   return (
     <>
       <HeaderForAllPages className="sticky" />
@@ -206,19 +214,25 @@ function MyProfile() {
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
-                  {currentUser.username}
+                  {profileData.username}
                 </h2>
-                <button
-                  className="absolute right-[5px] mt-[10px]"
-                  onClick={isEditing ? handleSaveClick : handleEditClick}
-                >
-                  <img
-                    src={
-                      isEditing ? 'src/assets/save.svg' : 'src/assets/edit.svg'
-                    }
-                    alt={isEditing ? 'Save icon' : 'Edit icon'}
-                  />
-                </button>
+                {currentUser && currentUser._id === owner && (
+                  <div>
+                    <button
+                      className="absolute right-[5px] mt-[10px]"
+                      onClick={isEditing ? handleSaveClick : handleEditClick}
+                    >
+                      <img
+                        src={
+                          isEditing
+                            ? 'src/assets/save.svg'
+                            : 'src/assets/edit.svg'
+                        }
+                        alt={isEditing ? 'Save icon' : 'Edit icon'}
+                      />
+                    </button>
+                  </div>
+                )}
               </div>
               <svg
                 className="my-[12px]"
@@ -478,7 +492,7 @@ function MyProfile() {
                   <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                 </svg>
                 <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                  {currentUser.username}
+                  {profileData.username}
                 </h5>
               </a>
             </div>
@@ -493,7 +507,7 @@ function MyProfile() {
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
                   <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                    {currentUser.username}
+                    {profileData.username}
                   </h5>
                 </a>
               </div>
