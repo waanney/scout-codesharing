@@ -521,6 +521,7 @@ function MyProfile() {
                     <h4>{post.title}</h4>
                     <h5>{post.description}</h5>
                     <p>{post.content}</p>
+                    ----------------------------------------
                     {/* ... */}
                   </li>
                 ))}
