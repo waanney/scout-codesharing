@@ -179,19 +179,36 @@ function Post({ board, boardId }) {
     }
   };
 
-  const handleShare = async () => {
-    try {
-      const response = await axios.post(
-        `${API_ROOT}/v1/boards/${boardId}/share`,
-        { userId: currentUser._id },
-      );
-      // Xử lý kết quả (ví dụ: hiển thị thông báo thành công)
-      console.log(response.data.message);
-    } catch (error) {
-      // Xử lý lỗi (ví dụ: hiển thị thông báo lỗi)
-      console.error('Error sharing post:', error);
-    }
-  };
+  const [isShared, setIsShared] = useState(false);
+
+useEffect(() => {
+  const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+  setIsShared(sharedPosts[boardId] || false); // Check if this post is already shared
+}, [boardId]);
+
+const handleShare = async () => {
+  if (isShared) return;
+
+  try {
+    const response = await axios.post(
+      `${API_ROOT}/v1/boards/${boardId}/share`,
+      { userId: currentUser._id }
+    );
+    
+    console.log(response.data.message);
+
+    setIsShared(true);
+
+    // Save to local storage
+    const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+    sharedPosts[boardId] = true; // Mark this post as shared
+    localStorage.setItem('sharedPosts', JSON.stringify(sharedPosts));
+  } catch (error) {
+    console.error('Error sharing post:', error);
+  }
+};
+
+
 
   //loading data
   if (loading) {
@@ -235,13 +252,17 @@ function Post({ board, boardId }) {
               </div>
               <div className="card flex flex-col items-end">
                 <div>
-                  <button
-                    onClick={handleShare}
-                    className="text-white flex flex-row items-center hover:scale-110"
-                  >
-                    <Share className="h-[30px] w-[30px]" />
-                    Share
-                  </button>
+                <button
+                  onClick={handleShare}
+                  className={`flex flex-row items-center rounded-md ${
+                  isShared ? 'bg-transparent text-blue-500 cursor-not-allowed' : 'hover:scale-110 text-white'
+                  }`}
+                  disabled={isShared}
+                >
+                  <Share className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`} />
+                  {isShared ? 'Shared' : 'Share'}
+                </button>
+
                 </div>
                 <div>
                   <button
@@ -270,7 +291,7 @@ function Post({ board, boardId }) {
                   key={comment._id}
                   className="rounded-[10px] mb-4 p-[15px 5px] bg-slate-400"
                 >
-                  <div className="text-white text-2xl font-bold leading-9">
+                  <div className="text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
                       target="_blank"
                       href={`http://localhost:5173/profile/${userData._id}`}
@@ -278,7 +299,7 @@ function Post({ board, boardId }) {
                       {userData.username}
                     </a>
                   </div>
-                  <div className="text-white text-[20px] font-normal leading-[150%]">
+                  <div className="text-white text-[20px] pl-[15px] font-normal leading-[150%]">
                     {comment.content}
                   </div>
                   <CommentRating

@@ -219,14 +219,14 @@ function MyProfile() {
                 {currentUser && currentUser._id === owner && (
                   <div>
                     <button
-                      className="absolute right-[5px] mt-[10px]"
+                      className="absolute right-[5px] mt-[-5px]"
                       onClick={isEditing ? handleSaveClick : handleEditClick}
                     >
                       <img
                         src={
                           isEditing
-                            ? 'src/assets/save.svg'
-                            : 'src/assets/edit.svg'
+                            ? '../src/assets/save.svg'
+                            : '../src/assets/edit.svg'
                         }
                         alt={isEditing ? 'Save icon' : 'Edit icon'}
                       />
@@ -283,7 +283,7 @@ function MyProfile() {
           <div className="flex h-[92px] w-[230px] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
             <img
               className="h-[13px] w-[14px] m-[11px]"
-              src="src/assets/Content.svg"
+              src="../src/assets/Content.svg"
             ></img>
 
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
@@ -485,6 +485,7 @@ function MyProfile() {
               </div>
             </form>
           </div>
+          {sharedPosts.map(post => (
           <div className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
             <div className="flex items-center space-x-1">
               <a className="flex items-center ml-[4px] mt-[4px]">
@@ -511,23 +512,28 @@ function MyProfile() {
                   </h5>
                 </a>
               </div>
-              <h1>{/*Title*/}</h1>
-              <h2>{/*Description*/}</h2>
-              <h3>Bài viết đã chia sẻ</h3>
-              <ul>
-                {sharedPosts.map(post => (
-                  <li key={post._id}>
+                  <div key={post._id}>
                     {/* Hiển thị thông tin bài viết */}
-                    <h4>{post.title}</h4>
-                    <h5>{post.description}</h5>
-                    <p>{post.content}</p>
-                    ----------------------------------------
+                    <h1 className="ml-[15px] text-[24px] font-bold text-center">{post.title}</h1>
+                    <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">{post.description}</h2>
+                    <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
+                      {post.content.split("\n").map((line, index) => (
+                      <div key={index} className="flex space-x-4">
+                        {/* Line Number */}
+                        <span className="text-gray-400 text-[20px]">{index + 1}.</span>
+
+                        {/* Line Content */}
+                        <p className="text-white text-[20px]">{line}</p>
+                      </div>
+                      ))}
+                    </div>
+
+
                     {/* ... */}
-                  </li>
-                ))}
-              </ul>
+                  </div>
             </div>
           </div>
+          ))}
         </div>
       </div>
       <FooterAllPage />
