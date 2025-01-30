@@ -486,18 +486,10 @@ function MyProfile() {
             </form>
           </div>
           {sharedPosts.map(post => (
-          <div className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]">
-            <div className="flex items-center space-x-1">
-              <a className="flex items-center ml-[4px] mt-[4px]">
-                <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
-                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                  {profileData.username}
-                </h5>
-              </a>
-            </div>
-            <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
+            <div
+              key={post._id}
+              className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+            >
               <div className="flex items-center space-x-1">
                 <a className="flex items-center ml-[4px] mt-[4px]">
                   <svg
@@ -508,31 +500,68 @@ function MyProfile() {
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
                   <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                    {profileData.username}
+                    {profileData && profileData.username
+                      ? profileData.username
+                      : 'Unknown User'}{' '}
+                    {/* Handle undefined profileData */}
                   </h5>
                 </a>
               </div>
-                  <div key={post._id}>
-                    {/* Hiển thị thông tin bài viết */}
-                    <h1 className="ml-[15px] text-[24px] font-bold text-center">{post.title}</h1>
-                    <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">{post.description}</h2>
-                    <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
-                      {post.content.split("\n").map((line, index) => (
-                      <div key={index} className="flex space-x-4">
-                        {/* Line Number */}
-                        <span className="text-gray-400 text-[20px]">{index + 1}.</span>
+              <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
+                <div className="flex items-center space-x-1">
+                  <a className="flex items-center ml-[4px] mt-[4px]">
+                    <svg
+                      height="30"
+                      width="30"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                    </svg>
+                    <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                      {profileData && profileData.username
+                        ? profileData.username
+                        : 'Unknown User'}{' '}
+                      {/* Handle undefined profileData */}
+                    </h5>
+                  </a>
+                </div>
 
-                        {/* Line Content */}
-                        <p className="text-white text-[20px]">{line}</p>
-                      </div>
+                {/* Conditional rendering to avoid errors */}
+                {post && post.content ? (
+                  <div>
+                    <h1 className="ml-[15px] text-[24px] font-bold text-center">
+                      {post.title}
+                    </h1>
+                    <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">
+                      {post.description}
+                    </h2>
+                    <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
+                      {post.content.split('\n').map((line, index) => (
+                        <div
+                          key={`${post._id}-${index}`}
+                          className="flex space-x-4"
+                        >
+                          {' '}
+                          {/* Use a more stable key */}
+                          <span className="text-gray-400 text-[20px]">
+                            {index + 1}.
+                          </span>
+                          <p className="text-white text-[20px]">{line}</p>
+                        </div>
                       ))}
                     </div>
-
-
-                    {/* ... */}
                   </div>
+                ) : (
+                  <div>
+                    {/* Content to display when post or post.content is not available */}
+                    <p>No content available for this post.</p>{' '}
+                    {/* Or a loading indicator */}
+                  </div>
+                )}
+
+                {/* ... */}
+              </div>
             </div>
-          </div>
           ))}
         </div>
       </div>
