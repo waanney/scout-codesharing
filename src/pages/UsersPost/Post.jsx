@@ -221,7 +221,12 @@ function Post({ board, boardId }) {
                 />
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-2xl leading-9">
-                    {userData.username}
+                    <a
+                      target="_blank"
+                      href={`http://localhost:5173/profile/${userData._id}`}
+                    >
+                      {userData.username}
+                    </a>
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
                     {formatMillisecondsToDate(board.createdAt)}
@@ -266,7 +271,12 @@ function Post({ board, boardId }) {
                   className="rounded-[10px] mb-4 p-[15px 5px] bg-slate-400"
                 >
                   <div className="text-white text-2xl font-bold leading-9">
-                    {comment.username}
+                    <a
+                      target="_blank"
+                      href={`http://localhost:5173/profile/${userData._id}`}
+                    >
+                      {userData.username}
+                    </a>
                   </div>
                   <div className="text-white text-[20px] font-normal leading-[150%]">
                     {comment.content}
