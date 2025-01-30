@@ -503,7 +503,6 @@ function MyProfile() {
                     {profileData && profileData.username
                       ? profileData.username
                       : 'Unknown User'}{' '}
-                    {/* Handle undefined profileData */}
                   </h5>
                 </a>
               </div>
@@ -521,7 +520,6 @@ function MyProfile() {
                       {profileData && profileData.username
                         ? profileData.username
                         : 'Unknown User'}{' '}
-                      {/* Handle undefined profileData */}
                     </h5>
                   </a>
                 </div>
@@ -541,8 +539,6 @@ function MyProfile() {
                           key={`${post._id}-${index}`}
                           className="flex space-x-4"
                         >
-                          {' '}
-                          {/* Use a more stable key */}
                           <span className="text-gray-400 text-[20px]">
                             {index + 1}.
                           </span>
@@ -553,13 +549,9 @@ function MyProfile() {
                   </div>
                 ) : (
                   <div>
-                    {/* Content to display when post or post.content is not available */}
-                    <p>No content available for this post.</p>{' '}
-                    {/* Or a loading indicator */}
+                    <p>No content available for this post.</p>
                   </div>
                 )}
-
-                {/* ... */}
               </div>
             </div>
           ))}
