@@ -54,14 +54,14 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           onClick={() => handleVote('up')}
           className={`cursor-pointer p-2 rounded ${
             userVote === 'up'
-              ? 'text-blue-500 hover:bg-gray-100'
+              ? 'hover:bg-gray-100'
               : 'hover:bg-gray-100'
           }`}
           aria-label="Upvote"
         >
           <img src="../src/assets/up.svg" alt="Upvote" />
         </button>
-        <span className="text-[24px] ml-2 text-blue-500">{upvote}</span>
+        <span className="text-[24px] ml-2">{upvote}</span>
       </div>
 
       {/* Downvote Section */}
@@ -70,14 +70,14 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           onClick={() => handleVote('down')}
           className={`cursor-pointer p-2 rounded ${
             userVote === 'down'
-              ? 'text-orange-500 hover:bg-gray-100'
+              ? 'hover:bg-gray-100'
               : 'hover:bg-gray-100'
           }`}
           aria-label="Downvote"
         >
           <img src="../src/assets/down.svg" alt="Downvote" />
         </button>
-        <span className="text-[24px] ml-2 text-red-500">{downvote}</span>
+        <span className="text-[24px] ml-2 ">{downvote}</span>
       </div>
     </div>
   );
