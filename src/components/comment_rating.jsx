@@ -10,11 +10,24 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser'));
   const [userVote, setUserVote] = useState(null);
-
+  const [isVoted, setIsVoted] = useState(null);
   useEffect(() => {
     if (currentUser) {
       setUserVote(upvote > downvote ? 'up' : downvote > upvote ? 'down' : null);
     }
+    const fetchVoted = async () => {
+      try {
+        const response = await axios.get(`${API_ROOT}/v1/Comment/${commentId}`);
+        const votes = response.data?.votes || [];
+
+        const userVote = votes.find(vote => vote.userId === currentUser._id);
+        setIsVoted(userVote ? userVote.type : null);
+      } catch (error) {
+        console.error('Error fetching vote status:', error);
+        setIsVoted(null);
+      }
+    };
+    fetchVoted();
   }, [currentUser, userVote, upvote, downvote]);
 
   const handleVote = async type => {
@@ -40,11 +53,13 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
         ),
       );
 
-      setUserVote(type === userVote ? null : type);
+      setIsVoted(type === userVote ? null : type);
     } catch (error) {
       console.error('Vote thất bại:', error);
     }
   };
+  const isUpvoted = isVoted === 'up';
+  const isDownvoted = isVoted === 'down';
 
   return (
     <div className="flex items-center gap-8">
@@ -52,32 +67,32 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
       <div className="flex items-center">
         <button
           onClick={() => handleVote('up')}
-          className={`cursor-pointer p-2 rounded ${
-            userVote === 'up'
-              ? 'hover:bg-gray-100'
-              : 'hover:bg-gray-100'
-          }`}
+          className={`cursor-pointer p-2 roundedhover:bg-gray-100`}
           aria-label="Upvote"
         >
           <img src="../src/assets/up.svg" alt="Upvote" />
         </button>
-        <span className="text-[24px] ml-2">{upvote}</span>
+        <span
+          className={`text-[24px] ml-2 ${isUpvoted ? 'text-blue-500 hover:bg-gray-100' : 'hover:bg-gray-100'}`}
+        >
+          {upvote}
+        </span>
       </div>
 
       {/* Downvote Section */}
       <div className="flex items-center">
         <button
           onClick={() => handleVote('down')}
-          className={`cursor-pointer p-2 rounded ${
-            userVote === 'down'
-              ? 'hover:bg-gray-100'
-              : 'hover:bg-gray-100'
-          }`}
+          className={`cursor-pointer p-2 roundedhover:bg-gray-100`}
           aria-label="Downvote"
         >
           <img src="../src/assets/down.svg" alt="Downvote" />
         </button>
-        <span className="text-[24px] ml-2 ">{downvote}</span>
+        <span
+          className={`text-[24px] ml-2 ${isDownvoted ? 'text-orange-500 hover:bg-gray-100' : 'hover:bg-gray-100'}`}
+        >
+          {downvote}
+        </span>
       </div>
     </div>
   );
