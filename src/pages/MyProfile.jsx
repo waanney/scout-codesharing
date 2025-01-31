@@ -38,6 +38,7 @@ function MyProfile() {
       description: description,
       userId: userId,
       content: text,
+      username: currentUser.username,
     };
     createPost(newPost, dispatch, navigate);
   };
@@ -179,11 +180,11 @@ function MyProfile() {
       const currentProfile = getcurrentProfile.data;
       if (currentProfile && currentProfile.sharedPosts) {
         try {
-          console.log('Fetching shared posts...');
+          //console.log('Fetching shared posts...');
           const posts = await fetchSharedPostsDetails_API(
             currentProfile.sharedPosts,
           );
-          console.log('Fetched posts:', posts);
+          //console.log('Fetched posts:', posts);//log ra posts để debug
           setSharedPosts(posts);
         } catch (error) {
           console.error('Error fetching shared posts:', error);
@@ -500,9 +501,7 @@ function MyProfile() {
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
                   <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                    {profileData && profileData.username
-                      ? profileData.username
-                      : 'Unknown User'}{' '}
+                    {profileData.username}
                   </h5>
                 </a>
               </div>
@@ -517,9 +516,7 @@ function MyProfile() {
                       <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                     </svg>
                     <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                      {profileData && profileData.username
-                        ? profileData.username
-                        : 'Unknown User'}{' '}
+                      {post.username}
                     </h5>
                   </a>
                 </div>
