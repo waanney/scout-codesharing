@@ -3,17 +3,18 @@ import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import { createPost } from '../redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import { API_ROOT } from '../utils/constant.js';
 import { fetchSharedPostsDetails_API } from '../api/index.js';
+import useUserData from '../hooks/useUserData.js';
 
 function MyProfile() {
   const { owner } = useParams();
-  const currentUser =
-    useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+  const { currentUserData } = useUserData();
+  console.log(currentUserData);
+
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [text, setText] = useState('');
@@ -21,7 +22,6 @@ function MyProfile() {
   const textareaRef = useRef(null);
   const lineHeight = '1.5rem';
   const numberOfVisibleLines = 12;
-  const userId = currentUser ? currentUser._id : '';
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -36,9 +36,9 @@ function MyProfile() {
     const newPost = {
       title: title,
       description: description,
-      userId: userId,
+      userId: currentUserData._id,
       content: text,
-      username: currentUser.username,
+      username: currentUserData.username,
     };
     createPost(newPost, dispatch, navigate);
   };
@@ -54,10 +54,10 @@ function MyProfile() {
     const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
     return (
       savedProfile || {
-        age: currentUser?.age || ' ',
-        education: currentUser?.education || ' ',
-        occupation: currentUser?.occupation || ' ',
-        location: currentUser?.location || ' ',
+        age: currentUserData?.age || ' ',
+        education: currentUserData?.education || ' ',
+        occupation: currentUserData?.occupation || ' ',
+        location: currentUserData?.location || ' ',
       }
     );
   });
@@ -113,13 +113,13 @@ function MyProfile() {
         location: editableProfile.location,
         Introduction: intro,
         personality: personality,
-        username: currentUser?.username,
+        username: currentUserData?.username,
         updatedAt: new Date().getTime(), // Sử dụng getTime() để lấy timestamp
-        owner: currentUser._id, // Thêm trường owner
+        owner: currentUserData._id, // Thêm trường owner
       };
       //console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên(để debug)
       await axios.put(
-        `${API_ROOT}/v1/myProfile/${currentUser._id}`,
+        `${API_ROOT}/v1/myProfile/${currentUserData._id}`,
         updatedFields,
       );
     } catch (error) {
@@ -217,7 +217,7 @@ function MyProfile() {
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
                   {profileData.username}
                 </h2>
-                {currentUser && currentUser._id === owner && (
+                {currentUserData && currentUserData._id === owner && (
                   <div>
                     <button
                       className="absolute right-[5px] mt-[-5px]"
@@ -391,7 +391,7 @@ function MyProfile() {
                       <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                     </svg>
                     <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                      {currentUser.username}
+                      {currentUserData?.username}
                     </h5>
                   </a>
                 </div>

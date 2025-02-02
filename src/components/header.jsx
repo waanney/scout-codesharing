@@ -5,6 +5,10 @@ import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '../redux/apiRequest';
 import useRestoreState from '../redux/useRestoreState';
+import useUserId from '../utils/useUserId';
+import axios from 'axios';
+import { API_ROOT } from '../utils/constant';
+import { useEffect } from 'react';
 
 const HeaderForAllPages = () => {
   useRestoreState();
@@ -13,6 +17,23 @@ const HeaderForAllPages = () => {
     useSelector(state => state.auth.login.currentUser) ||
     JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
   const { isFetching, error } = useSelector(state => state.auth.logout);
+  const userId = useUserId();
+  const [currentUserData, setcurrentUserData] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (userId) {
+        try {
+          const response = await axios.get(`${API_ROOT}/v1/Auth/${userId}`);
+          setcurrentUserData(response.data);
+        } catch (error) {
+          console.error('Error fetching user data:', error);
+        }
+      }
+    };
+
+    fetchUserData();
+  }, [userId]);
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();
@@ -51,7 +72,7 @@ const HeaderForAllPages = () => {
                     onClick={() => {
                       // Kiểm tra nếu item là 'Profile' thì navigate tới `/profile/${currentUser._id}`
                       if (item === 'Profile') {
-                        navigate(`/profile/${currentUser._id}`);
+                        navigate(`/profile/${userId}`);
                       } else {
                         navigate(
                           item === 'Home' ? '/' : `/${item.toLowerCase()}`,
@@ -84,7 +105,7 @@ const HeaderForAllPages = () => {
                   <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                 </svg>
                 <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                  {currentUser.username}
+                  {currentUserData?.username}
                 </h5>
               </a>
 

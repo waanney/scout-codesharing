@@ -8,7 +8,7 @@ import CommentCard from '../../components/comment_card.jsx';
 import axios from 'axios';
 import { API_ROOT } from '../../utils/constant.js';
 import CommentRating from '../../components/comment_rating.jsx';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { fetchUserData_API } from '../../api/index.js';
 import {
@@ -19,17 +19,16 @@ import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
+import useUserData from '../../hooks/useUserData.js';
 
 function Post({ board, boardId }) {
-  const currentUser =
-    useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser'));
+  const { currentUserData, userId } = useUserData();
+
   const [content, setContent] = useState('');
   const [comments, setComments] = useState([]);
   // State để lưu danh sách comment
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const userId = currentUser ? currentUser._id : '';
 
   // handle comment post
   const handleComment = async e => {
@@ -41,9 +40,9 @@ function Post({ board, boardId }) {
 
     const newComment = {
       content: content.trim(),
-      userId: userId,
+      userId: currentUserData._id,
       boardId: boardId,
-      username: currentUser.username,
+      username: currentUserData.username,
     };
 
     try {
@@ -60,7 +59,7 @@ function Post({ board, boardId }) {
           _id: response.data._id,
           userId,
           content: content.trim(),
-          username: currentUser.username,
+          username: currentUserData.username,
           upvote: 0,
           downvote: 0,
         },
@@ -124,12 +123,11 @@ function Post({ board, boardId }) {
       alert('Comment must have at least 1 lettr.');
       return;
     }
-
     const newLineComment = {
       content: line_content.trim(),
       userId: userId,
       boardId: boardId,
-      username: currentUser.username,
+      username: currentUserData.username,
       lineNumber: lineNumber,
     };
     // api
@@ -181,51 +179,48 @@ function Post({ board, boardId }) {
 
   const [isShared, setIsShared] = useState(false);
 
-useEffect(() => {
-  // Get current user's ID from the state or localStorage
-  const currentUserId = currentUser?._id || JSON.parse(localStorage.getItem('currentUser'))?._id;
-  if (!currentUserId) return; // If no current user, do nothing
+  useEffect(() => {
+    // Get current user's ID from the state or localStorage
+    const currentUserId = currentUserData?._id;
+    if (!currentUserId) return; // If no current user, do nothing
 
-  // Get the list of shared posts for the current user from localStorage
-  const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
-  setIsShared(sharedPosts[currentUserId]?.[boardId] || false); // Check if the post is shared by this user
-}, [boardId, currentUser?._id]);
-
-
-const handleShare = async () => {
-  // If already shared, do nothing
-  if (isShared) return;
-
-  try {
-    const response = await axios.post(
-      `${API_ROOT}/v1/boards/${boardId}/share`,
-      { userId: currentUser._id }
-    );
-
-    console.log(response.data.message);
-
-    setIsShared(true);
-
-    // Get the current user's ID
-    const currentUserId = currentUser._id;
-
-    // Retrieve the sharedPosts object from localStorage
+    // Get the list of shared posts for the current user from localStorage
     const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+    setIsShared(sharedPosts[currentUserId]?.[boardId] || false); // Check if the post is shared by this user
+  }, [boardId, currentUserData?._id]);
 
-    // Mark the post as shared by the current user
-    if (!sharedPosts[currentUserId]) {
-      sharedPosts[currentUserId] = {};
+  const handleShare = async () => {
+    // If already shared, do nothing
+    if (isShared) return;
+
+    try {
+      const response = await axios.post(
+        `${API_ROOT}/v1/boards/${boardId}/share`,
+        { userId: currentUserData._id },
+      );
+
+      console.log(response.data.message);
+
+      setIsShared(true);
+
+      // Get the current user's ID
+      const currentUserId = currentUserData._id;
+
+      // Retrieve the sharedPosts object from localStorage
+      const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+
+      // Mark the post as shared by the current user
+      if (!sharedPosts[currentUserId]) {
+        sharedPosts[currentUserId] = {};
+      }
+      sharedPosts[currentUserId][boardId] = true; // Mark the post as shared for this user
+
+      // Save the updated sharedPosts object back to localStorage
+      localStorage.setItem('sharedPosts', JSON.stringify(sharedPosts));
+    } catch (error) {
+      console.error('Error sharing post:', error);
     }
-    sharedPosts[currentUserId][boardId] = true; // Mark the post as shared for this user
-
-    // Save the updated sharedPosts object back to localStorage
-    localStorage.setItem('sharedPosts', JSON.stringify(sharedPosts));
-  } catch (error) {
-    console.error('Error sharing post:', error);
-  }
-};
-
-
+  };
 
   //loading data
   if (loading) {
@@ -269,17 +264,20 @@ const handleShare = async () => {
               </div>
               <div className="card flex flex-col items-end">
                 <div>
-                <button
-                  onClick={handleShare}
-                  className={`flex flex-row items-center rounded-md ${
-                  isShared ? 'bg-transparent text-blue-500 cursor-not-allowed' : 'hover:scale-110 text-white'
-                  }`}
-                  disabled={isShared}
-                >
-                  <Share className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`} />
-                  {isShared ? 'Shared' : 'Share'}
-                </button>
-
+                  <button
+                    onClick={handleShare}
+                    className={`flex flex-row items-center rounded-md ${
+                      isShared
+                        ? 'bg-transparent text-blue-500 cursor-not-allowed'
+                        : 'hover:scale-110 text-white'
+                    }`}
+                    disabled={isShared}
+                  >
+                    <Share
+                      className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`}
+                    />
+                    {isShared ? 'Shared' : 'Share'}
+                  </button>
                 </div>
                 <div>
                   <button

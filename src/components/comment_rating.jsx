@@ -1,18 +1,16 @@
 import { useState, useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import axios from 'axios';
 import { API_ROOT } from '../utils/constant';
+import useUserData from '../hooks/useUserData.js';
 
 //import { comment } from 'postcss';
 
 const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
-  const currentUser =
-    useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser'));
+  const { currentUserData } = useUserData();
   const [userVote, setUserVote] = useState(null);
   const [isVoted, setIsVoted] = useState(null);
   useEffect(() => {
-    if (currentUser) {
+    if (currentUserData) {
       setUserVote(upvote > downvote ? 'up' : downvote > upvote ? 'down' : null);
     }
     const fetchVoted = async () => {
@@ -20,7 +18,9 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
         const response = await axios.get(`${API_ROOT}/v1/Comment/${commentId}`);
         const votes = response.data?.votes || [];
 
-        const userVote = votes.find(vote => vote.userId === currentUser._id);
+        const userVote = votes.find(
+          vote => vote.userId === currentUserData?._id,
+        );
         setIsVoted(userVote ? userVote.type : null);
       } catch (error) {
         console.error('Error fetching vote status:', error);
@@ -28,7 +28,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
       }
     };
     fetchVoted();
-  }, [currentUser, userVote, upvote, downvote]);
+  }, [currentUserData, userVote, upvote, downvote]);
 
   const handleVote = async type => {
     try {
@@ -36,7 +36,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
         `${API_ROOT}/v1/Comment/${commentId}/vote`,
         {
           type,
-          userId: currentUser._id,
+          userId: currentUserData._id,
         },
       );
 

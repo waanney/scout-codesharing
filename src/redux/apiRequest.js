@@ -23,6 +23,7 @@ import { commentStart, commentSuccess, commentFailed } from './commentSlice';
 } from './myProfileSlice';*/
 import { API_ROOT } from '../utils/constant';
 //import { current } from '@reduxjs/toolkit';
+import { jwtDecode } from 'jwt-decode';
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());
@@ -56,7 +57,9 @@ export const registerUser = async (user, dispatch, navigate) => {
         };
         myProfile(newmyProfile, dispatch, navigate);
         */
-        navigate(`/profile/${res.data._id}`);
+        const decodedToken = jwtDecode(res.data.access_token);
+        const userId = decodedToken.id;
+        navigate(`/profile/${userId}`);
       })
       .catch(err => {
         dispatch(registerFailed(err.response?.data?.message));
