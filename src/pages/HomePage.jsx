@@ -2,6 +2,7 @@ import { useEffect, useRef } from 'react';
 import VanillaTilt from 'vanilla-tilt';
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
+import ScrollTop from '../components/scrollTop';
 
 function HomePage() {
   const cardRefs = useRef([]);
@@ -74,6 +75,11 @@ function HomePage() {
     },
   ];
 
+  window.scrollTo({
+    top: 0,
+    behavior: 'auto',
+  });
+
   return (
     <div className="flex min-h-screen flex-col">
       <HeaderForAllPages className="sticky" />
@@ -122,6 +128,7 @@ function HomePage() {
             </div>
           ))}
         </div>
+        <ScrollTop />
       </div>
       <FooterAllPage />
     </div>

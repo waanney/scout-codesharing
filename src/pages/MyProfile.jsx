@@ -9,6 +9,7 @@ import axios from 'axios';
 import { API_ROOT } from '../utils/constant.js';
 import { fetchSharedPostsDetails_API } from '../api/index.js';
 import useUserData from '../hooks/useUserData.js';
+import ScrollTop from '../components/scrollTop';
 
 function MyProfile() {
   const { owner } = useParams();
@@ -204,6 +205,11 @@ function MyProfile() {
   if (!profileData) {
     return <div>Không tải dữ liệu profile.</div>;
   }
+
+  window.scrollTo({
+    top: 0,
+    behavior: 'auto',
+  });
 
   return (
     <>
@@ -552,6 +558,7 @@ function MyProfile() {
             </div>
           ))}
         </div>
+        <ScrollTop />
       </div>
       <FooterAllPage />
     </>
