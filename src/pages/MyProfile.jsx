@@ -13,7 +13,6 @@ import useUserData from '../hooks/useUserData.js';
 function MyProfile() {
   const { owner } = useParams();
   const { currentUserData } = useUserData();
-  console.log(currentUserData);
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
