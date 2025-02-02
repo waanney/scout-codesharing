@@ -77,6 +77,8 @@ export const logoutUser = async (dispatch, navigate) => {
 
     // Xóa currentUser khỏi localStorage
     localStorage.removeItem('currentUser');
+    //Xóa sharedPost khỏi localStorage
+    localStorage.removeItem('sharedPosts');
 
     navigate('/login');
   } catch (err) {

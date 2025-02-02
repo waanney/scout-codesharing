@@ -187,7 +187,7 @@ function Post({ board, boardId }) {
     // Get the list of shared posts for the current user from localStorage
     const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
     setIsShared(sharedPosts[currentUserId]?.[boardId] || false); // Check if the post is shared by this user
-  }, [boardId, currentUserData?._id]);
+  }, [boardId, userId, currentUserData]);
 
   const handleShare = async () => {
     // If already shared, do nothing
@@ -221,6 +221,21 @@ function Post({ board, boardId }) {
       console.error('Error sharing post:', error);
     }
   };
+
+  useEffect(() => {
+    const fetchisShared = async () => {
+      try {
+        const response = await axios.get(
+          `${API_ROOT}/v1/boards/${boardId}/shared/${userId}`,
+        );
+        setIsShared(response.data.isShared);
+      } catch (error) {
+        console.error('Error fetching shared status:', error);
+      }
+    };
+
+    fetchisShared();
+  }, [boardId, currentUserData?._id]);
 
   //loading data
   if (loading) {
