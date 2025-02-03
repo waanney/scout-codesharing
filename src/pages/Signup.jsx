@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 
 function Signup() {
   const [Username, setUsername] = useState('');
-  const [UserID, setUserid] = useState('');
+  const [Email, setEmail] = useState('');
   const [Password, setPassword] = useState('');
   const [ConfirmPassword, setConfirmPassword] = useState('');
   const dispatch = useDispatch();
@@ -23,10 +23,11 @@ function Signup() {
 
     const newUser = {
       username: Username,
-      userID: UserID,
+      email: Email,
       password: Password,
       confirmPassword: ConfirmPassword,
     };
+    console.log(newUser);
     registerUser(newUser, dispatch, navigate);
   };
   const [showError, setShowError] = useState(false);
@@ -99,26 +100,26 @@ function Signup() {
                 onChange={e => setUsername(e.target.value)}
                 className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
                 type="text"
-                placeholder="Username"
+                placeholder="6+ && 20- characters"
                 required
               ></input>
             </div>
             <div className="mt-[15px] ml-[8px]">
               <label
                 className="font-Inter font-bold text-[18px]"
-                htmlFor="userid"
+                htmlFor="email"
               >
-                UserID{' '}
+                Email{' '}
                 <span className="text-[15px] text-white text-opacity-70">
                   {' '}
-                  &#40;use to log in and only you can see your id&#41;
+                  &#40;email address&#41;
                 </span>
               </label>
               <input
-                onChange={e => setUserid(e.target.value)}
+                onChange={e => setEmail(e.target.value)}
                 className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
                 type="text"
-                placeholder="UserID"
+                placeholder="Email"
                 required
               ></input>
             </div>

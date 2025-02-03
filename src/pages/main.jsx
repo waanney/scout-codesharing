@@ -14,6 +14,8 @@ import Signup from './Signup';
 import PostGetID from './UsersPost/_id';
 import UserStorage from './StoragePage/UserStorage';
 import Changepassword from './Changepassword';
+import Forgotpassword from './Forgotpassword.jsx';
+import Resetpassword from './Resetpassword.jsx';
 
 const router = createBrowserRouter([
   {
@@ -27,6 +29,14 @@ const router = createBrowserRouter([
   {
     path: '/login',
     element: <Login />,
+  },
+  {
+    path: '/forgot-password',
+    element: <Forgotpassword />,
+  },
+  {
+    path: '/reset-password/:token',
+    element: <Resetpassword />,
   },
   {
     element: <ProtectedRoute />, // Bảo vệ các route bên trong
