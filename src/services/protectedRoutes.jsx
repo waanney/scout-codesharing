@@ -13,3 +13,14 @@ export const ProtectedRoute = () => {
   }
   return <Outlet />;
 };
+
+export const HaveloginRoute = () => {
+  const currentUser =
+    useSelector(state => state.auth.login.currentUser) ||
+    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+
+  if (currentUser) {
+    return <Navigate to="/" replace />;
+  }
+  return <Outlet />;
+};

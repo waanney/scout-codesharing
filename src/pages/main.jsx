@@ -2,7 +2,10 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import { ProtectedRoute } from '../services/protectedRoutes.jsx';
+import {
+  ProtectedRoute,
+  HaveloginRoute,
+} from '../services/protectedRoutes.jsx';
 import { Provider } from 'react-redux'; // Import Provider
 import store from '../redux/store'; // Import store once
 
@@ -23,20 +26,25 @@ const router = createBrowserRouter([
     element: <HomePage />,
   },
   {
-    path: '/signup',
-    element: <Signup />,
-  },
-  {
-    path: '/login',
-    element: <Login />,
-  },
-  {
-    path: '/forgot-password',
-    element: <Forgotpassword />,
-  },
-  {
-    path: '/reset-password/:token',
-    element: <Resetpassword />,
+    element: <HaveloginRoute />,
+    children: [
+      {
+        path: '/signup',
+        element: <Signup />,
+      },
+      {
+        path: '/login',
+        element: <Login />,
+      },
+      {
+        path: '/forgot-password',
+        element: <Forgotpassword />,
+      },
+      {
+        path: '/reset-password/:token',
+        element: <Resetpassword />,
+      },
+    ],
   },
   {
     element: <ProtectedRoute />, // Bảo vệ các route bên trong
