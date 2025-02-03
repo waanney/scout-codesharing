@@ -180,14 +180,12 @@ function Post({ board, boardId }) {
   const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
-    // Get current user's ID from the state or localStorage
-    const currentUserId = currentUserData?._id;
-    if (!currentUserId) return; // If no current user, do nothing
-
-    // Get the list of shared posts for the current user from localStorage
-    const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
-    setIsShared(sharedPosts[currentUserId]?.[boardId] || false); // Check if the post is shared by this user
-  }, [boardId, userId, currentUserData]);
+    // Kiểm tra xem boardId có trong danh sách sharedPosts của currentUserData hay không
+    const isBoardShared = currentUserData?.sharedPosts.some(
+      postId => postId.toString() === boardId,
+    );
+    setIsShared(isBoardShared);
+  }, [boardId, currentUserData]);
 
   const handleShare = async () => {
     // If already shared, do nothing
@@ -203,39 +201,24 @@ function Post({ board, boardId }) {
 
       setIsShared(true);
 
-      // Get the current user's ID
-      const currentUserId = currentUserData._id;
+      // // Get the current user's ID
+      // const currentUserId = currentUserData._id;
 
-      // Retrieve the sharedPosts object from localStorage
-      const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
+      // // Retrieve the sharedPosts object from localStorage
+      // const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
 
-      // Mark the post as shared by the current user
-      if (!sharedPosts[currentUserId]) {
-        sharedPosts[currentUserId] = {};
-      }
-      sharedPosts[currentUserId][boardId] = true; // Mark the post as shared for this user
+      // // Mark the post as shared by the current user
+      // if (!sharedPosts[currentUserId]) {
+      //   sharedPosts[currentUserId] = {};
+      // }
+      // sharedPosts[currentUserId][boardId] = true; // Mark the post as shared for this user
 
-      // Save the updated sharedPosts object back to localStorage
-      localStorage.setItem('sharedPosts', JSON.stringify(sharedPosts));
+      // // Save the updated sharedPosts object back to localStorage
+      // localStorage.setItem('sharedPosts', JSON.stringify(sharedPosts));
     } catch (error) {
       console.error('Error sharing post:', error);
     }
   };
-
-  useEffect(() => {
-    const fetchisShared = async () => {
-      try {
-        const response = await axios.get(
-          `${API_ROOT}/v1/boards/${boardId}/shared/${userId}`,
-        );
-        setIsShared(response.data.isShared);
-      } catch (error) {
-        console.error('Error fetching shared status:', error);
-      }
-    };
-
-    fetchisShared();
-  }, [boardId, currentUserData?._id]);
 
   //loading data
   if (loading) {
