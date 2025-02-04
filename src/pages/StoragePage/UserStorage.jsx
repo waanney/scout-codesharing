@@ -22,7 +22,9 @@ export default function UserStorage() {
               <div
                 key={i}
                 className="bg-navy-700 rounded-lg p-4 shadow-md h-48"
-              ></div>
+              >
+                hello
+              </div>
             ))}
           </div>
         </div>
