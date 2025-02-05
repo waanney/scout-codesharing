@@ -12,6 +12,9 @@ import {
   changePasswordStart,
   changePasswordSuccess,
   changePasswordFailed,
+  resetPasswordStart,
+  resetPasswordSuccess,
+  resetPasswordFailed,
 } from './authSlice';
 import axiosJWT from './axiosJWT';
 import { createStart, createFailed, createSuccess } from './uppostSlice';
@@ -94,6 +97,16 @@ export const changePassword = async (data, dispatch, userId) => {
     dispatch(changePasswordSuccess()); // Sử dụng action từ authSlice
   } catch (err) {
     dispatch(changePasswordFailed(err.response?.data?.message)); // Sử dụng action từ authSlice
+  }
+};
+
+export const resetPassword = async (data, token, dispatch) => {
+  dispatch(resetPasswordStart());
+  try {
+    await axios.put(`${API_ROOT}/v1/Auth/reset-password/${token}`, data);
+    dispatch(resetPasswordSuccess());
+  } catch (err) {
+    dispatch(resetPasswordFailed(err.response?.data?.message));
   }
 };
 

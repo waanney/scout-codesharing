@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 import { changePassword } from '../redux/apiRequest';
 import { logoutUser } from '../redux/apiRequest';
 import { useNavigate } from 'react-router-dom';
+import useUserId from '../utils/useUserId';
 
 function Changepassword() {
   //handle lỗi và thành công
@@ -19,15 +20,10 @@ function Changepassword() {
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
   const [confirmNewPassword, setConfirmNewPassword] = useState('');
-  const currentUser =
-    useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser'));
-  const userId = currentUser ? currentUser._id : '';
+  const userId = useUserId();
 
   const handlechangePassword = e => {
     e.preventDefault();
-    //console.log("currentUser:", currentUser); // Kiểm tra toàn bộ currentUser(để debug)
-    //console.log("userId:", userId); // Kiểm tra userId(để debug)
     if (newPassword !== confirmNewPassword) {
       alert('New passwords do not match!');
       return;
@@ -40,7 +36,7 @@ function Changepassword() {
 
     // Hiển thị thông báo thành công
     setSuccessMessage(
-      'Đổi mật khẩu thành công! Vui lòng đăng nhập lại!  Đang đăng xuất...',
+      'Password changed successfully! You will be logged out in 3 seconds. Please log in again.',
     );
 
     // Tự động đăng xuất sau 3 giây

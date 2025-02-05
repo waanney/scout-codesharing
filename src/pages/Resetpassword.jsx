@@ -1,50 +1,48 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { API_ROOT } from '../utils/constant';
 import HeaderForAllPages from '../components/header.jsx';
-import { Link } from 'react-router-dom';
+import { resetPassword } from '../redux/apiRequest.js';
+import { useSelector, useDispatch } from 'react-redux';
 
 const ResetPassword = () => {
-  const { token } = useParams();
+  const token = useParams();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
   const email = searchParams.get('email');
-
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [message, setMessage] = useState('');
-  const [isLoading, setIsLoading] = useState(false);
   const navigate = useNavigate();
-  const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
+  const error = useSelector(state => state.auth.resetPassword.error);
   const [showError, setShowError] = useState(false);
   const [fadeError, setFadeError] = useState(false);
+  const dispatch = useDispatch();
 
   const handleResetPassword = async e => {
     e.preventDefault();
     setIsLoading(true);
 
     if (password !== confirmPassword) {
-      setMessage('Passwords do not match');
-      setIsLoading(false);
+      alert('New passwords do not match!');
       return;
     }
+    resetPassword(
+      { email, password, confirmPassword },
+      token,
+      dispatch,
+      setIsLoading(false),
+    );
 
-    try {
-      const response = await axios.post(
-        `${API_ROOT}/v1/Auth/reset-password/${token}`,
-        {
-          email,
-          password,
-          confirmPassword,
-        },
-      );
-      setMessage(response.data.message);
-      setTimeout(() => {
-        navigate('/login');
-      }, 2000); // Chuyển hướng sau 2 giây
-    } catch (error) {
-      setError(error.response.data.message);
+    setMessage('Password reset successfully! Please log in.');
+
+    setTimeout(() => {
+      navigate('/login');
+    }, 3000);
+  };
+
+  useEffect(() => {
+    if (error) {
       setShowError(true); // Show the error immediately
       setFadeError(false); // Reset the fade-out effect
 
@@ -63,10 +61,11 @@ const ResetPassword = () => {
         clearTimeout(timer);
         clearTimeout(hideTimer);
       };
-    } finally {
-      setIsLoading(false);
+    } else {
+      setShowError(false); // Hide the error message if there's no error
+      setFadeError(false); // Reset fade effect
     }
-  };
+  }, [error]);
 
   return (
     <div className="flex min-h-screen flex-col">
@@ -139,15 +138,13 @@ const ResetPassword = () => {
             />
           </div>
           <div className="flex items-center justify-center mt-[35px]">
-            <Link to="/login">
-              <button
-                type="submit"
-                className="cursor-pointer transition-all bg-blue-500 text-white font-bold text-[24px] px-8 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
-                disabled={isLoading}
-              >
-                {isLoading ? 'Sending...' : 'Reset Password'}
-              </button>
-            </Link>
+            <button
+              type="submit"
+              className="cursor-pointer transition-all bg-blue-500 text-white font-bold text-[24px] px-8 py-2 rounded-lg border-blue-600 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
+              disabled={isLoading}
+            >
+              Reset
+            </button>
           </div>
         </form>
       </div>

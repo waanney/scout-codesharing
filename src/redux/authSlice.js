@@ -22,6 +22,11 @@ export const initialState = {
     error: false,
     success: false,
   },
+  resetPassword: {
+    isFetching: false,
+    error: false,
+    success: false,
+  },
 };
 
 const authSlice = createSlice({
@@ -83,6 +88,21 @@ const authSlice = createSlice({
       state.changePassword.error = action.payload;
       state.changePassword.success = false;
     },
+    resetPasswordStart: state => {
+      state.resetPassword.isFetching = true;
+      state.resetPassword.error = false;
+      state.resetPassword.success = false;
+    },
+    resetPasswordSuccess: state => {
+      state.resetPassword.isFetching = false;
+      state.resetPassword.error = false;
+      state.resetPassword.success = true;
+    },
+    resetPasswordFailed: (state, action) => {
+      state.resetPassword.isFetching = false;
+      state.resetPassword.error = action.payload;
+      state.resetPassword.success = false;
+    },
 
     // New clearError reducer
     clearError: state => {
@@ -106,6 +126,9 @@ export const {
   changePasswordStart,
   changePasswordSuccess,
   changePasswordFailed,
+  resetPasswordStart,
+  resetPasswordSuccess,
+  resetPasswordFailed,
   clearError, // Export the clearError action
 } = authSlice.actions;
 
