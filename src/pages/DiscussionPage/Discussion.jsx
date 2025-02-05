@@ -30,8 +30,8 @@ function Discussion({
 
   return (
     <>
-      <div className="flex flex-col min-h-screen bg-[#0b2878]">
-        <HeaderForAllPages className="sticky" />
+      <HeaderForAllPages className="sticky" />
+      <div className="flex flex-col min-h-screen bg-[#0b2878] p-8">
         <div className="mx-auto mt-[103px] font-raleway text-[48px] text-white font-bold ">
           What is on?
         </div>
@@ -54,7 +54,7 @@ function Discussion({
           </ul>
         </nav>
         {/* Hiển thị danh sách bài đăng */}
-        <ul className="cards grid grid-cols-2 gap-[66px] place-items-center mb-[50px]">
+        <ul className="cards grid grid-cols-2 gap-[66px] place-items-center">
           {Boards.map(Boards => (
             <li key={Boards._id}>
               {' '}
