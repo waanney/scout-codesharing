@@ -96,11 +96,13 @@ function Post({ board, boardId }) {
     setComments(board.comments || []);
   }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
 
-  // handle comment inline
-  const [line_content, setLineContent] = useState('');
+  // select Language
   const language = hljs.highlightAuto(board.content).language;
   const sourceCode = board.content.split('\n');
   hljs.highlightAll();
+
+  // handle comment inline
+  const [line_content, setLineContent] = useState('');
   const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
   const [commentsByLine, setCommentsByLine] = useState([]);
 

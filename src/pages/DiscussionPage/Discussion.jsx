@@ -32,11 +32,11 @@ function Discussion({
     <>
       <HeaderForAllPages className="sticky" />
       <div className="flex flex-col min-h-screen bg-[#0b2878] p-8">
-        <div className="mx-auto mt-[103px] font-raleway text-[48px] text-white font-bold ">
+        <div className="mx-auto mt-[90px] font-raleway text-[48px] text-white font-bold ">
           What is on?
         </div>
         {/* Phân trang */}
-        <nav className="mx-auto text-[30px]">
+        <nav className="mx-auto mb-[10px] text-[30px]">
           <ul className="pagination flex flex-row space-x-4">
             {pageNumbers.map(number => (
               <li

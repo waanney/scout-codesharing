@@ -41,8 +41,8 @@ export default function UserStorage() {
         <div className="container mx-auto">
           {' '}
           {/* Để căn giữa nội dung nếu cần */}
-          <h1 className="text-2xl font-bold my-16 text-center text-white">
-            Title here
+          <h1 className="text-[48px] font-bold mt-16 mb-5 text-center text-white">
+            Your saved Posts
             {/*<CommentCard />*/}
           </h1>{' '}
           {/* Tiêu đề */}
@@ -51,9 +51,9 @@ export default function UserStorage() {
             {' '}
             {/* Lưới cho các card (hiện tại chỉ là khoảng trống) */}
             {/* Tạo các div rỗng để giữ chỗ cho các card, giúp background hiển thị đúng */}
-            {savedPosts.map((content, index) => (
+            {savedPosts.map(content => (
               <div
-                key={index}
+                key={content._id}
                 className="bg-navy-700 rounded-lg place-items-center"
               >
                 {' '}

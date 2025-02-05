@@ -10,11 +10,12 @@ import { API_ROOT } from '../utils/constant.js';
 import { fetchSharedPostsDetails_API } from '../api/index.js';
 import useUserData from '../hooks/useUserData.js';
 import ScrollTop from '../components/scrollTop';
+import hljs from 'highlight.js';
+import '../utils/customeStyle.css';
 
 function MyProfile() {
   const { owner } = useParams();
   const { currentUserData } = useUserData();
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [text, setText] = useState('');
@@ -24,6 +25,7 @@ function MyProfile() {
   const numberOfVisibleLines = 12;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  hljs.highlightAll();
 
   // Update line numbers when text changes
   useEffect(() => {
@@ -544,7 +546,13 @@ function MyProfile() {
                           <span className="text-gray-400 text-[20px]">
                             {index + 1}.
                           </span>
-                          <p className="text-white text-[20px]">{line}</p>
+                          <pre>
+                            <code
+                              className={`language-${hljs.highlightAuto(post.content).language}`}
+                            >
+                              {line}
+                            </code>
+                          </pre>
                         </div>
                       ))}
                     </div>
