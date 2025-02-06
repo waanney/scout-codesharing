@@ -139,10 +139,19 @@ const HeaderForAllPages = () => {
                 {error}
               </div>
             </div>
-            <button className="md:hidden flex justify-end z-10" onClick={() => setMenuOpen(!menuOpen)}>
-              {menuOpen ? <X size={30} className="text-white" /> : <Menu size={30} className="text-white" />}
+            <button
+              className="md:hidden flex justify-end z-10"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? (
+                <X size={30} className="text-white" />
+              ) : (
+                <Menu size={30} className="text-white" />
+              )}
             </button>
-            <div className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+            <div
+              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            >
               <a className="flex items-center mt-[20px]">
                 <svg height="50" width="50" xmlns="http://www.w3.org/2000/svg">
                   <circle r="25" cx="25" cy="25" fill="#D9D9D9" />
@@ -156,7 +165,6 @@ const HeaderForAllPages = () => {
                   <div
                     key={index}
                     className="h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]"
-                    
                     onClick={() => {
                       // Kiểm tra nếu item là 'Profile' thì navigate tới `/profile/${currentUser._id}`
                       if (item === 'Profile') {
@@ -172,26 +180,32 @@ const HeaderForAllPages = () => {
                   </div>
                 ),
               )}
-              <hr className="my-[5px]"/>
+              <hr className="my-[5px]" />
               <div className="mt-[10px]">
-              <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">
-                <button className="w-full h-full px-[5px]">
-                  <Link to="/changepassword" className="clickchangepassword hover:cursor-pointer w-full h-full flex items-center">
-                    <p className="font-medium text-[18px]">Change Password</p>
-                  </Link>
-                </button>
-              </div>
+                <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">
+                  <button className="w-full h-full px-[5px]">
+                    <Link
+                      to="/changepassword"
+                      className="clickchangepassword hover:cursor-pointer w-full h-full flex items-center"
+                    >
+                      <p className="font-medium text-[18px]">Change Password</p>
+                    </Link>
+                  </button>
+                </div>
 
-              <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
-                <button
-                  onClick={handleLogout}
-                  className="w-full h-full px-[5px] text-red-600"
-                >
-                  <Link to="/" className="clicklogout w-full h-full flex items-center">
-                    <p className="font-medium text-[18px]">Log out</p>
-                  </Link>
-                </button>
-              </div>
+                <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
+                  <button
+                    onClick={handleLogout}
+                    className="w-full h-full px-[5px] text-red-600"
+                  >
+                    <Link
+                      to="/"
+                      className="clicklogout w-full h-full flex items-center"
+                    >
+                      <p className="font-medium text-[18px]">Log out</p>
+                    </Link>
+                  </button>
+                </div>
 
                 {isFetching && <p>Logging out...</p>}
                 {error}
@@ -205,7 +219,7 @@ const HeaderForAllPages = () => {
             <a className="flex justify-between items-center mt-[10px]" href="/">
               <img
                 className="h-[37px] w-[37px] mr-[5px]"
-                src="src/assets/Scout.ico"
+                src="../src/assets/Scout.ico"
                 alt="Scout Logo"
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
@@ -253,7 +267,6 @@ const HeaderForAllPages = () => {
           </div>
         </>
       )}
-      
     </div>
   );
 };
