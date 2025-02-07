@@ -96,11 +96,12 @@ function Post({ board, boardId }) {
     setComments(board.comments || []);
   }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
 
-  // handle comment inline
-  const [line_content, setLineContent] = useState('');
-  const language = hljs.highlightAuto(board.content).language;
+  // select Language
   const sourceCode = board.content.split('\n');
   hljs.highlightAll();
+
+  // handle comment inline
+  const [line_content, setLineContent] = useState('');
   const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
   const [commentsByLine, setCommentsByLine] = useState([]);
 
@@ -220,6 +221,34 @@ function Post({ board, boardId }) {
     }
   };
 
+  const [isSaved, setIsSaved] = useState(false);
+
+  useEffect(() => {
+    // Kiểm tra xem boardId có trong danh sách sharedPosts của currentUserData hay không
+    const isBoardSaved = currentUserData?.savedPosts.some(
+      postId => postId.toString() === boardId,
+    );
+    setIsSaved(isBoardSaved);
+  }, [boardId, currentUserData]);
+
+  const handleSave = async () => {
+    // If already shared, do nothing
+    if (isSaved) return;
+
+    try {
+      const response = await axios.post(
+        `${API_ROOT}/v1/boards/${boardId}/save`,
+        { userId: currentUserData._id },
+      );
+
+      console.log(response.data.message);
+
+      setIsSaved(true);
+    } catch (error) {
+      console.error('Error saving post:', error);
+    }
+  };
+
   //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
@@ -279,13 +308,11 @@ function Post({ board, boardId }) {
                 </div>
                 <div>
                   <button
-                    onClick={() => {
-                      alert('Button clicked!');
-                    }}
-                    className="text-white flex flex-row items-center hover:scale-110"
+                    onClick={handleSave}
+                    className={`flex flex-row items-center hover:scale-110 ${isSaved ? 'text-blue-500' : 'text-white'}`}
                   >
                     <Save className="h-[30px] w-[30px]" />
-                    Save
+                    {isSaved ? 'Saved' : 'Save'}
                   </button>
                 </div>
               </div>
@@ -357,7 +384,7 @@ function Post({ board, boardId }) {
 
                   {/* Code Content */}
                   <pre className="flex-grow">
-                    <code className={`language-${language}`}>{code}</code>
+                    <code className={`language-${board.language}`}>{code}</code>
                   </pre>
 
                   {/* Popover */}

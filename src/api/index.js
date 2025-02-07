@@ -26,3 +26,10 @@ export const fetchSharedPostsDetails_API = async boardIds => {
   });
   return response.data;
 };
+
+export const fetchSavedPostsDetails_API = async boardIds => {
+  const response = await axios.post(`${API_ROOT}/v1/boards/saveDetails`, {
+    boardIds,
+  });
+  return response.data;
+};

@@ -10,13 +10,15 @@ import { API_ROOT } from '../utils/constant.js';
 import { fetchSharedPostsDetails_API } from '../api/index.js';
 import useUserData from '../hooks/useUserData.js';
 import ScrollTop from '../components/scrollTop';
+import hljs from 'highlight.js';
+import '../utils/customeStyle.css';
 
 function MyProfile() {
   const { owner } = useParams();
   const { currentUserData } = useUserData();
-
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
+  const [language, setLanguage] = useState('');
   const [text, setText] = useState('');
   const [lineNumbers, setLineNumbers] = useState([true]);
   const textareaRef = useRef(null);
@@ -24,6 +26,7 @@ function MyProfile() {
   const numberOfVisibleLines = 12;
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  hljs.highlightAll();
 
   // Update line numbers when text changes
   useEffect(() => {
@@ -36,6 +39,7 @@ function MyProfile() {
     const newPost = {
       title: title,
       description: description,
+      language: language,
       userId: currentUserData._id,
       content: text,
       username: currentUserData.username,
@@ -380,7 +384,7 @@ function MyProfile() {
         </div>
 
         <div className="flex-1 justify-items-end mr-[35px]">
-          <div className="mt-[125px] ml-[30px] w-[95%] h-[420px] bg-black bg-opacity-50 rounded-[10px]">
+          <div className="mt-[125px] ml-[30px] w-[95%] h-[460px] bg-black bg-opacity-50 rounded-[10px]">
             <form
               onSubmit={handleCreatepost}
               className="relative rounded-[10px]"
@@ -419,6 +423,13 @@ function MyProfile() {
                 className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
                 type="text"
                 placeholder="Describe your problem..."
+                required
+              ></input>
+              <input
+                onChange={e => setLanguage(e.target.value)}
+                className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
+                type="text"
+                placeholder="Enter code language..."
                 required
               ></input>
 
@@ -544,7 +555,13 @@ function MyProfile() {
                           <span className="text-gray-400 text-[20px]">
                             {index + 1}.
                           </span>
-                          <p className="text-white text-[20px]">{line}</p>
+                          <pre>
+                            <code
+                              className={`language-${hljs.highlightAuto(post.content).language}`}
+                            >
+                              {line}
+                            </code>
+                          </pre>
                         </div>
                       ))}
                     </div>
