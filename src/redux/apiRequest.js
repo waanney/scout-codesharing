@@ -83,6 +83,9 @@ export const logoutUser = async (dispatch, navigate) => {
     //Xóa sharedPost khỏi localStorage
     localStorage.removeItem('sharedPosts');
 
+    // Xóa state changePassword khỏi redux
+    dispatch(changePasswordSuccess(false));
+
     navigate('/login');
   } catch (err) {
     dispatch(logoutFailed());
@@ -91,22 +94,28 @@ export const logoutUser = async (dispatch, navigate) => {
 };
 
 export const changePassword = async (data, dispatch, userId) => {
-  dispatch(changePasswordStart()); // Sử dụng action từ authSlice
+  dispatch(changePasswordStart());
   try {
-    await axios.put(`${API_ROOT}/v1/Auth/change-password/${userId}`, data);
-    dispatch(changePasswordSuccess()); // Sử dụng action từ authSlice
+    const response = await axios.put(
+      `${API_ROOT}/v1/Auth/change-password/${userId}`,
+      data,
+    );
+    dispatch(changePasswordSuccess(response?.data?.message));
   } catch (err) {
-    dispatch(changePasswordFailed(err.response?.data?.message)); // Sử dụng action từ authSlice
+    dispatch(changePasswordFailed(err.response?.data?.message));
   }
 };
 
 export const resetPassword = async (data, token, dispatch) => {
   dispatch(resetPasswordStart());
   try {
-    await axios.put(`${API_ROOT}/v1/Auth/reset-password/${token}`, data);
-    dispatch(resetPasswordSuccess());
-  } catch (err) {
-    dispatch(resetPasswordFailed(err.response?.data?.message));
+    const response = await axios.put(
+      `${API_ROOT}/v1/Auth/reset-password/${token.token}`,
+      data,
+    );
+    dispatch(resetPasswordSuccess(response?.data?.message));
+  } catch (error) {
+    dispatch(resetPasswordFailed(error.response?.data?.message));
   }
 };
 

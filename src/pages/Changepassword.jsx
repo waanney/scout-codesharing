@@ -12,10 +12,12 @@ function Changepassword() {
   const isFetching = useSelector(state => state.auth.changePassword.isFetching);
   const [showError, setShowError] = useState(false);
   const [fadeError, setFadeError] = useState(false);
+  const success = useSelector(state => state.auth.changePassword.success);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [fadeSuccess, setFadeSuccess] = useState(false);
 
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [successMessage, setSuccessMessage] = useState('');
   //biến để change password
   const [oldPassword, setOldPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
@@ -33,17 +35,35 @@ function Changepassword() {
       dispatch,
       userId,
     );
-
-    // Hiển thị thông báo thành công
-    setSuccessMessage(
-      'Password changed successfully! You will be logged out in 3 seconds. Please log in again.',
-    );
-
-    // Tự động đăng xuất sau 3 giây
-    setTimeout(() => {
-      logoutUser(dispatch, navigate);
-    }, 3000);
   };
+
+  useEffect(() => {
+    if (success) {
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      const timer = setTimeout(() => {
+        setFadeSuccess(true);
+      }, 2000);
+
+      const hideTimer = setTimeout(() => {
+        setShowSuccess(false);
+        setFadeSuccess(false);
+      }, 3000);
+
+      setTimeout(() => {
+        logoutUser(dispatch, navigate);
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(hideTimer);
+      };
+    } else {
+      setShowSuccess(false);
+      setFadeSuccess(false);
+    }
+  }, [success]);
 
   // Effect to show the error message when it appears
   useEffect(() => {
@@ -93,11 +113,15 @@ function Changepassword() {
               </div>
             </div>
           )}
-          {successMessage && (
+          {showSuccess && success && (
             <div className="fixed inset-0 flex items-center justify-center z-10">
-              <div className="w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] flex items-center justify-center">
+              <div
+                className={`w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
+                          ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                          transition-all duration-1000 ease-in-out flex items-center justify-center`}
+              >
                 <p className="text-[22px] font-bold text-center text-white">
-                  {successMessage}
+                  {success}
                 </p>
               </div>
             </div>

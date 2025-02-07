@@ -78,10 +78,10 @@ const authSlice = createSlice({
       state.changePassword.error = false;
       state.changePassword.success = false;
     },
-    changePasswordSuccess: state => {
+    changePasswordSuccess: (state, action) => {
       state.changePassword.isFetching = false;
       state.changePassword.error = false;
-      state.changePassword.success = true;
+      state.changePassword.success = action.payload;
     },
     changePasswordFailed: (state, action) => {
       state.changePassword.isFetching = false;
@@ -93,10 +93,10 @@ const authSlice = createSlice({
       state.resetPassword.error = false;
       state.resetPassword.success = false;
     },
-    resetPasswordSuccess: state => {
+    resetPasswordSuccess: (state, action) => {
       state.resetPassword.isFetching = false;
       state.resetPassword.error = false;
-      state.resetPassword.success = true;
+      state.resetPassword.success = action.payload;
     },
     resetPasswordFailed: (state, action) => {
       state.resetPassword.isFetching = false;

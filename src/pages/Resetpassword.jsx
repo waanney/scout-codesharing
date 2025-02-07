@@ -3,6 +3,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import HeaderForAllPages from '../components/header.jsx';
 import { resetPassword } from '../redux/apiRequest.js';
 import { useSelector, useDispatch } from 'react-redux';
+import { resetPasswordSuccess } from '../redux/authSlice.js';
 
 const ResetPassword = () => {
   const token = useParams();
@@ -11,12 +12,14 @@ const ResetPassword = () => {
   const email = searchParams.get('email');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [message, setMessage] = useState('');
   const navigate = useNavigate();
   const [isLoading, setIsLoading] = useState(false);
   const error = useSelector(state => state.auth.resetPassword.error);
   const [showError, setShowError] = useState(false);
   const [fadeError, setFadeError] = useState(false);
+  const success = useSelector(state => state.auth.resetPassword.success);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [fadeSuccess, setFadeSuccess] = useState(false);
   const dispatch = useDispatch();
 
   const handleResetPassword = async e => {
@@ -33,12 +36,6 @@ const ResetPassword = () => {
       dispatch,
       setIsLoading(false),
     );
-
-    setMessage('Password reset successfully! Please log in.');
-
-    setTimeout(() => {
-      navigate('/login');
-    }, 3000);
   };
 
   useEffect(() => {
@@ -67,6 +64,36 @@ const ResetPassword = () => {
     }
   }, [error]);
 
+  useEffect(() => {
+    if (success) {
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      const timer = setTimeout(() => {
+        setFadeSuccess(true);
+      }, 2000);
+
+      const hideTimer = setTimeout(() => {
+        setShowSuccess(false);
+        setFadeSuccess(false);
+      }, 3000);
+
+      setTimeout(() => {
+        navigate('/login');
+      }, 3000);
+
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(hideTimer);
+        //xóa state resetPassword khỏi redux
+        dispatch(resetPasswordSuccess(false));
+      };
+    } else {
+      setShowSuccess(false);
+      setFadeSuccess(false);
+    }
+  }, [success]);
+
   return (
     <div className="flex min-h-screen flex-col">
       <HeaderForAllPages className="sticky" />
@@ -87,11 +114,15 @@ const ResetPassword = () => {
             </div>
           </div>
         )}
-        {message && (
+        {showSuccess && success && (
           <div className="fixed inset-0 flex items-center justify-center z-10">
-            <div className="w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] flex items-center justify-center">
+            <div
+              className={`w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
+                        ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                        transition-all duration-1000 ease-in-out flex items-center justify-center`}
+            >
               <p className="text-[22px] font-bold text-center text-white">
-                {message}
+                {success}
               </p>
             </div>
           </div>
