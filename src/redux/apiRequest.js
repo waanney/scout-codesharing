@@ -80,6 +80,7 @@ export const logoutUser = async (dispatch, navigate) => {
 
     // Xóa currentUser khỏi localStorage
     localStorage.removeItem('currentUser');
+    localStorage.removeItem('user')
     //Xóa sharedPost khỏi localStorage
     localStorage.removeItem('sharedPosts');
 
