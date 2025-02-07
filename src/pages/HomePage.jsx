@@ -3,10 +3,10 @@ import VanillaTilt from 'vanilla-tilt';
 import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import ScrollTop from '../components/scrollTop';
-
+import checkTokenAndRedirect from '../services/checkTokenExpiration.jsx';
 function HomePage() {
+  checkTokenAndRedirect();
   const cardRefs = useRef([]);
-
   useEffect(() => {
     if (cardRefs.current.length) {
       cardRefs.current.forEach(card => {

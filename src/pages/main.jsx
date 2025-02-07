@@ -46,6 +46,7 @@ const router = createBrowserRouter([
       },
     ],
   },
+
   {
     element: <ProtectedRoute />, // Bảo vệ các route bên trong
     children: [
@@ -72,7 +73,6 @@ const router = createBrowserRouter([
     ],
   },
 ]);
-
 createRoot(document.getElementById('root')).render(
   <StrictMode>
     <Provider store={store}>

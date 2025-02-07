@@ -2,6 +2,7 @@ import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import PostCard from '../../components/post_card';
 import ScrollTop from '../../components/scrollTop';
+import checkTokenAndRedirect from '../../services/checkTokenExpiration.jsx';
 function Discussion({
   board,
   Boards,
@@ -10,6 +11,8 @@ function Discussion({
   totalPosts,
   currentPage,
 }) {
+
+  checkTokenAndRedirect();
   if (!board) {
     return <div>Không có dữ liệu bảng.</div>;
   }
