@@ -556,9 +556,7 @@ function MyProfile() {
                             {index + 1}.
                           </span>
                           <pre>
-                            <code
-                              className={`language-${hljs.highlightAuto(post.content).language}`}
-                            >
+                            <code className={`language-${post.language}`}>
                               {line}
                             </code>
                           </pre>

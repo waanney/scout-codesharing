@@ -96,7 +96,8 @@ function Post({ board, boardId }) {
     setComments(board.comments || []);
   }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
 
-  // select Language
+  // highlight code
+  const language = board.language;
   const sourceCode = board.content.split('\n');
   hljs.highlightAll();
 
@@ -384,7 +385,7 @@ function Post({ board, boardId }) {
 
                   {/* Code Content */}
                   <pre className="flex-grow">
-                    <code className={`language-${board.language}`}>{code}</code>
+                    <code className={`language-${language}`}>{code}</code>
                   </pre>
 
                   {/* Popover */}

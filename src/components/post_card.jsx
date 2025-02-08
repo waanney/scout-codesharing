@@ -5,7 +5,7 @@ import '../utils/customeStyle.css';
 import hljs from 'highlight.js';
 
 const PostCard = ({ post }) => {
-  const language = hljs.highlightAuto(post.content).language;
+  const language = post.language;
   const sourceCode = post.content.split('\n');
   hljs.highlightAll();
 
