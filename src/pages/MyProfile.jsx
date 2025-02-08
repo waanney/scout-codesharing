@@ -137,7 +137,7 @@ function MyProfile() {
   };
 
   const handleSaveClick = async () => {
-    console.log('Updated profile:', editableProfile);
+    //console.log('Updated profile:', editableProfile);// In ra dữ liệu gửi lên(để debug)
     await handleUpdateProfile(); // Gọi hàm handleUpdateProfile để cập nhật profile
     setIsEditing(false); // Chuyển sang chế độ xem profile
   };
