@@ -49,25 +49,15 @@ function MyProfile() {
   };
   //biến cho myProfile
   const [intro, setIntro] = useState('');
-  //const [profileId, setProfileId] = useState('');
+  const [username, setUsername] = useState('');
   const [personality, setPersonality] = useState([]);
   const [profileData, setProfileData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editableProfile, setEditableProfile] = useState(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
-    return (
-      savedProfile || {
-        age: currentUserData?.age || ' ',
-        education: currentUserData?.education || ' ',
-        occupation: currentUserData?.occupation || ' ',
-        location: currentUserData?.location || ' ',
-      }
-    );
-  });
+  const [editableProfile, setEditableProfile] = useState({});
 
-  // Fetch profile data when currentUser changes
+  // Fetch profile dựa trên owner
   useEffect(() => {
     const fetchProfile = async () => {
       setLoading(true);
@@ -78,19 +68,9 @@ function MyProfile() {
         setProfileData(response.data);
         //đưa thay đổi vào editableProfile luôn
         setEditableProfile(response.data);
-        // Lưu _id của profile vào state
-        //setProfileId(profileData._id);
-        // Update the state with the fetched profile data
-        // setEditableProfile({
-        //   age: profileData?.age || '',
-        //   education: profileData?.education || '',
-        //   occupation: profileData?.occupation || '',
-        //   location: profileData?.location || '',
-        //   Introduction: profileData?.Introduction || '',
-        //   personality: profileData?.personality || [],
-        // });
-        // setIntro(profileData?.Introduction || '');
-        // setPersonality(profileData?.personality || []);
+        setIntro(response.data.Introduction || '');
+        setPersonality(response.data.personality || []);
+        setUsername(response.data.username || '');
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {
@@ -105,6 +85,10 @@ function MyProfile() {
       ...prev,
       [field]: value,
     }));
+
+    if (field === 'personality') {
+      setPersonality(value);
+    }
   };
   //console.log('Editable profile:', editableProfile);// In ra để debug
 
@@ -118,7 +102,7 @@ function MyProfile() {
         location: editableProfile.location,
         Introduction: intro,
         personality: personality,
-        username: currentUserData?.username,
+        username: username,
         updatedAt: new Date().getTime(), // Sử dụng getTime() để lấy timestamp
         owner: currentUserData._id, // Thêm trường owner
       };
@@ -127,6 +111,11 @@ function MyProfile() {
         `${API_ROOT}/v1/myProfile/${currentUserData._id}`,
         updatedFields,
       );
+      await axios.put(
+        `${API_ROOT}/v1/Auth/change-username/${currentUserData._id}`,
+        { username },
+      );
+      window.location.reload();
     } catch (error) {
       console.error('Error updating profile:', error);
       console.error('Response từ server:', error.response.data);
@@ -139,8 +128,8 @@ function MyProfile() {
 
   const handleSaveClick = async () => {
     //console.log('Updated profile:', editableProfile);// In ra dữ liệu gửi lên(để debug)
-    await handleUpdateProfile(); // Gọi hàm handleUpdateProfile để cập nhật profile
-    setIsEditing(false); // Chuyển sang chế độ xem profile
+    await handleUpdateProfile();
+    setIsEditing(false);
   };
 
   const handleKeyDown = e => {
@@ -228,7 +217,17 @@ function MyProfile() {
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
-                  {profileData.username}
+                  {isEditing ? (
+                    <input
+                      type="text"
+                      value={username} // Bind the textarea value
+                      onChange={e => setUsername(e.target.value)}
+                      className="bg-transparent text-white rounded-[2px] text-[15px] w-[150px] h-[40px] resize-none overflow-hidden"
+                      style={{ border: 'solid 2px #EAEBF6' }}
+                    />
+                  ) : (
+                    username
+                  )}
                 </h2>
                 {currentUserData && currentUserData._id === owner && (
                   <div>
@@ -303,7 +302,7 @@ function MyProfile() {
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
               {isEditing ? (
                 <textarea
-                  value={intro} // Bind the textarea value
+                  value={editableProfile.Introduction} // Bind the textarea value
                   onChange={e => setIntro(e.target.value)}
                   className="bg-transparent text-white rounded-[2px] text-[11px] w-[170px] h-[70px] resize-none overflow-hidden"
                   style={{
@@ -327,7 +326,7 @@ function MyProfile() {
                     padding: '5px',
                   }}
                 >
-                  {intro}
+                  {editableProfile.Introduction || ''}
                 </div>
               )}
             </div>
@@ -339,7 +338,7 @@ function MyProfile() {
             <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-hidden">
               {isEditing ? (
                 <>
-                  {personality.map((trait, index) => (
+                  {editableProfile.personality?.map((trait, index) => (
                     <div
                       key={index}
                       className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative"
@@ -374,7 +373,7 @@ function MyProfile() {
                   </div>
                 </>
               ) : (
-                personality.map((trait, index) => (
+                editableProfile.personality?.map((trait, index) => (
                   <div
                     key={index}
                     className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
@@ -435,6 +434,7 @@ function MyProfile() {
                 id="lang"
                 name="langSelect"
                 onChange={e => setLanguage(e.target.value)}
+                value={language}
                 required
               >
                 <optgroup
@@ -442,7 +442,7 @@ function MyProfile() {
                   className="bg-slate-800 h-[50px]"
                   style={{ height: '40px' }}
                 >
-                  <option value="" disabled selected hidden>
+                  <option value="" disabled hidden>
                     Choose Language...
                   </option>
                   {langlist.map((jsoncontent, index) => (
