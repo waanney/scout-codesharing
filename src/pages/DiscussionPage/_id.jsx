@@ -7,7 +7,7 @@ function Board() {
   const [loading, setLoading] = useState(true); // Thêm trạng thái loading
   const [error, setError] = useState(null); // Thêm trạng thái lỗi
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
+  const postsPerPage = 12;
   useEffect(() => {
     const boardCollectionId = '677e53f474f256608d6044a2';
     setLoading(true); // Bắt đầu loading
