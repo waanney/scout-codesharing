@@ -80,24 +80,14 @@ function HomePage() {
     behavior: 'auto',
   });
 
-  const getBackgroundStyle = () => {
-    if (window.innerWidth < 768) {
-      return { backgroundSize: "400px 400px" }; // Mobile
-    } else {
-      return { backgroundSize: "500px 500px" }; // Desktop
-    }
-  };
-
   return (
     <div className="flex min-h-screen flex-col">
       <HeaderForAllPages className="sticky" />
       <h1
-        className="bg-fixed bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 h-[500px] flex items-center justify-center text-center text-[48px] md:text-[60px] px-5 mt-[120px] mb-[90px] w-[700px]"
+        className="bg-fixed bg-no-repeat bg-center bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 h-[500px] flex items-center justify-center text-center text-[48px] md:text-[60px] px-5 mt-[120px] mb-[90px] w-[700px]"
         style={{
           backgroundImage: "url('src/assets/Scout_blur.png')",
-          backgroundRepeat: "no-repeat",
-          backgroundPosition: "center",
-          ...getBackgroundStyle(),
+          backgroundSize: "500px 500px"
         }}
       >
         Source Code Open for Universal Testing

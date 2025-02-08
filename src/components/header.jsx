@@ -62,7 +62,7 @@ const HeaderForAllPages = () => {
             </a>
 
             <div
-              className="hidden md:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {['Home', 'Discussion', 'Storage', 'Profile'].map(
@@ -99,7 +99,7 @@ const HeaderForAllPages = () => {
             </div>
 
             <div
-              className="hidden md:flex h-[30px] w-[150px] relative items-center space-x-1 cursor-pointer justify-end"
+              className="hidden lg:flex h-[30px] w-[150px] relative items-center space-x-1 cursor-pointer justify-end"
               onClick={() => setOpen(!open)}
             >
               <a className="flex items-center">
@@ -140,7 +140,7 @@ const HeaderForAllPages = () => {
               </div>
             </div>
             <button
-              className="md:hidden flex justify-end z-10"
+              className="lg:hidden flex justify-end z-10"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? (
@@ -226,7 +226,7 @@ const HeaderForAllPages = () => {
             </a>
 
             <div
-              className="hidden md:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
+              className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
               {['Home', 'Discussion', 'Storage', 'Profile'].map(
@@ -252,7 +252,7 @@ const HeaderForAllPages = () => {
               )}
             </div>
 
-            <div className="hidden md:flex justify-between space-x-1">
+            <div className="hidden lg:flex justify-between space-x-1">
               <Link to="/signup" className="clickSignup">
                 <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
                   Sign up
@@ -265,7 +265,7 @@ const HeaderForAllPages = () => {
               </Link>
             </div>
             <button
-              className="md:hidden flex justify-end z-10"
+              className="lg:hidden flex justify-end z-10"
               onClick={() => setMenuOpen(!menuOpen)}
             >
               {menuOpen ? (
