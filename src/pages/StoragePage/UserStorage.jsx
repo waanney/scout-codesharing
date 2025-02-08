@@ -1,5 +1,6 @@
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
+import ScrollTop from '../../components/scrollTop';
 //import CommentCard from '../../components/comment_card.jsx';
 import PostCard from '../../components/post_card';
 import { useState, useEffect } from 'react';
@@ -99,6 +100,7 @@ export default function UserStorage() {
             ))}
           </ul>
         </div>
+        <ScrollTop />
       </div>
       <FooterAllPage />
     </>
