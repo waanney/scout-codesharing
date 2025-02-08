@@ -349,7 +349,7 @@ function MyProfile() {
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
-            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-hidden">
+            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto">
               {isEditing ? (
                 <>
                   {personality?.map((trait, index) => (
