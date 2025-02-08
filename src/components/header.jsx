@@ -252,7 +252,7 @@ const HeaderForAllPages = () => {
               )}
             </div>
 
-            <div className="justify-between space-x-1">
+            <div className="hidden md:flex justify-between space-x-1">
               <Link to="/signup" className="clickSignup">
                 <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
                   Sign up
@@ -264,7 +264,47 @@ const HeaderForAllPages = () => {
                 </button>
               </Link>
             </div>
+            <button
+              className="md:hidden flex justify-end z-10"
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
+              {menuOpen ? (
+                <X size={30} className="text-white" />
+              ) : (
+                <Menu size={30} className="text-white" />
+              )}
+            </button>
+            <div
+              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            >
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+                (item, index) => (
+                  <div
+                    key={index}
+                    className="h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]"
+                    onClick={() => navigate('/login')}
+                  >
+                    <span className="text-[20px] pl-[10px]">{item}</span>
+                  </div>
+                ),
+              )}
+              <hr/>
+              <div className="flex gap-[20px] space-x-1 mt-[20px]">
+              <Link to="/signup" className="clickSignup">
+                <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
+                  Sign up
+                </button>
+              </Link>
+              <Link to="/login" className="clickLogin">
+                <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold hover:bg-[#e0e0e0]">
+                  Log in
+                </button>
+              </Link>
+            </div>
+            </div>
           </div>
+          
+            
         </>
       )}
     </div>
