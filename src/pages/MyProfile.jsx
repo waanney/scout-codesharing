@@ -326,7 +326,7 @@ function MyProfile() {
                     padding: '5px',
                   }}
                 >
-                  {editableProfile.Introduction || ''}
+                  {editableProfile.Introduction}
                 </div>
               )}
             </div>
@@ -338,7 +338,7 @@ function MyProfile() {
             <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-hidden">
               {isEditing ? (
                 <>
-                  {editableProfile.personality?.map((trait, index) => (
+                  {personality?.map((trait, index) => (
                     <div
                       key={index}
                       className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative"
