@@ -89,6 +89,10 @@ function MyProfile() {
     if (field === 'personality') {
       setPersonality(value);
     }
+
+    if (field === 'Introduction') {
+      setIntro(value);
+    }
   };
   //console.log('Editable profile:', editableProfile);// In ra để debug
 
@@ -302,7 +306,7 @@ function MyProfile() {
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
               {isEditing ? (
                 <textarea
-                  value={editableProfile.Introduction} // Bind the textarea value
+                  value={intro} // Bind the textarea value
                   onChange={e => setIntro(e.target.value)}
                   className="bg-transparent text-white rounded-[2px] text-[11px] w-[170px] h-[70px] resize-none overflow-hidden"
                   style={{
@@ -326,7 +330,7 @@ function MyProfile() {
                     padding: '5px',
                   }}
                 >
-                  {editableProfile.Introduction}
+                  {intro}
                 </div>
               )}
             </div>
