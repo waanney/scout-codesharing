@@ -55,7 +55,17 @@ function MyProfile() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [editableProfile, setEditableProfile] = useState({});
+  const [editableProfile, setEditableProfile] = useState(() => {
+    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
+    return (
+      savedProfile || {
+        age: currentUserData?.age || ' ',
+        education: currentUserData?.education || ' ',
+        occupation: currentUserData?.occupation || ' ',
+        location: currentUserData?.location || ' ',
+      }
+    );
+  });
 
   // Fetch profile dựa trên owner
   useEffect(() => {
