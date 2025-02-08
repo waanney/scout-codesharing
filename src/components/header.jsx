@@ -106,7 +106,7 @@ const HeaderForAllPages = () => {
                 <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
                   <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                 </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px] text-nowrap">
                   {currentUserData?.username}
                 </h5>
               </a>
