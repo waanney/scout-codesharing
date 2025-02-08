@@ -80,6 +80,9 @@ const PostCard = ({ post }) => {
         className=" font-mono text-[12px] w-[80%] h-[81%] bg-[#00000080] rounded-[5px] mt-[10px] mx-auto
                     overflow-hidden"
       >
+        <div className="ml-[5px] text-gray-500 text-[15px]">
+          {post.language}
+        </div>
         {sourceCode.map((code, lineNum) => (
           <div key={lineNum} className="flex flex-row hover:bg-gray-600">
             <div className="w-[30px] px-[5px] text-gray-400">{lineNum + 1}</div>

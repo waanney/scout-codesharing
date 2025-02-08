@@ -373,7 +373,7 @@ function Post({ board, boardId }) {
           </div>
           <div className="card rounded-[10px] h-[636px] w-[1000px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
             <div className="font-mono w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
-              <div className="ml-[10px] text-gray-400 text-[20px]">
+              <div className="ml-[10px] text-gray-500 text-[20px]">
                 {board.language}
               </div>
               {sourceCode.map((code, lineNum) => (

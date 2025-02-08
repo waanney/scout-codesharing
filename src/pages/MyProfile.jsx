@@ -567,6 +567,9 @@ function MyProfile() {
                       {post.description}
                     </h2>
                     <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
+                      <div className="ml-[5px] text-gray-500 text-[20px]">
+                        {post.language}
+                      </div>
                       {post.content.split('\n').map((line, index) => (
                         <div
                           key={`${post._id}-${index}`}
