@@ -17,7 +17,7 @@ const HeaderForAllPages = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+    JSON.parse(localStorage.getItem('currentUser'));
   const { isFetching, error } = useSelector(state => state.auth.logout);
   const userId = useUserId();
   const [currentUserData, setcurrentUserData] = useState(null);
@@ -288,23 +288,21 @@ const HeaderForAllPages = () => {
                   </div>
                 ),
               )}
-              <hr/>
+              <hr />
               <div className="flex gap-[20px] space-x-1 mt-[20px]">
-              <Link to="/signup" className="clickSignup">
-                <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
-                  Sign up
-                </button>
-              </Link>
-              <Link to="/login" className="clickLogin">
-                <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold hover:bg-[#e0e0e0]">
-                  Log in
-                </button>
-              </Link>
-            </div>
+                <Link to="/signup" className="clickSignup">
+                  <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
+                    Sign up
+                  </button>
+                </Link>
+                <Link to="/login" className="clickLogin">
+                  <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold hover:bg-[#e0e0e0]">
+                    Log in
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
-          
-            
         </>
       )}
     </div>
