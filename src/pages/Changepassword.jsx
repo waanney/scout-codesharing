@@ -91,96 +91,101 @@ function Changepassword() {
       setFadeError(false); // Reset fade effect
     }
   }, [error]);
-
   return (
     <>
       <div className="flex min-h-screen flex-col">
         <HeaderForAllPages />
-        <div className="flex flex-col items-center justify-center px-4 mt-[100px]">
-          <h1 className="text-center text-[60px] font-bold mb-[16px] text-white">
+        <div className="flex flex-col items-center justify-center px-4 mt-16 md:mt-[100px]"> 
+          <h1 className="text-center text-4xl md:text-[60px] font-bold mb-6 md:mb-[16px] text-white"> 
             Change password
           </h1>
+
+          {/* Error Message */}
           {showError && error && (
             <div className="fixed inset-0 flex items-center justify-center z-10">
               <div
-                className={`w-[450px] h-[110px] bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] 
-                              ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                              transition-all duration-1000 ease-in-out flex items-center justify-center`}
+                className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] 
+                                    ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                                    transition-all duration-1000 ease-in-out flex items-center justify-center`}
               >
-                <p className="text-[22px] font-bold text-center text-red-600">
+                <p className="text-base md:text-[22px] font-bold text-center text-red-600"> 
                   {error}
                 </p>
               </div>
             </div>
           )}
+
+          {/* Success Message */}
           {showSuccess && success && (
             <div className="fixed inset-0 flex items-center justify-center z-10">
               <div
-                className={`w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
-                          ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                          transition-all duration-1000 ease-in-out flex items-center justify-center`}
+                className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
+                                    ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                                    transition-all duration-1000 ease-in-out flex items-center justify-center`}
               >
-                <p className="text-[22px] font-bold text-center text-white">
+                <p className="text-base md:text-[22px] font-bold text-center text-white"> 
                   {success}
                 </p>
               </div>
             </div>
           )}
+
+
           <form
             onSubmit={handlechangePassword}
-            className="flex flex-grow flex-col h-[500px] w-[500px] bg-black bg-opacity-50 rounded-[10px]"
+            className="flex flex-col w-full max-w-[500px] bg-black bg-opacity-50 rounded-[10px] p-4 md:p-8" 
           >
-            <div className="mt-[22px] ml-[8px]">
+            <div className="mb-4"> 
               <label
-                className="font-Inter font-bold text-[18px]"
+                className="font-Inter font-bold text-base md:text-[18px]"  
                 htmlFor="oldpassword"
               >
-                Old Password{' '}
+                Old Password
               </label>
               <input
-                className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
+                className="w-full h-[48px] md:h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"  
                 type="password"
                 id="oldpassword"
                 placeholder="Your old password"
                 required
                 onChange={e => setOldPassword(e.target.value)}
-              ></input>
+              />
             </div>
-            <div className="mt-[15px] ml-[8px]">
+            <div className="mb-4"> 
               <label
-                className="font-Inter font-bold text-[18px]"
+                className="font-Inter font-bold text-base md:text-[18px]"  
                 htmlFor="newpassword"
               >
-                New Password{' '}
+                New Password
               </label>
               <input
-                className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
+                className="w-full h-[48px] md:h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"  
                 type="password"
                 id="newpassword"
                 placeholder="8+ characters "
                 required
                 onChange={e => setNewPassword(e.target.value)}
-              ></input>
+              />
             </div>
-            <div className="mt-[15px] ml-[8px]">
+            <div className="mb-6"> 
               <label
-                className="font-Inter font-bold text-[18px]"
+                className="font-Inter font-bold text-base md:text-[18px]"  
                 htmlFor="confirmnewpassword"
               >
                 Confirm New Password
               </label>
               <input
-                className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
+                className="w-full h-[48px] md:h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"  
                 type="password"
                 placeholder="Confirm your new Password"
                 required
                 onChange={e => setConfirmNewPassword(e.target.value)}
-              ></input>
+              />
             </div>
-            <div className="flex items-center justify-center mt-[35px] ">
+            <div className="flex items-center justify-center">
               <button
                 type="submit"
-                className="flex items-center justify-center h-[50px] w-[150px] bg-[#3366cc] bg-opacity-50 font-Inter font-bold text-[25px] rounded-[10px] cursor-pointer"
+                className="w-full md:w-auto flex items-center justify-center h-[50px] px-6 md:px-8 bg-[#3366cc] bg-opacity-50 font-Inter font-bold text-base md:text-[25px] rounded-[10px] cursor-pointer"  
                 disabled={isFetching}
               >
                 {isFetching ? 'Đang xử lý...' : 'Change'}
