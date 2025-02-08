@@ -12,6 +12,7 @@ import useUserData from '../hooks/useUserData.js';
 import ScrollTop from '../components/scrollTop';
 import hljs from 'highlight.js';
 import '../utils/customeStyle.css';
+import hljsLanguages from '../utils/hljsLanguages.json';
 
 function MyProfile() {
   const { owner } = useParams();
@@ -175,6 +176,9 @@ function MyProfile() {
     // Join the updated lines and set it as the new value
     setText(updatedLines.join('\n'));
   };
+
+  //Hiển thị các Language
+  const langlist = hljsLanguages;
 
   //biến cho sharedPosts
   const [sharedPosts, setSharedPosts] = useState([]);
@@ -425,13 +429,29 @@ function MyProfile() {
                 placeholder="Describe your problem..."
                 required
               ></input>
-              <input
+              <select
+                className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap text-[#bbb] text-md"
+                label="Lang"
+                id="lang"
+                name="langSelect"
                 onChange={e => setLanguage(e.target.value)}
-                className="w-[95%] h-[lineHeight] items-center bg-black bg-opacity-50  rounded-[5px]  pl-[15px] mt-[8px] mx-[28px] text-wrap"
-                type="text"
-                placeholder="Enter code language..."
                 required
-              ></input>
+              >
+                <optgroup
+                  label="Choose Language..."
+                  className="bg-slate-800 h-[50px]"
+                  style={{ height: '40px' }}
+                >
+                  <option value="" disabled selected hidden>
+                    Choose Language...
+                  </option>
+                  {langlist.map((jsoncontent, index) => (
+                    <option key={index} value={jsoncontent.aliases[0]}>
+                      {jsoncontent.language}
+                    </option>
+                  ))}
+                </optgroup>
+              </select>
 
               <div className="flex bg-black bg-opacity-50 mx-[28px] mt-[8px]">
                 {/* Line numbers */}
