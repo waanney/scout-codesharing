@@ -36,7 +36,7 @@ export default function UserStorage() {
 
   //Phân trang
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 4;
+  const postsPerPage = 10;
 
   const indexOfFirstPost = (currentPage - 1) * postsPerPage;
   const indexOfLastPost = indexOfFirstPost + postsPerPage - 1;
