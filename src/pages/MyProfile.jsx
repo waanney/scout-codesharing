@@ -13,6 +13,7 @@ import ScrollTop from '../components/scrollTop';
 import hljs from 'highlight.js';
 import '../utils/customeStyle.css';
 import hljsLanguages from '../utils/hljsLanguages.json';
+import LoadingAnimation from'../components/loading.jsx';
 
 function MyProfile() {
   const { owner } = useParams();
@@ -240,7 +241,7 @@ function MyProfile() {
   }, []);
 
   if (loading) {
-    return <div>Đang tải dữ liệu profile...</div>;
+    <LoadingAnimation/>;
   }
 
   if (error) {
@@ -297,7 +298,7 @@ function MyProfile() {
               </div>
 
               {AvatarUrl ? (
-                <img src={AvatarUrl} width="142" height="142" alt="Avatar" />
+                <img src={AvatarUrl} className="aspect-square h-[142px] w-[142px] rounded-full" alt="Avatar" />
               ) : (
                 <svg
                   className="my-[12px]"

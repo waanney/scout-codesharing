@@ -111,7 +111,7 @@ const HeaderForAllPages = () => {
             >
               <a className="flex items-center">
                 {AvatarUrl ? (
-                  <img height="30" width="30" src={AvatarUrl} alt="Avatar" />
+                  <img className="aspect-square h-[30px] w-[30px] rounded-full" src={AvatarUrl} alt="Avatar" />
                 ) : (
                   <svg
                     height="30"
