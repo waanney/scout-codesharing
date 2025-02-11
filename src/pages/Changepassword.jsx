@@ -95,7 +95,7 @@ function Changepassword() {
     <>
       <div className="flex min-h-screen flex-col">
         <HeaderForAllPages />
-        <div className="flex flex-col items-center justify-center px-4 mt-16 md:mt-[100px]"> 
+        <div className="flex flex-col items-center justify-center px-4 mt-[100px] md:mt-[100px]"> 
           <h1 className="text-center text-4xl md:text-[60px] font-bold mb-6 md:mb-[16px] text-white"> 
             Change password
           </h1>
