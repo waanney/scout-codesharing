@@ -260,7 +260,7 @@ function MyProfile() {
   return (
     <>
       <HeaderForAllPages className="sticky" />
-      <div className="flex sm:hidden flex-col h-screen items-center">
+      <div className="flex sm:hidden flex-col items-center">
         <div className="h-[360px] w-[90%] bg-[#3366CC] mt-[125px] rounded-[10px]">
           <a className="flex flex-col items-center">
             <div className="relative flex items-center justify-center w-full">
@@ -571,7 +571,7 @@ function MyProfile() {
         {sharedPosts.map(post => (
           <div
             key={post._id}
-            className="mt-[20px] mb-[20px] ml-[30px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+            className="mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
           >
             <div className="flex items-center space-x-1">
               <a className="flex items-center ml-[4px] mt-[4px]">
@@ -583,7 +583,7 @@ function MyProfile() {
                 </h5>
               </a>
             </div>
-            <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
+            <div className="mx-[5%] mt-[20px] w-[90%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
               <div className="flex items-center space-x-1">
                 <a className="flex items-center ml-[4px] mt-[4px]">
                   <svg
