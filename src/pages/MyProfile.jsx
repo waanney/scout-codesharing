@@ -52,6 +52,8 @@ function MyProfile() {
   const [username, setUsername] = useState('');
   const [personality, setPersonality] = useState([]);
   const [profileData, setProfileData] = useState(null);
+  const [AvatarUrl, setAvatarUrl] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -81,6 +83,7 @@ function MyProfile() {
         setIntro(response.data.Introduction || '');
         setPersonality(response.data.personality || []);
         setUsername(response.data.username || '');
+        setAvatarUrl(response.data.avatar || null);
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {
@@ -106,6 +109,15 @@ function MyProfile() {
   };
   //console.log('Editable profile:', editableProfile);// In ra để debug
 
+  const handleFileChange = event => {
+    const files = event.target.files;
+    if (files && files.length > 0) {
+      const file = files[0];
+      setSelectedFile(file);
+      setAvatarUrl(URL.createObjectURL(file));
+    }
+  };
+
   const handleUpdateProfile = async () => {
     try {
       // Chỉ gửi các trường cần cập nhật
@@ -117,8 +129,8 @@ function MyProfile() {
         Introduction: intro,
         personality: personality,
         username: username,
-        updatedAt: new Date().getTime(), // Sử dụng getTime() để lấy timestamp
-        owner: currentUserData._id, // Thêm trường owner
+        updatedAt: new Date().getTime(),
+        owner: currentUserData._id,
       };
       //console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên(để debug)
       await axios.put(
@@ -129,6 +141,23 @@ function MyProfile() {
         `${API_ROOT}/v1/Auth/change-username/${currentUserData._id}`,
         { username },
       );
+      if (selectedFile) {
+        const formData = new FormData();
+        formData.append('avatar', selectedFile);
+
+        const uploadResponse = await axios.put(
+          `${API_ROOT}/v1/Auth/avatar/${currentUserData._id}`,
+          formData,
+          {
+            headers: {
+              'Content-Type': 'multipart/form-data',
+            },
+          },
+        );
+        setAvatarUrl(uploadResponse.data.avatarUrl);
+        console.log('Upload success:', uploadResponse.data);
+      }
+
       window.location.reload();
     } catch (error) {
       console.error('Error updating profile:', error);
@@ -261,14 +290,27 @@ function MyProfile() {
                   </div>
                 )}
               </div>
-              <svg
-                className="my-[12px]"
-                height="142"
-                width="142"
-                xmlns="http://www.w3.org/2000/svg"
-              >
-                <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
-              </svg>
+
+              {AvatarUrl ? (
+                <img src={AvatarUrl} width="142" height="142" alt="Avatar" />
+              ) : (
+                <svg
+                  className="my-[12px]"
+                  height="142"
+                  width="142"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
+                </svg>
+              )}
+
+              {isEditing && (
+                <input
+                  type="file"
+                  accept="image/*"
+                  onChange={handleFileChange}
+                />
+              )}
             </a>
             <div className="grid grid-cols-2">
               {['age', 'education', 'occupation', 'location'].map(field => (

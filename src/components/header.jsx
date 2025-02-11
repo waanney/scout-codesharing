@@ -21,6 +21,7 @@ const HeaderForAllPages = () => {
   const { isFetching, error } = useSelector(state => state.auth.logout);
   const userId = useUserId();
   const [currentUserData, setcurrentUserData] = useState(null);
+  const [AvatarUrl, setAvatarUrl] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,6 +29,7 @@ const HeaderForAllPages = () => {
         try {
           const response = await axios.get(`${API_ROOT}/v1/Auth/${userId}`);
           setcurrentUserData(response.data);
+          setAvatarUrl(response.data.avatar);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -103,9 +105,17 @@ const HeaderForAllPages = () => {
               onClick={() => setOpen(!open)}
             >
               <a className="flex items-center">
-                <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
-                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                </svg>
+                {AvatarUrl ? (
+                  <img height="30" width="30" src={AvatarUrl} alt="Avatar" />
+                ) : (
+                  <svg
+                    height="30"
+                    width="30"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                  </svg>
+                )}
                 <h5 className="ml-[5px] font-Raleway font-bold text-[22px] text-nowrap">
                   {currentUserData?.username}
                 </h5>
