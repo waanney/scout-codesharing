@@ -29,7 +29,12 @@ const HeaderForAllPages = () => {
         try {
           const response = await axios.get(`${API_ROOT}/v1/Auth/${userId}`);
           setcurrentUserData(response.data);
-          setAvatarUrl(response.data.avatar);
+          const avatarcontent = await axios.get(
+            `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
+            { responseType: 'blob' },
+          );
+          const avatarUrl = URL.createObjectURL(avatarcontent.data);
+          setAvatarUrl(avatarUrl);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }

@@ -83,7 +83,12 @@ function MyProfile() {
         setIntro(response.data.Introduction || '');
         setPersonality(response.data.personality || []);
         setUsername(response.data.username || '');
-        setAvatarUrl(response.data.avatar || null);
+        const avatarcontent = await axios.get(
+          `${API_ROOT}/v1/Auth/get-avatar/${owner}`,
+          { responseType: 'blob' },
+        );
+        const avatarUrl = URL.createObjectURL(avatarcontent.data);
+        setAvatarUrl(avatarUrl);
       } catch (error) {
         console.error('Error fetching profile:', error);
       } finally {
