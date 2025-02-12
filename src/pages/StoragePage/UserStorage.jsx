@@ -50,51 +50,40 @@ export default function UserStorage() {
   for (let i = 1; i <= Math.ceil(savedPosts.length / postsPerPage); i++) {
     pageNumbers.push(i);
   }
-
   return (
     <>
       <HeaderForAllPages className="sticky" />
-      <div className="bg-navy-900 min-h-screen p-8 bg-[#0b2878] padding">
+      <div className="bg-navy-900 min-h-screen p-4 md:p-8 bg-[#0b2878]">
         <div className="container mx-auto">
-          {' '}
-          {/* Để căn giữa nội dung nếu cần */}
-          {/* Tiêu đề */}
-          <h1 className="text-[48px] font-bold mt-16 mb-5 text-center text-white">
+          <h1 className="text-3xl md:text-[48px] font-bold mt-8 md:mt-16 mb-5 text-center text-white">
             Your saved Posts
-            {/*<CommentCard />*/}
-          </h1>{' '}
-          {/* Phân trang */}
-          <nav className="mx-auto mb-[10px] text-[30px] ">
-            <ul className="pagination flex flex-row space-x-4 place-self-center">
-              {pageNumbers.map(number => (
-                <li
-                  key={number}
-                  className={`page-item ${currentPage === number ? 'active' : ''}`}
-                >
-                  <button
-                    onClick={() => {
-                      setCurrentPage(number);
-                    }}
-                    className={`page-link ${currentPage === number ? 'underline' : ''}`}
+          </h1>
+
+          {/* Pagination */}
+          {pageNumbers.length > 1 && (
+            <nav className="mx-auto mb-4 md:mb-[10px] text-lg md:text-[30px]">
+              <ul className="pagination flex flex-row space-x-2 md:space-x-4 justify-center">
+                {pageNumbers.map(number => (
+                  <li
+                    key={number}
+                    className={`page-item ${currentPage === number ? 'active' : ''}`}
                   >
-                    {number}
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </nav>
-          {/*grid grid-cols-1 md:grid-cols-3 gap-8*/}
-          <ul className="cards grid grid-cols-2 gap-[66px]">
-            {' '}
-            {/* Lưới cho các card (hiện tại chỉ là khoảng trống) */}
-            {/* Tạo các div rỗng để giữ chỗ cho các card, giúp background hiển thị đúng */}
+                    <button
+                      onClick={() => setCurrentPage(number)}
+                      className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${currentPage === number ? 'bg-white text-navy-900' : 'text-white hover:text-white'}`}
+                    >
+                      {number}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            </nav>
+          )}
+
+          {/* Post Grid */}
+          <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[66px]">
             {currentPosts.map(content => (
-              <li
-                key={content._id}
-                className="bg-navy-700 rounded-lg place-items-center"
-              >
-                {' '}
-                {/* Đảm bảo mỗi post có key duy nhất */}
+              <li key={content._id} className="bg-navy-700 rounded-lg">
                 <PostCard post={content} />
               </li>
             ))}

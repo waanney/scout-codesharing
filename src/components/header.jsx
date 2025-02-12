@@ -17,10 +17,11 @@ const HeaderForAllPages = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const currentUser =
     useSelector(state => state.auth.login.currentUser) ||
-    JSON.parse(localStorage.getItem('currentUser')); // Lấy currentUser từ Redux hoặc từ localStorage
+    JSON.parse(localStorage.getItem('currentUser'));
   const { isFetching, error } = useSelector(state => state.auth.logout);
   const userId = useUserId();
   const [currentUserData, setcurrentUserData] = useState(null);
+  const [AvatarUrl, setAvatarUrl] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -28,6 +29,12 @@ const HeaderForAllPages = () => {
         try {
           const response = await axios.get(`${API_ROOT}/v1/Auth/${userId}`);
           setcurrentUserData(response.data);
+          const avatarcontent = await axios.get(
+            `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
+            { responseType: 'blob' },
+          );
+          const avatarUrl = URL.createObjectURL(avatarcontent.data);
+          setAvatarUrl(avatarUrl);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
@@ -103,10 +110,22 @@ const HeaderForAllPages = () => {
               onClick={() => setOpen(!open)}
             >
               <a className="flex items-center">
-                <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
-                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
+                {AvatarUrl ? (
+                  <img
+                    className="aspect-square h-[30px] w-[30px] rounded-full"
+                    src={AvatarUrl}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <svg
+                    height="30"
+                    width="30"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                  </svg>
+                )}
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px] text-nowrap">
                   {currentUserData?.username}
                 </h5>
               </a>
@@ -288,23 +307,21 @@ const HeaderForAllPages = () => {
                   </div>
                 ),
               )}
-              <hr/>
+              <hr />
               <div className="flex gap-[20px] space-x-1 mt-[20px]">
-              <Link to="/signup" className="clickSignup">
-                <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
-                  Sign up
-                </button>
-              </Link>
-              <Link to="/login" className="clickLogin">
-                <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold hover:bg-[#e0e0e0]">
-                  Log in
-                </button>
-              </Link>
-            </div>
+                <Link to="/signup" className="clickSignup">
+                  <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">
+                    Sign up
+                  </button>
+                </Link>
+                <Link to="/login" className="clickLogin">
+                  <button className="h-[40px] w-[90px] bg-white text-black rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold hover:bg-[#e0e0e0]">
+                    Log in
+                  </button>
+                </Link>
+              </div>
             </div>
           </div>
-          
-            
         </>
       )}
     </div>
