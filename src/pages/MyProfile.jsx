@@ -260,7 +260,7 @@ function MyProfile() {
   return (
     <>
       <HeaderForAllPages className="sticky" />
-      <div className="flex sm:hidden flex-col items-center">
+      <div className="flex lg:hidden flex-col items-center">
         <div className="h-[360px] w-[90%] bg-[#3366CC] mt-[125px] rounded-[10px]">
           <a className="flex flex-col items-center">
             <div className="relative flex items-center justify-center w-full">
@@ -295,14 +295,22 @@ function MyProfile() {
                 </div>
               )}
             </div>
-            <svg
-              className="my-[12px]"
-              height="142"
-              width="142"
-              xmlns="http://www.w3.org/2000/svg"
-            >
-              <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
-            </svg>
+            {AvatarUrl ? (
+                <img
+                  src={AvatarUrl}
+                  className="aspect-square h-[142px] w-[142px] rounded-full"
+                  alt="Avatar"
+                />
+              ) : (
+                <svg
+                  className="my-[12px]"
+                  height="142"
+                  width="142"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
+                  <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
+                </svg>
+              )}
           </a>
           <div className="grid grid-cols-2">
             {['age', 'education', 'occupation', 'location'].map(field => (
@@ -639,7 +647,7 @@ function MyProfile() {
         ))}
       </div>
       {/*For width > 640px*/}
-      <div className="hidden sm:flex overflow-x-hidden">
+      <div className="hidden lg:flex overflow-x-hidden">
         <div className="sticky top-0 flex flex-col h-screen">
           <div className="h-[360px] w-[230px] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
@@ -695,6 +703,7 @@ function MyProfile() {
 
               {isEditing && (
                 <input
+                  className="flex items-center w-[230px] text-wrap"
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
@@ -828,6 +837,7 @@ function MyProfile() {
                 ))
               )}
             </div>
+            
           </div>
         </div>
 
