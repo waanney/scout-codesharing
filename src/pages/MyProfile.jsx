@@ -605,7 +605,7 @@ function MyProfile() {
                   <h1 className="ml-[15px] text-[24px] font-bold text-center">
                     {post.title}
                   </h1>
-                  <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">
+                  <h2 className="ml-[30px] text-[20px] font-bold mb-[5px] line-clamp-1">
                     {post.description}
                   </h2>
                   <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">

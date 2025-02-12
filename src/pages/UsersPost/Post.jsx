@@ -267,17 +267,17 @@ function Post({ board, boardId }) {
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
         <HeaderForAllPages className="sticky" />
-        <div className="cards grid grid-cols-[2fr_3fr] gap-[34px] place-items-center overflow-hidden px-5 lg:mt-16 lg:flex-row lg:items-stretch lg:px-[calc(160px-(1920px-100vw)/3)]">
-          <div className="card rounded-[10px] h-[636px] lg:flex lg:min-w-[336px] lg:flex-col xl:items-stretch aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
-            <div className="cards grid grid-cols-2 gap-[10px] mt-[37px] mx-[20px]">
+        <div className="cards grid md:grid-cols-[2fr_5fr] grid-cols-1 gap-[34px] place-self-center place-items-center overflow-hidden px-5 py-[50px] mt-[50px]">
+          <div className="card rounded-[10px] md:h-[636px] h-[500px] w-[90%] bg-[#05143c]">
+            <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 <img
-                  className="rounded-full h-[50px] w-[50px]"
+                  className="rounded-full h-[50px] w-[50px] self-center"
                   src="..\src\assets\demo_avatar.png"
                   alt="User Avatar"
                 />
                 <div className="flex flex-col">
-                  <div className="ml-[10px] text-white font-bold text-2xl leading-9">
+                  <div className="ml-[10px] text-white font-bold text-[1.5rem] leading-9">
                     <a
                       target="_blank"
                       href={`http://localhost:5173/profile/${userData._id}`}
@@ -290,7 +290,7 @@ function Post({ board, boardId }) {
                   </div>
                 </div>
               </div>
-              <div className="card flex flex-col items-end">
+              <div className="card flex flex-col bg-[#05143c]">
                 <div>
                   <button
                     onClick={handleShare}
@@ -318,15 +318,15 @@ function Post({ board, boardId }) {
                 </div>
               </div>
             </div>
-            <div className="mx-[38px] text-white">
-              <div className="text-center text-2xl font-bold leading-[150%]">
+            <div className="text-white">
+              <div className="text-[1.5em] w-full text-center place-self-center font-bold leading-[150%]">
                 Problem solving
               </div>
-              <div className="text-xl font-normal leading-[150%]">
+              <div className="px-[38px] text-xl font-normal leading-[150%]">
                 {board?.title}
               </div>
             </div>
-            <div className="w-[80%] h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+            <div className="w-[16em] h-[16em] md:h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
                   key={comment._id}
@@ -371,55 +371,13 @@ function Post({ board, boardId }) {
               </button>
             </form>
           </div>
-          <div className="card rounded-[10px] h-[636px] w-[1000px] px-[10px] py-[20px] swiper swiper-initialized swiper-horizontal relative swiper-backface-hidden aos-init aos-animate bg-[#05143c] mt-[50px] mb-[50px]">
+          <div className="card relative rounded-[10px] md:h-[636px] h-[500px] w-[90%] p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
             <div className="font-mono w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <div className="ml-[10px] text-gray-500 text-[20px]">
                 {board.language}
               </div>
               {sourceCode.map((code, lineNum) => (
-                <div
-                  key={lineNum}
-                  className="flex flex-row hover:bg-gray-600 relative"
-                >
-                  {/* Line Number */}
-                  <div className="w-[30px] text-gray-400 text-right pr-[10px]">
-                    {lineNum + 1}
-                  </div>
-
-                  {/* Code Content */}
-                  <pre className="flex-grow">
-                    <code className={`language-${language}`}>{code}</code>
-                  </pre>
-
-                  {/* Popover */}
-                  {open[lineNum] && (
-                    <div className="absolute top-0 right-[30px] z-50 w-[500px] h-[400px] bg-blue-950 rounded-[10px] shadow-lg p-4">
-                      <p className="text-center font-bold leading-[150%] text-2xl">
-                        This is line {lineNum + 1}
-                      </p>
-                      <div className="w-full h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-                        {(commentsByLine[lineNum + 1] || []).map(comment => (
-                          <CommentCard key={comment._id} comment={comment} />
-                        ))}
-                      </div>
-                      <form
-                        onSubmit={e => handleInlineComment(e, lineNum + 1)}
-                        className="flex items-center mt-4"
-                      >
-                        <input
-                          value={line_content}
-                          onChange={e => setLineContent(e.target.value)}
-                          className="flex-grow h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal px-[10px] focus:outline-none"
-                          placeholder="Add your comment..."
-                          type="text"
-                        />
-                        <button type="submit" className="ml-[10px]">
-                          <Send className="h-[30px] w-[30px] text-gray-500 hover:text-white" />
-                        </button>
-                      </form>
-                    </div>
-                  )}
-
+                <div key={lineNum}>
                   {/* Button */}
                   <button
                     onClick={() => {
@@ -427,10 +385,50 @@ function Post({ board, boardId }) {
                       NewOpen[lineNum] = !open[lineNum];
                       setOpen(NewOpen);
                     }}
-                    className="text-gray-500 hover:text-white ml-[10px]"
+                    className="absolute text-gray-500 hover:text-white ml-[10px] right-[15px] z-10"
                   >
                     <MessageSquareText className="h-[20px] w-[20px]" />
                   </button>
+                  <div className="relative flex flex-row hover:bg-gray-600 ">
+                    {/* Line Number */}
+                    <div className="min-w-[30px] text-gray-400 text-right pr-[10px]">
+                      {lineNum + 1}
+                    </div>
+
+                    {/* Code Content */}
+                    <pre className="">
+                      <code className={`language-${language}`}>{code}</code>
+                    </pre>
+
+                    {/* Popover */}
+                    {open[lineNum] && (
+                      <div className="absolute top-0 right-[30px] z-20 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[250px]  bg-blue-950 rounded-[10px] shadow-lg p-4">
+                        <p className="text-center font-bold leading-[150%] text-2xl">
+                          This is line {lineNum + 1}
+                        </p>
+                        <div className="w-full h-[7em] md:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+                          {(commentsByLine[lineNum + 1] || []).map(comment => (
+                            <CommentCard key={comment._id} comment={comment} />
+                          ))}
+                        </div>
+                        <form
+                          onSubmit={e => handleInlineComment(e, lineNum + 1)}
+                          className="flex flex-row mt-4"
+                        >
+                          <input
+                            value={line_content}
+                            onChange={e => setLineContent(e.target.value)}
+                            className="flex-grow h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal pl-[10px] focus:outline-none"
+                            placeholder="Add your comment..."
+                            type="text"
+                          />
+                          <button type="submit" className="ml-[10px]">
+                            <Send className="h-[30px] w-[30px] text-gray-500 hover:text-white" />
+                          </button>
+                        </form>
+                      </div>
+                    )}
+                  </div>
                 </div>
               ))}
             </div>
