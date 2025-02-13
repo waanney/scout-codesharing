@@ -106,7 +106,7 @@ const HeaderForAllPages = () => {
             </div>
 
             <div
-              className="hidden lg:flex h-[30px] w-[150px] relative items-center space-x-1 cursor-pointer justify-end"
+              className="hidden lg:flex h-[30px] w-full relative items-center space-x-1 cursor-pointer justify-end"
               onClick={() => setOpen(!open)}
             >
               <a className="flex items-center">
@@ -131,7 +131,7 @@ const HeaderForAllPages = () => {
               </a>
 
               <div
-                className={`absolute left-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
+                className={`absolute right-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
                   open
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'

@@ -278,8 +278,8 @@ function Post({ board, boardId }) {
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
         <HeaderForAllPages className="sticky" />
-        <div className="cards grid md:grid-cols-[3fr_7fr] grid-cols-1 gap-[34px] place-self-center place-items-center overflow-hidden px-5 py-[50px] mt-[50px]">
-          <div className="card rounded-[10px] md:h-[636px] h-[500px] w-full bg-[#05143c]">
+        <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
+          <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 {AvatarUrl ? (
@@ -338,7 +338,7 @@ function Post({ board, boardId }) {
               </div>
             </div>
             <div className="text-white">
-              <div className="text-[1.5em] w-full text-center place-self-center font-bold leading-[150%]">
+              <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
                 {board?.title}
               </div>
               <div className=" w-full px-[20px]">
@@ -357,11 +357,11 @@ function Post({ board, boardId }) {
                 </button>
               </div>
             </div>
-            <div className="w-[16em] h-[35%] md:h-[49%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+            <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
                   key={comment._id}
-                  className="rounded-[10px] mb-4 p-[15px 5px] bg-slate-400"
+                  className="w-[95%] rounded-[10px] mb-4 p-[15px 5px] bg-slate-400"
                 >
                   <div className="text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
@@ -371,7 +371,7 @@ function Post({ board, boardId }) {
                       {userData.username}
                     </a>
                   </div>
-                  <div className="text-white text-[20px] pl-[15px] font-normal leading-[150%]">
+                  <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
                     {comment.content}
                   </div>
                   <CommentRating
@@ -402,7 +402,7 @@ function Post({ board, boardId }) {
               </button>
             </form>
           </div>
-          <div className="card  rounded-[10px] md:h-[636px] h-[500px] w-full p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
+          <div className="card  rounded-[10px] lg:h-[636px] h-[500px] w-full p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
             <div className="font-mono relative w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <div className="ml-[10px] text-gray-500 text-[20px]">
                 {board.language}
@@ -433,7 +433,7 @@ function Post({ board, boardId }) {
 
                     {/* Popover */}
                     {open[lineNum] && (
-                      <div className="absolute top-7 left-[250px] z-10 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[250px]  bg-blue-950 rounded-[10px] shadow-lg p-4">
+                      <div className="absolute top-7 left-0 z-10 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[350px]  bg-blue-950 rounded-[10px] shadow-lg p-4">
                         <p className="text-center font-bold leading-[150%] text-2xl">
                           This is line {lineNum + 1}
                         </p>
