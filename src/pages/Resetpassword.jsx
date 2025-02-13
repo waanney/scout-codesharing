@@ -130,7 +130,7 @@ const ResetPassword = () => {
 
         <form
           onSubmit={handleResetPassword}
-          className="flex flex-grow flex-col h-[400px] w-[500px] bg-black bg-opacity-50 rounded-[10px]"
+          className="flex flex-grow flex-col h-[400px] md:w-32 lg:w-48 bg-black bg-opacity-50 rounded-[10px]"
         >
           <div className="mt-[31px] ml-[8px]">
             <label

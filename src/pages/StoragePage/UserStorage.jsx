@@ -26,7 +26,9 @@ export default function UserStorage() {
             currentProfile.savedPosts,
           );
           //console.log('Fetched posts:', posts);//log ra posts để debug
-          setSavedPosts(posts);
+          setSavedPosts(
+            posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+          );
         } catch (error) {
           console.error('Error fetching saved posts:', error);
         }
