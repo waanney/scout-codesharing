@@ -394,6 +394,7 @@ function MyProfile() {
                           }
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
                           style={{ border: 'solid 2px #EAEBF6' }}
+                          placeholder="Less than 15"
                         />
                       )
                     ) : (
