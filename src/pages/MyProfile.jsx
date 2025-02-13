@@ -6,7 +6,6 @@ import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { API_ROOT } from '../utils/constant.js';
 import { fetchSharedPostsDetails_API } from '../api/index.js';
 import useUserData from '../hooks/useUserData.js';
 import ScrollTop from '../components/scrollTop';
@@ -14,6 +13,9 @@ import hljs from 'highlight.js';
 import '../utils/customeStyle.css';
 import hljsLanguages from '../utils/hljsLanguages.json';
 import LoadingAnimation from '../components/loading.jsx';
+import { env } from '../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 
 function MyProfile() {
   const { owner } = useParams();

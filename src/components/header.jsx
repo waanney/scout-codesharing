@@ -7,9 +7,11 @@ import { logoutUser } from '../redux/apiRequest';
 import useRestoreState from '../redux/useRestoreState';
 import useUserId from '../utils/useUserId';
 import axios from 'axios';
-import { API_ROOT } from '../utils/constant';
 import { useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
+import { env } from '../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 
 const HeaderForAllPages = () => {
   useRestoreState();
