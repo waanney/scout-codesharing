@@ -175,9 +175,9 @@ function MyProfile() {
 
       window.location.reload();
     } catch (error) {
-      // console.error('Error updating profile:', error);
-      // console.error('Response từ server:', error.response.data);
-      setError(error || error.response.data);
+      const errorMessage =
+        error.response?.data?.message || error.message || 'Cập nhật thất bại';
+      setError(errorMessage);
     }
   };
 
@@ -272,7 +272,11 @@ function MyProfile() {
           setSharedPostAvatars(avatarMap);
           setSharedPosts(posts);
         } catch (error) {
-          setError(error);
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            'Lỗi khi tải bài viết chia sẻ';
+          setError(errorMessage);
         }
       }
     };
@@ -379,6 +383,7 @@ function MyProfile() {
                             handleProfileChange(field, e.target.value)
                           }
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
+                          placeholder="Age"
                           style={{ border: 'solid 2px #EAEBF6' }}
                         />
                       ) : (
@@ -390,6 +395,7 @@ function MyProfile() {
                           }
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
                           style={{ border: 'solid 2px #EAEBF6' }}
+                          placeholder="Less than 15 characters"
                         />
                       )
                     ) : (
@@ -417,6 +423,7 @@ function MyProfile() {
                     padding: '5px',
                     border: 'solid 2px #EAEBF6',
                   }}
+                  placeholder="Introduce yourself in 50 characters or less"
                   rows={1} // Initial row count
                   onInput={e => {
                     e.target.style.height = 'auto'; // Reset height
