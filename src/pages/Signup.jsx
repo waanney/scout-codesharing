@@ -98,8 +98,9 @@ function Signup() {
                 onChange={e => setUsername(e.target.value)}
                 className="w-full h-[48px] md:h-[63px] rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
                 type="text"
-                placeholder="6+ && 20- characters"
+                placeholder="6+ && 15- characters"
                 required
+                maxLength={15}
               />
             </div>
             <div className="mb-4">

@@ -176,7 +176,7 @@ function MyProfile() {
       window.location.reload();
     } catch (error) {
       const errorMessage =
-      error.response?.data?.message || error.message || 'Cập nhật thất bại';
+        error.response?.data?.message || error.message || 'Cập nhật thất bại';
       setError(errorMessage);
     }
   };
@@ -305,7 +305,7 @@ function MyProfile() {
       <HeaderForAllPages className="sticky" />
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
         <div className="lg:sticky top-0 flex items-center flex-col h-screen">
-          <div className="h-[360px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
+          <div className="h-[440px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
@@ -316,6 +316,8 @@ function MyProfile() {
                       onChange={e => setUsername(e.target.value)}
                       className="bg-transparent text-white rounded-[2px] text-[15px] w-[150px] h-[40px] resize-none overflow-hidden"
                       style={{ border: 'solid 2px #EAEBF6' }}
+                      maxLength="15"
+                      placeholder="Maximum 15 chars"
                     />
                   ) : (
                     username
@@ -542,8 +544,8 @@ function MyProfile() {
                   onChange={e => setTitle(e.target.value)}
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  maxLength="75"
-                  placeholder="Add your title here!(Maximum 75 characters)"
+                  maxLength="60"
+                  placeholder="Add your title here!(Maximum 60 characters)"
                   required
                 />
 
@@ -552,8 +554,8 @@ function MyProfile() {
                   onChange={e => setDescription(e.target.value)}
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  maxLength="75"
-                  placeholder="Describe your problem...(Maximum 75 characters)"
+                  maxLength="60"
+                  placeholder="Describe your problem...(Maximum 60 characters)"
                   required
                 />
 
@@ -751,5 +753,3 @@ function MyProfile() {
 }
 
 export default MyProfile;
-
-
