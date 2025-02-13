@@ -9,7 +9,8 @@
     "lint": "eslint .",
     "preview": "vite preview",
     "prepare": "husky",
-    "format": "prettier .  --write"
+    "format": "prettier .  --write",
+    "start": "serve -s dist"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
@@ -30,6 +31,7 @@
     "react-router-dom": "^7.1.1",
     "redux": "^5.0.1",
     "rollup": "^4.29.2",
+    "serve": "^14.2.4",
     "tailwind-scrollbar": "^3.1.0",
     "vanilla-tilt": "^1.8.1"
   },
