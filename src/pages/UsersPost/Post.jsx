@@ -329,7 +329,8 @@ function Post({ board, boardId }) {
                 <div>
                   <button
                     onClick={handleSave}
-                    className={`flex flex-row items-center hover:scale-110 ${isSaved ? 'text-blue-500' : 'text-white'}`}
+                    className={`flex flex-row items-center  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
+                    disabled={isSaved}
                   >
                     <Save className="h-[30px] w-[30px]" />
                     {isSaved ? 'Saved' : 'Save'}
