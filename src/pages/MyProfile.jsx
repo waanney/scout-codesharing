@@ -711,7 +711,8 @@ function MyProfile() {
                 {post && post.content ? (
                   <div>
                     <h1 className="ml-[15px] text-[24px] font-bold text-center">
-                      {post.title}
+                      {post.title.split(' ').slice(0, 20).join(' ')}
+                      {post.title.split(' ').length > 20 ? '...' : ''}
                     </h1>
                     <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">
                       {post.description.split(' ').slice(0, 20).join(' ')}

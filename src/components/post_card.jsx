@@ -89,8 +89,9 @@ const PostCard = ({ post }) => {
       </div>
 
       {/*Title*/}
-      <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%]">
-        {post.title}
+      <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%] break-words">
+      {post.title.split(' ').slice(0, 20).join(' ')}
+      {post.title.split(' ').length > 20 ? '...' : ''}
       </div>
       {/*Code display*/}
       <div
