@@ -535,7 +535,7 @@ function MyProfile() {
                 </div>
                 <button
                   type="submit"
-                  className="cursor-pointer transition-all bg-white text-black font-bold text-[18px] px-6 py-2 mt-[4px] rounded-lg border-slate-200 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
+                  className="cursor-pointer transition-all mb-[5px] bg-white text-black font-bold text-[18px] px-6 py-2 mt-[4px] rounded-lg border-slate-200 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
                 >
                   Create
                 </button>

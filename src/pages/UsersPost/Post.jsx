@@ -362,7 +362,7 @@ function Post({ board, boardId }) {
               {comments.map(comment => (
                 <div
                   key={comment._id}
-                  className="w-[95%] rounded-[10px] mb-4 p-[15px 5px] bg-slate-400"
+                  className="w-[95%] rounded-[10px] mb-4 p-[15px 5px] bg-slate-500"
                 >
                   <div className="text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
