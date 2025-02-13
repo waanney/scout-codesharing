@@ -176,7 +176,7 @@ function MyProfile() {
       window.location.reload();
     } catch (error) {
       const errorMessage =
-        error.response?.data?.message || error.message || 'Cập nhật thất bại';
+      error.response?.data?.message || error.message || 'Cập nhật thất bại';
       setError(errorMessage);
     }
   };
@@ -303,10 +303,9 @@ function MyProfile() {
   return (
     <>
       <HeaderForAllPages className="sticky" />
-      {/*For width > 640px*/}
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
-        <div className="sticky top-0 flex flex-col h-screen">
-          <div className="h-[360px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[125px] ml-[35px] rounded-[10px]">
+        <div className="lg:sticky top-0 flex items-center flex-col h-screen">
+          <div className="h-[360px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
@@ -395,7 +394,6 @@ function MyProfile() {
                           }
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
                           style={{ border: 'solid 2px #EAEBF6' }}
-                          placeholder="Less than 15 characters"
                         />
                       )
                     ) : (
@@ -406,7 +404,7 @@ function MyProfile() {
               ))}
             </div>
           </div>
-          <div className="flex h-[92px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[11px] ml-[35px] rounded-[10px]">
+          <div className="flex h-[92px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
             <img
               className="h-[13px] w-[14px] m-[11px]"
               src="../src/assets/Content.svg"
@@ -446,7 +444,7 @@ function MyProfile() {
               )}
             </div>
           </div>
-          <div className="h-[100px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[11px] ml-[35px] mb-[20px] rounded-[10px]">
+          <div className="h-[100px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] mb-[20px] rounded-[10px]">
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
@@ -501,7 +499,7 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 lg:justify-items-end lg:mr-[35px]">
+        <div className="flex-1 lg:justify-items-end justify-items-center lg:mr-[35px]">
           <div className="lg:mt-[125px] lg:ml-[30px] w-[90%] h-[460px] bg-black bg-opacity-50 rounded-[10px]">
             <form
               onSubmit={handleCreatepost}
@@ -543,7 +541,8 @@ function MyProfile() {
                   onChange={e => setTitle(e.target.value)}
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  placeholder="Add your title here!"
+                  maxLength="75"
+                  placeholder="Add your title here!(Maximum 75 characters)"
                   required
                 />
 
@@ -552,7 +551,8 @@ function MyProfile() {
                   onChange={e => setDescription(e.target.value)}
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  placeholder="Describe your problem..."
+                  maxLength="75"
+                  placeholder="Describe your problem...(Maximum 75 characters)"
                   required
                 />
 
@@ -651,7 +651,7 @@ function MyProfile() {
           {sharedPosts.map(post => (
             <div
               key={post._id}
-              className="cursor-pointer mt-[20px] mb-[20px] ml-[30px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+              className="cursor-pointer mt-[20px] mb-[20px] lg:ml-[30px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
               onClick={() =>
                 (window.location.href = `http://localhost:5173/post/${post._id}`)
               }
@@ -678,7 +678,7 @@ function MyProfile() {
                   </h5>
                 </a>
               </div>
-              <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
+              <div className="mt-[20px] w-[90%] mx-[5%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
                 <div className="flex items-center space-x-1">
                   <a className="flex items-center ml-[4px] mt-[4px]">
                     {sharedPostAvatars[post._id] ? (
@@ -750,3 +750,5 @@ function MyProfile() {
 }
 
 export default MyProfile;
+
+
