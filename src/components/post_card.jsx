@@ -4,8 +4,7 @@ import { formatMillisecondsToDate } from '../utils/formater.js';
 import '../utils/customeStyle.css';
 import hljs from 'highlight.js';
 import axios from 'axios';
-
-const API_ROOT = import.meta.env.VITE_API_ROOT;
+import { env } from '../configs/environment.js';
 
 const PostCard = ({ post }) => {
   const language = post.language;
@@ -25,7 +24,7 @@ const PostCard = ({ post }) => {
         const data = await fetchUserData_API(post.userID);
         setUserData(data);
         const avatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${post.userID}`,
+          `${env.API_ROOT}/v1/Auth/get-avatar/${post.userID}`,
           { responseType: 'blob' },
         );
         const avatarUrl = URL.createObjectURL(avatarcontent.data);
@@ -58,7 +57,7 @@ const PostCard = ({ post }) => {
   return (
     <div
       className="card bg-[#05143c]  h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
-      onClick={() => (window.location.href = `${API_ROOT}/post/${post._id}`)}
+      onClick={() => (window.location.href = `${env.FE_ROOT}/post/${post._id}`)}
     >
       {/*User info*/}
       <div className="cards grid grid-cols-2 gap-[10px]">
