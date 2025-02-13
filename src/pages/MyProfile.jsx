@@ -240,6 +240,8 @@ function MyProfile() {
     fetchSharedPosts();
   }, []);
 
+  
+
   if (loading) {
     <LoadingAnimation />;
   }
@@ -614,7 +616,8 @@ function MyProfile() {
                     {post.title}
                   </h1>
                   <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">
-                    {post.description}
+                    {post.description.split(" ").slice(0, 10).join(" ")}
+                    {post.description.split(" ").length > 10 ? "..." : ""}
                   </h2>
                   <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
                     <div className="ml-[10px] text-gray-400 text-[20px]">
@@ -984,6 +987,9 @@ function MyProfile() {
             <div
               key={post._id}
               className="mt-[20px] mb-[20px] ml-[30px] w-[95%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+              onClick={() =>
+                (window.location.href = `http://localhost:5173/post/${post._id}`)
+              }
             >
               <div className="flex items-center space-x-1">
                 <a className="flex items-center ml-[4px] mt-[4px]">
@@ -1022,7 +1028,8 @@ function MyProfile() {
                       {post.title}
                     </h1>
                     <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">
-                      {post.description}
+                    {post.description.split(" ").slice(0, 20).join(" ")}
+                    {post.description.split(" ").length > 20 ? "..." : ""}
                     </h2>
                     <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
                       <div className="ml-[10px] text-gray-400 text-[20px]">
