@@ -57,7 +57,7 @@ export default function UserStorage() {
       <HeaderForAllPages className="sticky" />
       <div className="bg-navy-900 min-h-screen p-4 md:p-8 bg-[#0b2878]">
         <div className="container mx-auto">
-          <h1 className="text-3xl md:text-[48px] font-bold mt-8 md:mt-16 mb-5 text-center text-white">
+          <h1 className="text-3xl md:text-[48px] font-bold mt-8 md:mt-16 mb-5 text-center text-white pt-[50px]">
             Your saved Posts
           </h1>
 
