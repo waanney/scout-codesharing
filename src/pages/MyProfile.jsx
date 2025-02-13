@@ -17,7 +17,7 @@ import LoadingAnimation from '../components/loading.jsx';
 
 function MyProfile() {
   const { owner } = useParams();
-  const { currentUserData } = useUserData();
+  const { currentUserData, userId } = useUserData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
   const [language, setLanguage] = useState('');
@@ -42,7 +42,7 @@ function MyProfile() {
       title: title,
       description: description,
       language: language,
-      userId: currentUserData._id,
+      userId: userId,
       content: text,
       username: currentUserData.username,
     };
@@ -54,6 +54,7 @@ function MyProfile() {
   const [personality, setPersonality] = useState([]);
   const [profileData, setProfileData] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
+  const [currentUserAvt, setCurrentUserAvt] = useState(null);
   const [selectedFile, setSelectedFile] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -90,8 +91,20 @@ function MyProfile() {
         );
         const avatarUrl = URL.createObjectURL(avatarcontent.data);
         setAvatarUrl(avatarUrl);
+        const currentUseravatarcontent = await axios.get(
+          `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
+          { responseType: 'blob' },
+        );
+        const currentUserAvatarUrl = URL.createObjectURL(
+          currentUseravatarcontent.data,
+        );
+        setCurrentUserAvt(currentUserAvatarUrl);
       } catch (error) {
-        console.error('Error fetching profile:', error);
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          'Không thể tải dữ liệu profile';
+        setError(errorMessage);
       } finally {
         setLoading(false);
       }
@@ -139,20 +152,16 @@ function MyProfile() {
         owner: currentUserData._id,
       };
       //console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên(để debug)
-      await axios.put(
-        `${API_ROOT}/v1/myProfile/${currentUserData._id}`,
-        updatedFields,
-      );
-      await axios.put(
-        `${API_ROOT}/v1/Auth/change-username/${currentUserData._id}`,
-        { username },
-      );
+      await axios.put(`${API_ROOT}/v1/myProfile/${userId}`, updatedFields);
+      await axios.put(`${API_ROOT}/v1/Auth/change-username/${userId}`, {
+        username,
+      });
       if (selectedFile) {
         const formData = new FormData();
         formData.append('avatar', selectedFile);
 
         const uploadResponse = await axios.put(
-          `${API_ROOT}/v1/Auth/avatar/${currentUserData._id}`,
+          `${API_ROOT}/v1/Auth/avatar/${userId}`,
           formData,
           {
             headers: {
@@ -166,8 +175,9 @@ function MyProfile() {
 
       window.location.reload();
     } catch (error) {
-      console.error('Error updating profile:', error);
-      console.error('Response từ server:', error.response.data);
+      // console.error('Error updating profile:', error);
+      // console.error('Response từ server:', error.response.data);
+      setError(error || error.response.data);
     }
   };
 
@@ -220,6 +230,23 @@ function MyProfile() {
 
   //biến cho sharedPosts
   const [sharedPosts, setSharedPosts] = useState([]);
+  const [sharedPostAvatars, setSharedPostAvatars] = useState({});
+
+  const fetchAvatarForPost = async userId => {
+    try {
+      const response = await axios.get(
+        `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
+        {
+          responseType: 'blob',
+        },
+      );
+      return URL.createObjectURL(response.data);
+    } catch (error) {
+      console.error('Error fetching avatar:', error);
+      return null;
+    }
+  };
+
   useEffect(() => {
     const fetchSharedPosts = async () => {
       const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
@@ -230,28 +257,38 @@ function MyProfile() {
           const posts = await fetchSharedPostsDetails_API(
             currentProfile.sharedPosts,
           );
-          //console.log('Fetched posts:', posts);//log ra posts để debug
+
+          const avatarPromises = posts.map(post =>
+            fetchAvatarForPost(post.userId),
+          );
+          const avatars = await Promise.all(avatarPromises);
+
+          // Tạo object avatar mapping
+          const avatarMap = posts.reduce((acc, post, index) => {
+            acc[post._id] = avatars[index];
+            return acc;
+          }, {});
+
+          setSharedPostAvatars(avatarMap);
           setSharedPosts(posts);
         } catch (error) {
-          console.error('Error fetching shared posts:', error);
+          setError(error);
         }
       }
     };
     fetchSharedPosts();
-  }, []);
-
-  
+  }, [owner]);
 
   if (loading) {
     <LoadingAnimation />;
   }
 
   if (error) {
-    return <div>Lỗi: {error.message || 'Không thể tải dữ liệu profile.'}</div>;
+    return <div className="text-red-500 p-4">Lỗi: {error}</div>;
   }
 
-  if (!profileData) {
-    return <div>Không tải dữ liệu profile.</div>;
+  if (!loading && !profileData) {
+    return <div className="p-4">Không tìm thấy profile</div>;
   }
 
   window.scrollTo({
@@ -453,7 +490,6 @@ function MyProfile() {
                 ))
               )}
             </div>
-            
           </div>
         </div>
 
@@ -466,13 +502,21 @@ function MyProfile() {
               <div className="flex justify-between mt-[10px] mx-[10px]">
                 <div className=" flex items-center space-x-1">
                   <a className="flex items-center">
-                    <svg
-                      height="30"
-                      width="30"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                    </svg>
+                    {currentUserAvt ? (
+                      <img
+                        className="aspect-square h-[30px] w-[30px] rounded-full"
+                        src={currentUserAvt}
+                        alt="currentUserAvt"
+                      />
+                    ) : (
+                      <svg
+                        height="30"
+                        width="30"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                      </svg>
+                    )}
                     <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
                       {currentUserData?.username}
                     </h5>
@@ -606,13 +650,21 @@ function MyProfile() {
             >
               <div className="flex items-center space-x-1">
                 <a className="flex items-center ml-[4px] mt-[4px]">
-                  <svg
-                    height="30"
-                    width="30"
-                    xmlns="http://www.w3.org/2000/svg"
-                  >
-                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                  </svg>
+                  {AvatarUrl ? (
+                    <img
+                      className="aspect-square h-[30px] w-[30px] rounded-full"
+                      src={AvatarUrl}
+                      alt="Avatar"
+                    />
+                  ) : (
+                    <svg
+                      height="30"
+                      width="30"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                    </svg>
+                  )}
                   <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
                     {profileData.username}
                   </h5>
@@ -621,13 +673,21 @@ function MyProfile() {
               <div className="mt-[20px] ml-[30px] w-[95%] h-[85%] border-solid border-[2px] border-slate-300 rounded-[10px]">
                 <div className="flex items-center space-x-1">
                   <a className="flex items-center ml-[4px] mt-[4px]">
-                    <svg
-                      height="30"
-                      width="30"
-                      xmlns="http://www.w3.org/2000/svg"
-                    >
-                      <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                    </svg>
+                    {sharedPostAvatars[post._id] ? (
+                      <img
+                        className="aspect-square h-[30px] w-[30px] rounded-full"
+                        src={sharedPostAvatars[post._id]}
+                        alt="Avatar"
+                      />
+                    ) : (
+                      <svg
+                        height="30"
+                        width="30"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                      </svg>
+                    )}
                     <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
                       {post.username}
                     </h5>
@@ -641,8 +701,8 @@ function MyProfile() {
                       {post.title}
                     </h1>
                     <h2 className="ml-[30px] text-[20px] font-bold mb-[5px]">
-                    {post.description.split(" ").slice(0, 20).join(" ")}
-                    {post.description.split(" ").length > 20 ? "..." : ""}
+                      {post.description.split(' ').slice(0, 20).join(' ')}
+                      {post.description.split(' ').length > 20 ? '...' : ''}
                     </h2>
                     <div className="w-[95%] h-[370px] items-center bg-black bg-opacity-50 rounded-[5px] mx-[2.5%] overflow-y-auto p-4">
                       <div className="ml-[10px] text-gray-400 text-[20px]">

@@ -73,6 +73,7 @@ function Post({ board, boardId }) {
   const [userData, setUserData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [AvatarUrl, setAvatarUrl] = useState(null);
   useEffect(() => {
     // Lấy thông tin user từ API
     const fetchData = async () => {
@@ -80,6 +81,12 @@ function Post({ board, boardId }) {
       try {
         const data = await fetchUserData_API(board.userID);
         setUserData(data);
+        const avatarcontent = await axios.get(
+          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
+          { responseType: 'blob' },
+        );
+        const avatarUrl = URL.createObjectURL(avatarcontent.data);
+        setAvatarUrl(avatarUrl);
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);
@@ -274,11 +281,19 @@ function Post({ board, boardId }) {
           <div className="card rounded-[10px] md:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
-                <img
-                  className="rounded-full h-[50px] w-[50px] self-center"
-                  src="..\src\assets\demo_avatar.png"
-                  alt="User Avatar"
-                />
+                {AvatarUrl ? (
+                  <img
+                    className="aspect-square h-[50px] w-[50px] rounded-full"
+                    src={AvatarUrl}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <img
+                    className="rounded-full h-[50px] w-[50px] self-center"
+                    src="..\src\assets\demo_avatar.png"
+                    alt="User Avatar"
+                  />
+                )}
                 <div className="flex flex-col">
                   <div className="ml-[10px] text-white font-bold text-[1.5rem] leading-9">
                     <a
@@ -406,7 +421,7 @@ function Post({ board, boardId }) {
                 {board.language}
               </div>
               {sourceCode.map((code, lineNum) => (
-                <div key={lineNum} className='flex'>
+                <div key={lineNum} className="flex">
                   {/* Button */}
                   <button
                     onClick={() => {
