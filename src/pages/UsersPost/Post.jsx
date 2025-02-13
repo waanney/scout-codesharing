@@ -383,12 +383,12 @@ function Post({ board, boardId }) {
             </div>
             <form
               onSubmit={handleComment}
-              className="flex flex-row px-[20px] py-[20px]"
+              className="flex flex-row px-[20px] py-[20px] pt-4 md:pb-6"
             >
               <input
                 value={content}
                 onChange={e => setContent(e.target.value)}
-                className="w-[90%] h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
+                className="w-[90%]  h-[43px] rounded-[10px] bg-[#253767] text-white text-[15px] font-normal leading-[150%] hover:drop-shadow-[0px_0px_10px_rgba(0,0,0,0.5)]"
                 placeholder="  Add your comment..."
                 type="text"
               />
@@ -406,7 +406,7 @@ function Post({ board, boardId }) {
                 {board.language}
               </div>
               {sourceCode.map((code, lineNum) => (
-                <div key={lineNum}>
+                <div key={lineNum} className='flex'>
                   {/* Button */}
                   <button
                     onClick={() => {
@@ -414,7 +414,7 @@ function Post({ board, boardId }) {
                       NewOpen[lineNum] = !open[lineNum];
                       setOpen(NewOpen);
                     }}
-                    className="absolute text-gray-500 hover:text-white ml-[10px] right-[15px] z-10"
+                    className=" text-gray-500 hover:text-white ml-[10px] right-[15px] z-10"
                   >
                     <MessageSquareText className="h-[20px] w-[20px]" />
                   </button>
@@ -431,7 +431,7 @@ function Post({ board, boardId }) {
 
                     {/* Popover */}
                     {open[lineNum] && (
-                      <div className="absolute top-0 right-[30px] z-20 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[250px]  bg-blue-950 rounded-[10px] shadow-lg p-4">
+                      <div className="absolute top-7 left-[250px] z-10 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[250px]  bg-blue-950 rounded-[10px] shadow-lg p-4">
                         <p className="text-center font-bold leading-[150%] text-2xl">
                           This is line {lineNum + 1}
                         </p>
