@@ -301,7 +301,7 @@ function Post({ board, boardId }) {
                   <div className="ml-[10px] text-white font-bold text-[1.5rem] leading-9">
                     <a
                       target="_blank"
-                      href={`http://localhost:5173/profile/${userData._id}`}
+                      href={`${API_ROOT}/profile/${userData._id}`}
                     >
                       {userData.username}
                     </a>
@@ -369,7 +369,7 @@ function Post({ board, boardId }) {
                   <div className="text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
                       target="_blank"
-                      href={`http://localhost:5173/profile/${userData._id}`}
+                      href={`${API_ROOT}/profile/${userData._id}`}
                     >
                       {userData.username}
                     </a>
