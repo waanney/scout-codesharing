@@ -270,7 +270,9 @@ function MyProfile() {
           }, {});
 
           setSharedPostAvatars(avatarMap);
-          setSharedPosts(posts);
+          setSharedPosts(
+            posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
+          );
         } catch (error) {
           const errorMessage =
             error.response?.data?.message ||
