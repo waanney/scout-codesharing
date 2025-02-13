@@ -250,6 +250,9 @@ function Post({ board, boardId }) {
     }
   };
 
+  //rút gọn description
+  const [fullText, setFullText] = useState(false);
+
   //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
@@ -267,8 +270,8 @@ function Post({ board, boardId }) {
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
         <HeaderForAllPages className="sticky" />
-        <div className="cards grid md:grid-cols-[2fr_5fr] grid-cols-1 gap-[34px] place-self-center place-items-center overflow-hidden px-5 py-[50px] mt-[50px]">
-          <div className="card rounded-[10px] md:h-[636px] h-[500px] w-[90%] bg-[#05143c]">
+        <div className="cards grid md:grid-cols-[3fr_7fr] grid-cols-1 gap-[34px] place-self-center place-items-center overflow-hidden px-5 py-[50px] mt-[50px]">
+          <div className="card rounded-[10px] md:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 <img
@@ -320,13 +323,39 @@ function Post({ board, boardId }) {
             </div>
             <div className="text-white">
               <div className="text-[1.5em] w-full text-center place-self-center font-bold leading-[150%]">
-                Problem solving
-              </div>
-              <div className="px-[38px] text-xl font-normal leading-[150%]">
                 {board?.title}
               </div>
+              {fullText ? (
+                <div className="px-[20px]">
+                  <div className="h-[84px] text-xl font-normal leading-[150%] overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+                    {board?.description}
+                  </div>
+                  <button
+                    className="font-bold"
+                    onClick={() => {
+                      setFullText(false);
+                    }}
+                  >
+                    less
+                  </button>
+                </div>
+              ) : (
+                <div className="px-[20px]">
+                  <div className="text-xl font-normal leading-[150%] line-clamp-3">
+                    {board?.description}
+                  </div>
+                  <button
+                    className="font-bold"
+                    onClick={() => {
+                      setFullText(true);
+                    }}
+                  >
+                    more
+                  </button>
+                </div>
+              )}
             </div>
-            <div className="w-[16em] h-[16em] md:h-[60%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+            <div className="w-[16em] h-[16em] md:h-[49%] mx-auto px-[10px] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
                   key={comment._id}
@@ -371,7 +400,7 @@ function Post({ board, boardId }) {
               </button>
             </form>
           </div>
-          <div className="card relative rounded-[10px] md:h-[636px] h-[500px] w-[90%] p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
+          <div className="card relative rounded-[10px] md:h-[636px] h-[500px] w-full p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
             <div className="font-mono w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <div className="ml-[10px] text-gray-500 text-[20px]">
                 {board.language}
