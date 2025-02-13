@@ -59,9 +59,7 @@ const PostCard = ({ post }) => {
   return (
     <div
       className="card bg-[#05143c]  h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
-      onClick={() =>
-        (window.location.href = `http://localhost:5173/post/${post._id}`)
-      }
+      onClick={() => (window.location.href = `${API_ROOT}/post/${post._id}`)}
     >
       {/*User info*/}
       <div className="cards grid grid-cols-2 gap-[10px]">
