@@ -130,9 +130,9 @@ const ResetPassword = () => {
 
         <form
           onSubmit={handleResetPassword}
-          className="flex flex-grow flex-col h-[400px] md:w-32 lg:w-48 bg-black bg-opacity-50 rounded-[10px]"
+          className="flex flex-grow flex-col h-[400px] w-full max-w-[500px] bg-black bg-opacity-50 rounded-[10px]"
         >
-          <div className="mt-[31px] ml-[8px]">
+          <div className="mt-[31px] mx-[8px]">
             <label
               className="font-Inter font-bold text-[18px]"
               htmlFor="password"
@@ -140,7 +140,7 @@ const ResetPassword = () => {
               New Password:
             </label>
             <input
-              className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
+              className="w-full h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
               id="password"
               type="password"
               placeholder="New Password"
@@ -150,7 +150,7 @@ const ResetPassword = () => {
               onChange={e => setPassword(e.target.value)}
             />
           </div>
-          <div className="mt-[31px] ml-[8px]">
+          <div className="mt-[31px] mx-[8px]">
             <label
               className="font-Inter font-bold text-[18px]"
               htmlFor="confirmPassword"
@@ -158,7 +158,7 @@ const ResetPassword = () => {
               Confirm Password:
             </label>
             <input
-              className="w-[484px] h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
+              className="w-full h-[63px] items-center rounded-[10px] bg-transparent border-[1px] border-[#a2a2a2] pl-[15px] mt-[8px]"
               id="confirmPassword"
               type="password"
               placeholder="Confirm Password"
