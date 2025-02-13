@@ -305,7 +305,7 @@ function MyProfile() {
       <HeaderForAllPages className="sticky" />
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
         <div className="lg:sticky top-0 flex items-center flex-col h-screen">
-          <div className="h-[440px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
+          <div className="h-[440px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
@@ -361,7 +361,7 @@ function MyProfile() {
 
               {isEditing && (
                 <input
-                  className="flex items-center w-[230px] text-wrap"
+                  className="flex items-center w-[250px] text-wrap"
                   type="file"
                   accept="image/*"
                   onChange={handleFileChange}
@@ -371,10 +371,10 @@ function MyProfile() {
             <div className="grid grid-cols-2">
               {['age', 'education', 'occupation', 'location'].map(field => (
                 <React.Fragment key={field}>
-                  <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[10px]">
+                  <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[15px]">
                     {field.toUpperCase()}
                   </div>
-                  <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[10px]">
+                  <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[15px]">
                     {isEditing ? (
                       field === 'age' ? (
                         <input
@@ -407,7 +407,7 @@ function MyProfile() {
               ))}
             </div>
           </div>
-          <div className="flex h-[92px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
+          <div className="flex h-[92px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
             <img
               className="h-[13px] w-[14px] m-[11px]"
               src="../src/assets/Content.svg"
@@ -447,7 +447,7 @@ function MyProfile() {
               )}
             </div>
           </div>
-          <div className="h-[100px] lg:w-[230px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] mb-[20px] rounded-[10px]">
+          <div className="h-[100px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] mb-[20px] rounded-[10px]">
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
@@ -503,7 +503,7 @@ function MyProfile() {
         </div>
 
         <div className="flex-1 lg:justify-items-end justify-items-center lg:mr-[35px]">
-          <div className="lg:mt-[125px] lg:ml-[30px] w-[90%] h-[460px] bg-black bg-opacity-50 rounded-[10px]">
+          <div className="lg:mt-[125px] w-[90%] h-[460px] bg-black bg-opacity-50 rounded-[10px]">
             <form
               onSubmit={handleCreatepost}
               className="relative rounded-[10px]"
@@ -654,7 +654,7 @@ function MyProfile() {
           {sharedPosts.map(post => (
             <div
               key={post._id}
-              className="cursor-pointer mt-[20px] mb-[20px] lg:ml-[30px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+              className="cursor-pointer mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
               onClick={() =>
                 (window.location.href = `http://localhost:5173/post/${post._id}`)
               }
