@@ -4,9 +4,8 @@ import { formatMillisecondsToDate } from '../utils/formater.js';
 import '../utils/customeStyle.css';
 import hljs from 'highlight.js';
 import axios from 'axios';
-import { env } from '../configs/environment.js';
 
-const API_ROOT = env.API_ROOT;
+const API_ROOT = import.meta.env.VITE_API_ROOT;
 
 const PostCard = ({ post }) => {
   const language = post.language;
