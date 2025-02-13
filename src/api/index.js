@@ -1,6 +1,8 @@
 // file này dùng để gọi API
 import axios from 'axios';
-import { API_ROOT } from '../utils/constant';
+import { env } from '../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 // dùng data cho UsersPost, khi vô một bài post cụ thể thì data sẽ lấy từ đây
 export const fetchBoardDetails_API = async boardId => {
   const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`);

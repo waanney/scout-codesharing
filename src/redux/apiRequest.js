@@ -24,9 +24,11 @@ import { commentStart, commentSuccess, commentFailed } from './commentSlice';
   myProfileSuccess,
   myProfileFailed,
 } from './myProfileSlice';*/
-import { API_ROOT } from '../utils/constant';
 //import { current } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
+import { env } from '../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 
 export const loginUser = async (user, dispatch, navigate) => {
   dispatch(loginStart());

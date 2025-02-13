@@ -1,7 +1,9 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import { API_ROOT } from '../utils/constant';
 import useUserData from '../hooks/useUserData.js';
+import { env } from '../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 
 //import { comment } from 'postcss';
 

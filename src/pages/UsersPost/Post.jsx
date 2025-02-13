@@ -6,7 +6,6 @@ import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import CommentCard from '../../components/comment_card.jsx';
 import axios from 'axios';
-import { API_ROOT } from '../../utils/constant.js';
 import CommentRating from '../../components/comment_rating.jsx';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
@@ -20,6 +19,9 @@ import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
 import useUserData from '../../hooks/useUserData.js';
+import { env } from '../../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 
 function Post({ board, boardId }) {
   const { currentUserData, userId } = useUserData();
