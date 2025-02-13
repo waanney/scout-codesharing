@@ -423,7 +423,8 @@ function MyProfile() {
                     padding: '5px',
                     border: 'solid 2px #EAEBF6',
                   }}
-                  placeholder="Introduce yourself in 50 characters or less"
+                  maxLength="75"
+                  placeholder="Introduce yourself in 75 characters or less"
                   rows={1} // Initial row count
                   onInput={e => {
                     e.target.style.height = 'auto'; // Reset height
