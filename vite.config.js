@@ -12,6 +12,7 @@ export default defineConfig({
   plugins: [react()],
   build: {
     rollupOptions: {
+      chunkSizeWarningLimit: 1000,
       input: {
         main: resolve(__dirname, 'index.html'),
       },
