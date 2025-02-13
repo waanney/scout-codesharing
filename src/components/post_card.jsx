@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '../utils/formater.js';
 import '../utils/customeStyle.css';
 import hljs from 'highlight.js';
+import axios from 'axios'
+import { API_ROOT } from '../utils/constant.js';
 
 const PostCard = ({ post }) => {
   const language = post.language;
@@ -12,6 +14,7 @@ const PostCard = ({ post }) => {
   const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
   const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
   const [error, setError] = useState(null); // State để xử lý lỗi
+  const [AvatarUrl, setAvatarUrl] = useState(null);
 
   // lấy data username và những data như upvote, downvote sau này sẽ thêm vào
   useEffect(() => {
@@ -20,6 +23,12 @@ const PostCard = ({ post }) => {
       try {
         const data = await fetchUserData_API(post.userID);
         setUserData(data);
+        const avatarcontent = await axios.get(
+          `${API_ROOT}/v1/Auth/get-avatar/${post.userID}`,
+          { responseType: 'blob' },
+        );
+        const avatarUrl = URL.createObjectURL(avatarcontent.data);
+        setAvatarUrl(avatarUrl);
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);
@@ -55,13 +64,21 @@ const PostCard = ({ post }) => {
       {/*User info*/}
       <div className="cards grid grid-cols-2 gap-[10px]">
         <div className="card flex flex-row">
-          <div className="h-[30px] w-[30px]">
-            <img
-              className="rounded-full"
-              src="../src/assets/demo_avatar.png"
-              alt="User Avatar"
-            />
-          </div>
+        {AvatarUrl ? (
+                  <img
+                    className="aspect-square h-[30px] w-[30px] rounded-full"
+                    src={AvatarUrl}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <svg
+                    height="30"
+                    width="30"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                  </svg>
+                )}
           <div className="ml-[10px] text-white font-bold text-[20px]">
             {userData.username}
           </div>
