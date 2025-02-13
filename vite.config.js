@@ -11,8 +11,8 @@ const __dirname = path.dirname(__filename);
 export default defineConfig({
   plugins: [react()],
   build: {
+    chunkSizeWarningLimit: 1500,
     rollupOptions: {
-      chunkSizeWarningLimit: 1000,
       input: {
         main: resolve(__dirname, 'index.html'),
       },
