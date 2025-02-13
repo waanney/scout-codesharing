@@ -651,7 +651,7 @@ function MyProfile() {
           {sharedPosts.map(post => (
             <div
               key={post._id}
-              className="mt-[20px] mb-[20px] ml-[30px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+              className="cursor-pointer mt-[20px] mb-[20px] ml-[30px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
               onClick={() =>
                 (window.location.href = `http://localhost:5173/post/${post._id}`)
               }
