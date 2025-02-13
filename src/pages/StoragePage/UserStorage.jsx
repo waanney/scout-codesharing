@@ -5,9 +5,11 @@ import ScrollTop from '../../components/scrollTop';
 import PostCard from '../../components/post_card';
 import { useState, useEffect } from 'react';
 import { fetchSavedPostsDetails_API } from '../../api/index';
-import { API_ROOT } from '../../utils/constant.js';
 import axios from 'axios';
 import useUserId from '../../utils/useUserId';
+import { env } from '../../configs/environment.js';
+
+const API_ROOT = env.API_ROOT;
 
 export default function UserStorage() {
   const userId = useUserId();
