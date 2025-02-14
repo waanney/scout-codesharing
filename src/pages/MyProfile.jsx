@@ -14,7 +14,9 @@ import '../utils/customeStyle.css';
 import hljsLanguages from '../utils/hljsLanguages.json';
 import LoadingAnimation from '../components/loading.jsx';
 import { env } from '../configs/environment.js';
-
+import savePost from '../assets/save.svg';
+import editPost from '../assets/edit.svg';
+import content from '../assets/Content.svg';
 const API_ROOT = env.API_ROOT;
 
 function MyProfile() {
@@ -334,11 +336,7 @@ function MyProfile() {
                       onClick={isEditing ? handleSaveClick : handleEditClick}
                     >
                       <img
-                        src={
-                          isEditing
-                            ? '../src/assets/save.svg'
-                            : '../src/assets/edit.svg'
-                        }
+                        src={isEditing ? { savePost } : { editPost }}
                         alt={isEditing ? 'Save icon' : 'Edit icon'}
                       />
                     </button>
@@ -412,10 +410,7 @@ function MyProfile() {
             </div>
           </div>
           <div className="flex h-[92px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
-            <img
-              className="h-[13px] w-[14px] m-[11px]"
-              src="../src/assets/Content.svg"
-            ></img>
+            <img className="h-[13px] w-[14px] m-[11px]" src={content}></img>
 
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
               {isEditing ? (

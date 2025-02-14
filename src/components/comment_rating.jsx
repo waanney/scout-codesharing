@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react';
 import axios from 'axios';
 import useUserData from '../hooks/useUserData.js';
 import { env } from '../configs/environment.js';
-
+import upvoteC from '../assets/up.svg';
+import downvoteC from '../assets/down.svg';
 const API_ROOT = env.API_ROOT;
 
 //import { comment } from 'postcss';
@@ -72,7 +73,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           className={`cursor-pointer p-2 roundedhover:bg-gray-100`}
           aria-label="Upvote"
         >
-          <img src="../src/assets/up.svg" alt="Upvote" />
+          <img src={upvoteC} alt="Upvote" />
         </button>
         <span
           className={`text-[24px] ml-2 ${isUpvoted ? 'text-blue-500 hover:bg-gray-100' : 'hover:bg-gray-100'}`}
@@ -88,7 +89,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           className={`cursor-pointer p-2 roundedhover:bg-gray-100`}
           aria-label="Downvote"
         >
-          <img src="../src/assets/down.svg" alt="Downvote" />
+          <img src={downvoteC} alt="Downvote" />
         </button>
         <span
           className={`text-[24px] ml-2 ${isDownvoted ? 'text-orange-500 hover:bg-gray-100' : 'hover:bg-gray-100'}`}
