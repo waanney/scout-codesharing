@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { env } from '../configs/environment';
+import { env } from '~/configs/environment';
 
 export const commentRatingApi = {
   vote: (commentId, userId, type) =>

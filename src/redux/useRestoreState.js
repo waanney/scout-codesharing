@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setCurrentUser } from '../redux/actions'; // Action để cập nhật state user
+import { setCurrentUser } from '~/redux/actions'; // Action để cập nhật state user
 
 const useRestoreState = () => {
   const dispatch = useDispatch();

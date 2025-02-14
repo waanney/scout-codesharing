@@ -26,7 +26,7 @@ import { commentStart, commentSuccess, commentFailed } from './commentSlice';
 } from './myProfileSlice';*/
 //import { current } from '@reduxjs/toolkit';
 import { jwtDecode } from 'jwt-decode';
-import { env } from '../configs/environment.js';
+import { env } from '~/configs/environment.js';
 
 const API_ROOT = env.API_ROOT;
 

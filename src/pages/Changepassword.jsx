@@ -1,10 +1,10 @@
-import HeaderForAllPages from '../components/header.jsx';
+import HeaderForAllPages from '~/components/header.jsx';
 import { useSelector, useDispatch } from 'react-redux';
 import { useState, useEffect } from 'react';
-import { changePassword } from '../redux/apiRequest';
-import { logoutUser } from '../redux/apiRequest';
+import { changePassword } from '~/redux/apiRequest';
+import { logoutUser } from '~/redux/apiRequest';
 import { useNavigate } from 'react-router-dom';
-import useUserId from '../utils/useUserId';
+import useUserId from '~/utils/useUserId';
 
 function Changepassword() {
   //handle lỗi và thành công

@@ -1,22 +1,22 @@
 import React from 'react';
-import HeaderForAllPages from '../components/header.jsx';
-import FooterAllPage from '../components/footer.jsx';
-import { createPost } from '../redux/apiRequest.js';
+import HeaderForAllPages from '~/components/header.jsx';
+import FooterAllPage from '~/components/footer.jsx';
+import { createPost } from '~/redux/apiRequest.js';
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { fetchSharedPostsDetails_API } from '../api/index.js';
-import useUserData from '../hooks/useUserData.js';
-import ScrollTop from '../components/scrollTop';
+import { fetchSharedPostsDetails_API } from '~/api/index.js';
+import useUserData from '~/hooks/useUserData.js';
+import ScrollTop from '~/components/scrollTop';
 import hljs from 'highlight.js';
-import '../utils/customeStyle.css';
-import hljsLanguages from '../utils/hljsLanguages.json';
-import LoadingAnimation from '../components/loading.jsx';
-import { env } from '../configs/environment.js';
-import savePost from '../assets/save.svg';
-import editPost from '../assets/edit.svg';
-import content from '../assets/Content.svg';
+import '~/utils/customeStyle.css';
+import hljsLanguages from '~/utils/hljsLanguages.json';
+import LoadingAnimation from '~/components/loading.jsx';
+import { env } from '~/configs/environment.js';
+import savePost from '~/assets/save.svg';
+import editPost from '~/assets/edit.svg';
+import content from '~/assets/Content.svg';
 const API_ROOT = env.API_ROOT;
 
 function MyProfile() {

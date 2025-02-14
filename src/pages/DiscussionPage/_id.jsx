@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { fetchBoardCollection_API } from '../../api/index';
+import { fetchBoardCollection_API } from '~/api/index.js';
 import Discussion from './Discussion.jsx';
-import LoadingAnimation from '../../components/loading.jsx';
+import LoadingAnimation from '~/components/loading.jsx';
 function Board() {
   const [board, setBoard] = useState(null);
   const [loading, setLoading] = useState(true); // Thêm trạng thái loading

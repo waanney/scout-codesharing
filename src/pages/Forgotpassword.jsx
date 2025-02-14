@@ -1,10 +1,10 @@
 import { useDispatch } from 'react-redux';
-import HeaderForAllPages from '../components/header.jsx';
-import { clearError } from '../redux/authSlice';
+import HeaderForAllPages from '~/components/header.jsx';
+import { clearError } from '~/redux/authSlice';
 import { Link } from 'react-router-dom';
 import { useState } from 'react';
 import axios from 'axios';
-import { env } from '../configs/environment.js';
+import { env } from '~/configs/environment.js';
 
 const API_ROOT = env.API_ROOT;
 

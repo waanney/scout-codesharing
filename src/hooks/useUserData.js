@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-import useUserId from '../utils/useUserId';
-import { env } from '../configs/environment.js';
+import useUserId from '~/utils/useUserId';
+import { env } from '~/configs/environment.js';
 
 const API_ROOT = env.API_ROOT;
 

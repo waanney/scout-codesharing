@@ -1,10 +1,10 @@
-import { fetchUserData_API } from '../api/index.js';
+import { fetchUserData_API } from '~/api/index.js';
 import { useState, useEffect } from 'react';
-import { formatMillisecondsToDate } from '../utils/formater.js';
-import '../utils/customeStyle.css';
+import { formatMillisecondsToDate } from '~/utils/formater.js';
+import '~/utils/customeStyle.css';
 import hljs from 'highlight.js';
 import axios from 'axios';
-import { env } from '../configs/environment.js';
+import { env } from '~/configs/environment.js';
 
 const PostCard = ({ post }) => {
   const language = post.language;

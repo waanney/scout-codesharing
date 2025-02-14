@@ -1,17 +1,17 @@
 import { useEffect, useRef } from 'react';
 import VanillaTilt from 'vanilla-tilt';
-import HeaderForAllPages from '../components/header.jsx';
-import FooterAllPage from '../components/footer.jsx';
-import ScrollTop from '../components/scrollTop';
+import HeaderForAllPages from '~/components/header.jsx';
+import FooterAllPage from '~/components/footer.jsx';
+import ScrollTop from '~/components/scrollTop';
 import usecheckTokenAndRedirect from '../services/checkTokenExpiration.jsx';
-import devTeamLogo from '../assets/Devteam.svg';
-import ProfileImg from '../assets/Profile.svg';
-import Scoutlogo1 from '../assets/Scout.svg';
-import Scoutlogo2 from '../assets/Scout.ico';
-import DicussionImg from '../assets/Discussion.png';
-import StorageImg from '../assets/Storage.svg';
-import NewfeedImg from '../assets/Newfeed.svg';
-import PostImG from '../assets/Posts.svg';
+import devTeamLogo from '~/assets/Devteam.svg';
+import ProfileImg from '~/assets/Profile.svg';
+import Scoutlogo1 from '~/assets/Scout.svg';
+import Scoutlogo2 from '~/assets/Scout.ico';
+import DicussionImg from '~/assets/Discussion.png';
+import StorageImg from '~/assets/Storage.svg';
+import NewfeedImg from '~/assets/Newfeed.svg';
+import PostImG from '~/assets/Posts.svg';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);

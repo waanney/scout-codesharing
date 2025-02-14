@@ -1,8 +1,8 @@
-import HeaderForAllPages from '../../components/header.jsx';
-import FooterAllPage from '../../components/footer.jsx';
-import PostCard from '../../components/post_card';
-import ScrollTop from '../../components/scrollTop';
-import usecheckTokenAndRedirect from '../../services/checkTokenExpiration.jsx';
+import HeaderForAllPages from '~/components/header.jsx';
+import FooterAllPage from '~/components/footer.jsx';
+import PostCard from '~/components/post_card';
+import ScrollTop from '~/components/scrollTop';
+import usecheckTokenAndRedirect from '~/services/checkTokenExpiration.jsx';
 
 function Discussion({
   board,

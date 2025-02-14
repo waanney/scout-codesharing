@@ -2,12 +2,9 @@ import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
-import {
-  ProtectedRoute,
-  HaveloginRoute,
-} from '../services/protectedRoutes.jsx';
+import { ProtectedRoute, HaveloginRoute } from '~/services/protectedRoutes.jsx';
 import { Provider } from 'react-redux'; // Import Provider
-import store from '../redux/store'; // Import store once
+import store from '~/redux/store'; // Import store once
 
 import HomePage from './HomePage';
 import Board from './DiscussionPage/_id';

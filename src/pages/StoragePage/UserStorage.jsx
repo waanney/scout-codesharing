@@ -1,13 +1,13 @@
-import HeaderForAllPages from '../../components/header.jsx';
-import FooterAllPage from '../../components/footer.jsx';
-import ScrollTop from '../../components/scrollTop';
+import HeaderForAllPages from '~/components/header.jsx';
+import FooterAllPage from '~/components/footer.jsx';
+import ScrollTop from '~/components/scrollTop';
 //import CommentCard from '../../components/comment_card.jsx';
-import PostCard from '../../components/post_card';
+import PostCard from '~/components/post_card';
 import { useState, useEffect } from 'react';
-import { fetchSavedPostsDetails_API } from '../../api/index';
+import { fetchSavedPostsDetails_API } from '~/api/index';
 import axios from 'axios';
-import useUserId from '../../utils/useUserId';
-import { env } from '../../configs/environment.js';
+import useUserId from '~/utils/useUserId';
+import { env } from '~/configs/environment.js';
 
 const API_ROOT = env.API_ROOT;
 

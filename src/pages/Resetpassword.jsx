@@ -1,9 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
-import HeaderForAllPages from '../components/header.jsx';
-import { resetPassword } from '../redux/apiRequest.js';
+import HeaderForAllPages from '~/components/header.jsx';
+import { resetPassword } from '~/redux/apiRequest.js';
 import { useSelector, useDispatch } from 'react-redux';
-import { resetPasswordSuccess } from '../redux/authSlice.js';
+import { resetPasswordSuccess } from '~/redux/authSlice.js';
 
 const ResetPassword = () => {
   const token = useParams();

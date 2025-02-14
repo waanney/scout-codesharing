@@ -3,14 +3,14 @@ import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
-import { logoutUser } from '../redux/apiRequest';
-import useRestoreState from '../redux/useRestoreState';
-import useUserId from '../utils/useUserId';
+import { logoutUser } from '~/redux/apiRequest';
+import useRestoreState from '~/redux/useRestoreState';
+import useUserId from '~/utils/useUserId';
 import axios from 'axios';
 import { useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
-import { env } from '../configs/environment.js';
-import logo from '../assets/Scout.ico';
+import { env } from '~/configs/environment.js';
+import logo from '~/assets/Scout.ico';
 const API_ROOT = env.API_ROOT;
 
 const HeaderForAllPages = () => {

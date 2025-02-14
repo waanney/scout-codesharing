@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
-import HeaderForAllPages from '../components/header.jsx';
-import { loginUser } from '../redux/apiRequest.js';
-import { clearError } from '../redux/authSlice';
+import HeaderForAllPages from '~/components/header.jsx';
+import { loginUser } from '~/redux/apiRequest.js';
+import { clearError } from '~/redux/authSlice';
 import { Link, useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
 

@@ -1,6 +1,6 @@
 // file này dùng để gọi API
 import axios from 'axios';
-import { env } from '../configs/environment.js';
+import { env } from '~/configs/environment.js';
 
 const API_ROOT = env.API_ROOT;
 // dùng data cho UsersPost, khi vô một bài post cụ thể thì data sẽ lấy từ đây
