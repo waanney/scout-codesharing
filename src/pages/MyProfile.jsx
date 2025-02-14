@@ -306,7 +306,7 @@ function MyProfile() {
     <>
       <HeaderForAllPages className="sticky" />
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
-        <div className="lg:sticky top-0 flex items-center flex-col ">
+        <div className=" top-0 flex items-center flex-col ">
           <div className="h-[440px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
@@ -497,8 +497,10 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 items-center ml-[35px]">
-          <div className="lg:mt-[125px] w-[90%] h-[460px] bg-black bg-opacity-50 rounded-[10px]">
+        <div className="flex-1 grid place-items-center ">
+          <div
+            className={`mt:20px mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px]  lg:ml-[35px] bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
+          >
             <form
               onSubmit={handleCreatepost}
               className="relative rounded-[10px]"
@@ -649,7 +651,7 @@ function MyProfile() {
           {sharedPosts.map(post => (
             <div
               key={post._id}
-              className="cursor-pointer mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px]"
+              className="cursor-pointer mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px] lg:ml-[35px]"
               onClick={() =>
                 (window.location.href = `http://localhost:5173/post/${post._id}`)
               }
@@ -741,8 +743,8 @@ function MyProfile() {
             </div>
           ))}
         </div>
-        <ScrollTop />
       </div>
+      <ScrollTop />
       <FooterAllPage />
     </>
   );
