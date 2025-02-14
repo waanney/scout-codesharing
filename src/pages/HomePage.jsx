@@ -40,7 +40,7 @@ function HomePage() {
 
   const cardDetails = [
     {
-      src: { devTeamLogo },
+      img: { devTeamLogo },
       title: '@DC1: Devteam-4',
       description:
         'We are 4 Devmems of Fessior - GDSC - HCMUT. Especially, we are all the freshmen of Computer Science of HCMUT - OISP.',
