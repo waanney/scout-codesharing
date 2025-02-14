@@ -12,6 +12,7 @@ import DicussionImg from '~/assets/Discussion.png';
 import StorageImg from '~/assets/Storage.svg';
 import NewfeedImg from '~/assets/Newfeed.svg';
 import PostImG from '~/assets/Posts.svg';
+import BackgroundImg from '~/assets/Scout_blur.png';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);
@@ -102,7 +103,7 @@ function HomePage() {
       <h1
         className="bg-fixed bg-no-repeat bg-center bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 h-[500px] flex items-center justify-center text-center text-[48px] md:text-[60px] px-5 mt-[120px] mb-[90px] w-[500px] md:w-[700px]"
         style={{
-          backgroundImage: "url('src/assets/Scout_blur.png')",
+          backgroundImage: `url(${BackgroundImg})`,
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
           ...getBackgroundStyle(),
