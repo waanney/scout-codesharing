@@ -39,7 +39,7 @@ function MyProfile() {
   useEffect(() => {
     const lines = text.split('\n');
     setLineNumbers(lines.map(() => true));
-  }, [text]);
+  }, []);
 
   const handleCreatepost = e => {
     e.preventDefault();
@@ -302,16 +302,11 @@ function MyProfile() {
     return <div className="p-4">Không tìm thấy profile</div>;
   }
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'auto',
-  });
-
   return (
     <>
       <HeaderForAllPages className="sticky" />
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
-        <div className="lg:sticky top-0 flex items-center flex-col h-screen">
+        <div className="lg:sticky top-0 flex items-center flex-col ">
           <div className="h-[440px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
@@ -502,7 +497,7 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 lg:justify-items-end justify-items-center lg:mr-[35px]">
+        <div className="flex-1 items-center ml-[35px]">
           <div className="lg:mt-[125px] w-[90%] h-[460px] bg-black bg-opacity-50 rounded-[10px]">
             <form
               onSubmit={handleCreatepost}
@@ -541,22 +536,22 @@ function MyProfile() {
               <div className="w-[93%] mx-auto flex flex-col gap-3">
                 {/* Title Input */}
                 <input
-                  onChange={e => setTitle(e.target.value)}
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
                   maxLength="60"
                   placeholder="Add your title here!(Maximum 60 characters)"
                   required
+                  onChange={e => setTitle(e.target.value)}
                 />
 
                 {/* Description Input */}
                 <input
-                  onChange={e => setDescription(e.target.value)}
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
                   maxLength="60"
                   placeholder="Describe your problem...(Maximum 60 characters)"
                   required
+                  onChange={e => setDescription(e.target.value)}
                 />
 
                 {/* Language Selector */}
@@ -564,9 +559,9 @@ function MyProfile() {
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-[#bbb] text-md"
                   id="lang"
                   name="langSelect"
-                  onChange={e => setLanguage(e.target.value)}
                   value={language}
                   required
+                  onChange={e => setLanguage(e.target.value)}
                 >
                   <optgroup label="Choose Language..." className="bg-slate-800">
                     <option value="" disabled hidden>
