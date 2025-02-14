@@ -4,6 +4,14 @@ import HeaderForAllPages from '../components/header.jsx';
 import FooterAllPage from '../components/footer.jsx';
 import ScrollTop from '../components/scrollTop';
 import usecheckTokenAndRedirect from '../services/checkTokenExpiration.jsx';
+import devTeamLogo from '../assets/Devteam.svg';
+import ProfileImg from '../assets/Profile.svg';
+import Scoutlogo1 from '../assets/Scout.svg';
+import Scoutlogo2 from '../assets/Scout.ico';
+import DicussionImg from '../assets/Discussion.png';
+import StorageImg from '../assets/Storage.svg';
+import NewfeedImg from '../assets/Newfeed.svg';
+import PostImG from '../assets/Posts.svg';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);
@@ -32,43 +40,43 @@ function HomePage() {
 
   const cardDetails = [
     {
-      img: 'src/assets/Devteam.svg',
+      img: { devTeamLogo },
       title: '@DC1: Devteam-4',
       description:
         'We are 4 Devmems of Fessior - GDSC - HCMUT. Especially, we are all the freshmen of Computer Science of HCMUT - OISP.',
     },
     {
-      img: 'src/assets/Scout.svg',
+      img: { Scoutlogo1 },
       title: 'Scout',
       description:
         'It means Source Code Open for Universal Testing. We discuss about coding languages on this website.',
     },
     {
-      img: 'src/assets/Profile.svg',
+      img: { ProfileImg },
       title: 'Profile',
       description:
         'Introduction about you. Everyone can get more information about you. Your posts and what you shared will be here, too.',
     },
     {
-      img: 'src/assets/Scout.ico',
+      img: { Scoutlogo2 },
       title: 'Discussion',
       description:
         'This is where your code is shared and enhanced by others suggestion',
       isTall: true,
-      extraImg: 'src/assets/Discussion.png',
+      extraImg: { DicussionImg },
     },
     {
-      img: 'src/assets/Storage.svg',
+      img: { StorageImg },
       title: 'Storage',
       description: 'When you “Save” a post, it will be sent to Storage.',
     },
     {
-      img: 'src/assets/Newfeed.svg',
+      img: { NewfeedImg },
       title: 'Rating Comments',
       description: 'You can rate the comments of others.',
     },
     {
-      img: 'src/assets/Posts.svg',
+      img: { PostImG },
       title: 'Posts',
       description:
         'When you have a coding problem or you want to share your codes with everyone, you can post them on Discussion.',

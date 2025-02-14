@@ -20,6 +20,7 @@ import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
 import useUserData from '../../hooks/useUserData.js';
 import { env } from '../../configs/environment.js';
+import demoAvatar from '../../assets/demo_avatar.png';
 
 const API_ROOT = env.API_ROOT;
 
@@ -293,7 +294,7 @@ function Post({ board, boardId }) {
                 ) : (
                   <img
                     className="rounded-full h-[50px] w-[50px] self-center"
-                    src="..\src\assets\demo_avatar.png"
+                    src={demoAvatar}
                     alt="User Avatar"
                   />
                 )}
