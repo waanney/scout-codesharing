@@ -45,7 +45,7 @@ function Discussion({
         ) : (
           <>
             <nav className="mx-auto mb-[10px] text-[20px] md:text-[30px]">
-              <ul className="pagination flex flex-row space-x-2 md:space-x-4 justify-center">
+              <ul className="pagination flex flex-row space-x-2 md:space-x-4  justify-center">
                 {pageNumbers.map(number => (
                   <li
                     key={number}
@@ -53,7 +53,7 @@ function Discussion({
                   >
                     <button
                       onClick={() => paginate(number)}
-                      className={`page-link ${currentPage === number ? 'underline' : ''}`}
+                      className={`page-link h-[40px] w-[40px] rounded-[15px] ${currentPage === number ? 'bg-blue-200' : ''}`}
                     >
                       {number}
                     </button>
