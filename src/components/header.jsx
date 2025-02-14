@@ -10,7 +10,7 @@ import axios from 'axios';
 import { useEffect } from 'react';
 import { Menu, X } from 'lucide-react';
 import { env } from '../configs/environment.js';
-
+import logo from '../assets/Scout.ico';
 const API_ROOT = env.API_ROOT;
 
 const HeaderForAllPages = () => {
@@ -64,7 +64,7 @@ const HeaderForAllPages = () => {
             <a className="flex justify-between items-center mt-[10px]" href="/">
               <img
                 className="h-[37px] w-[37px] mr-[5px]"
-                src="./assets/Scout.ico"
+                src={logo}
                 alt="Scout Logo"
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
