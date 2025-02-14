@@ -40,43 +40,43 @@ function HomePage() {
 
   const cardDetails = [
     {
-      img: { devTeamLogo },
+      img: devTeamLogo,
       title: '@DC1: Devteam-4',
       description:
         'We are 4 Devmems of Fessior - GDSC - HCMUT. Especially, we are all the freshmen of Computer Science of HCMUT - OISP.',
     },
     {
-      img: { Scoutlogo1 },
+      img: Scoutlogo1,
       title: 'Scout',
       description:
         'It means Source Code Open for Universal Testing. We discuss about coding languages on this website.',
     },
     {
-      img: { ProfileImg },
+      img: ProfileImg,
       title: 'Profile',
       description:
         'Introduction about you. Everyone can get more information about you. Your posts and what you shared will be here, too.',
     },
     {
-      img: { Scoutlogo2 },
+      img: Scoutlogo2,
       title: 'Discussion',
       description:
         'This is where your code is shared and enhanced by others suggestion',
       isTall: true,
-      extraImg: { DicussionImg },
+      extraImg: DicussionImg,
     },
     {
-      img: { StorageImg },
+      img: StorageImg,
       title: 'Storage',
       description: 'When you “Save” a post, it will be sent to Storage.',
     },
     {
-      img: { NewfeedImg },
+      img: NewfeedImg,
       title: 'Rating Comments',
       description: 'You can rate the comments of others.',
     },
     {
-      img: { PostImG },
+      img: PostImG,
       title: 'Posts',
       description:
         'When you have a coding problem or you want to share your codes with everyone, you can post them on Discussion.',

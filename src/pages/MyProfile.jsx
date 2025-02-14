@@ -14,6 +14,7 @@ import '~/utils/customeStyle.css';
 import hljsLanguages from '~/utils/hljsLanguages.json';
 import LoadingAnimation from '~/components/loading.jsx';
 import { env } from '~/configs/environment.js';
+//img
 import savePost from '~/assets/save.svg';
 import editPost from '~/assets/edit.svg';
 import content from '~/assets/Content.svg';
@@ -336,7 +337,7 @@ function MyProfile() {
                       onClick={isEditing ? handleSaveClick : handleEditClick}
                     >
                       <img
-                        src={isEditing ? { savePost } : { editPost }}
+                        src={isEditing ? savePost : editPost}
                         alt={isEditing ? 'Save icon' : 'Edit icon'}
                       />
                     </button>
