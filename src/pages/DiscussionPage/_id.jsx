@@ -3,6 +3,7 @@ import { fetchBoardCollection_API } from '~/api/index.js';
 import Discussion from './Discussion.jsx';
 import LoadingAnimation from '~/components/loading.jsx';
 import { useSearchParams } from 'react-router-dom';
+import { env } from '../../configs/environment.js';
 function Board() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true); // Thêm trạng thái loading
@@ -14,7 +15,6 @@ function Board() {
     setError(null); // Reset lỗi
     fetchBoardCollection_API(currentPage)
       .then(data => {
-        console.log(data);
         if (data && data.boards) {
           setData(data);
         } else {
@@ -26,6 +26,13 @@ function Board() {
       })
       .finally(() => setLoading(false)); // Kết thúc loading
   }, [currentPage]);
+  // param phân trang
+  if (
+    window.location.href == `${env.FE_ROOT}/discussion` &&
+    currentPage === 1
+  ) {
+    setSearchParams({ page: 1 });
+  }
 
   const paginate = pageNumber => {
     setCurrentPage(pageNumber);

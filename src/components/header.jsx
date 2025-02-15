@@ -42,9 +42,8 @@ const HeaderForAllPages = () => {
         }
       }
     };
-
     fetchUserData();
-  }, [userId]);
+  }, []);
 
   const [open, setOpen] = useState(false);
   const dispatch = useDispatch();

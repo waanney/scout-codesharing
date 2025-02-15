@@ -9,7 +9,6 @@ import axios from 'axios';
 import CommentRating from '../../components/comment_rating.jsx';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchUserData_API } from '../../api/index.js';
 import {
   commentPost_API,
   commentInlinePost_API,
@@ -73,7 +72,7 @@ function Post({ board, boardId }) {
     }
   };
   // lấy data user
-  const [userData, setUserData] = useState(null);
+
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
@@ -82,8 +81,6 @@ function Post({ board, boardId }) {
     const fetchData = async () => {
       setLoading(true);
       try {
-        const data = await fetchUserData_API(board.userID);
-        setUserData(data);
         const avatarcontent = await axios.get(
           `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
           { responseType: 'blob' },
@@ -254,7 +251,7 @@ function Post({ board, boardId }) {
     return <div>Error: {error.message || 'Failed to load user data.'}</div>;
   }
 
-  if (!userData) {
+  if (!board) {
     return <div>Không tồn tại user data.</div>;
   }
 
