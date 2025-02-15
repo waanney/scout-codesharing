@@ -372,7 +372,7 @@ function Post({ board, boardId }) {
                       target="_blank"
                       href={`https://scout-codesharing.onrender.com/profile/${userData._id}`}
                     >
-                      {userData.username}
+                      {currentUserData.username}
                     </a>
                   </div>
                   <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
