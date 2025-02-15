@@ -2,44 +2,35 @@ import { useEffect, useState } from 'react';
 import { fetchBoardCollection_API } from '~/api/index.js';
 import Discussion from './Discussion.jsx';
 import LoadingAnimation from '~/components/loading.jsx';
+import { useSearchParams } from 'react-router-dom';
 function Board() {
-  const [board, setBoard] = useState(null);
+  const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true); // Thêm trạng thái loading
   const [error, setError] = useState(null); // Thêm trạng thái lỗi
   const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 12;
+  const [searchParams, setSearchParams] = useSearchParams();
   useEffect(() => {
-    const boardCollectionId = '677e53f474f256608d6044a2';
     setLoading(true); // Bắt đầu loading
     setError(null); // Reset lỗi
-    fetchBoardCollection_API(boardCollectionId)
+    fetchBoardCollection_API(currentPage)
       .then(data => {
+        console.log(data);
         if (data && data.boards) {
-          // Kiểm tra data và data.boards
-          // Sắp xếp bài viết theo createdAt (mới nhất đến cũ nhất)
-          const sortedPosts = [...data.boards].sort(
-            (a, b) => new Date(b.createdAt) - new Date(a.createdAt),
-          );
-          setBoard({ ...data, boards: sortedPosts }); // Cập nhật state với dữ liệu đã sắp xếp
+          setData(data);
         } else {
-          setBoard(data); // Vẫn set data nếu không có posts (ví dụ: chỉ có thông tin board)
+          setData(data); // Vẫn set data nếu không có posts (ví dụ: chỉ có thông tin board)
         }
       })
       .catch(err => {
         setError(err); // Gán lỗi nếu có
       })
       .finally(() => setLoading(false)); // Kết thúc loading
-  }, []);
+  }, [currentPage]);
 
-  // Xử lý phân trang
-  const indexOfLastPost = currentPage * postsPerPage;
-  const indexOfFirstPost = indexOfLastPost - postsPerPage;
-  const currentPosts =
-    board && board.boards
-      ? board.boards.slice(indexOfFirstPost, indexOfLastPost)
-      : [];
-
-  const paginate = pageNumber => setCurrentPage(pageNumber);
+  const paginate = pageNumber => {
+    setCurrentPage(pageNumber);
+    setSearchParams({ page: pageNumber });
+  };
 
   if (loading) {
     return <LoadingAnimation />; // Hiển thị thông báo loading
@@ -51,12 +42,11 @@ function Board() {
 
   return (
     <Discussion
-      board={board}
-      Boards={currentPosts}
+      board={data.boards}
       paginate={paginate}
-      postsPerPage={postsPerPage}
-      totalPosts={board && board.boards ? board.boards.length : 0}
-      currentPage={currentPage}
+      totalPages={data.totalPages}
+      totalPosts={data.totalCount}
+      currentPage={Number(searchParams.get('page')) || currentPage}
     />
   );
 }

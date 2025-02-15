@@ -10,8 +10,10 @@ export const fetchBoardDetails_API = async boardId => {
 };
 
 // Dùng data cho Discussion, đây là 1 cái board collection chứa tất cả dữ liệu cần cho một bài post
-export const fetchBoardCollection_API = async boardCollectionId => {
-  const response = await axios.get(`${API_ROOT}/v1/page/${boardCollectionId}`);
+export const fetchBoardCollection_API = async page => {
+  const response = await axios.get(
+    `${API_ROOT}/v1/boards/pagination/pagenumber?page=${page}`,
+  );
   return response.data;
 };
 
