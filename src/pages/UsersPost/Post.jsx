@@ -208,25 +208,8 @@ function Post({ board, boardId }) {
         `${API_ROOT}/v1/boards/${boardId}/share`,
         { userId: currentUserData._id },
       );
-
       console.log(response.data.message);
-
       setIsShared(true);
-
-      // // Get the current user's ID
-      // const currentUserId = currentUserData._id;
-
-      // // Retrieve the sharedPosts object from localStorage
-      // const sharedPosts = JSON.parse(localStorage.getItem('sharedPosts')) || {};
-
-      // // Mark the post as shared by the current user
-      // if (!sharedPosts[currentUserId]) {
-      //   sharedPosts[currentUserId] = {};
-      // }
-      // sharedPosts[currentUserId][boardId] = true; // Mark the post as shared for this user
-
-      // // Save the updated sharedPosts object back to localStorage
-      // localStorage.setItem('sharedPosts', JSON.stringify(sharedPosts));
     } catch (error) {
       console.error('Error sharing post:', error);
     }
@@ -243,9 +226,7 @@ function Post({ board, boardId }) {
   }, [boardId, currentUserData]);
 
   const handleSave = async () => {
-    // If already shared, do nothing
     if (isSaved) return;
-
     try {
       const response = await axios.post(
         `${API_ROOT}/v1/boards/${boardId}/save`,
@@ -302,9 +283,9 @@ function Post({ board, boardId }) {
                   <div className="ml-[10px] text-white font-bold text-[1.5rem] leading-9">
                     <a
                       target="_blank"
-                      href={`${env.FE_ROOT}/profile/${userData._id}`}
+                      href={`${env.FE_ROOT}/profile/${board.userId}`}
                     >
-                      {userData.username}
+                      {board.username}
                     </a>
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
@@ -370,9 +351,9 @@ function Post({ board, boardId }) {
                   <div className="text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
                       target="_blank"
-                      href={`${env.FE_ROOT}/profile/${userData._id}`}
+                      href={`${env.FE_ROOT}/profile/${comment.userId}`}
                     >
-                      {currentUserData.username}
+                      {comment.username}
                     </a>
                   </div>
                   <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
