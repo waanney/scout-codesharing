@@ -497,7 +497,7 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 place-items-center">
+        <div className="flex-1 grid-cols-1 place-items-center">
           <div
             className={`mt-[20px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px]  lg:ml-[35px] bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
           >
