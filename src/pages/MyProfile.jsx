@@ -497,9 +497,9 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 grid place-items-center ">
+        <div className="flex-1 lg:justify-items-end justify-items-center lg:mr-[35px] mb-[20px]">
           <div
-            className={`mt:20px mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px]  lg:ml-[35px] bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
+            className={`mt-[20px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px]  lg:ml-[35px] bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
           >
             <form
               onSubmit={handleCreatepost}
