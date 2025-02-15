@@ -497,13 +497,13 @@ function MyProfile() {
           </div>
         </div>
 
-        <div className="flex-1 grid place-items-center">
+        <div className="flex-1 flex-col ">
           <div
-            className={`mt-[20px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px]  lg:ml-[35px] bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
+            className={`mt-[20px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto  bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
           >
             <form
               onSubmit={handleCreatepost}
-              className="relative rounded-[10px]"
+              className="flex-col  rounded-[10px]"
             >
               <div className="flex justify-between mt-[10px] mx-[10px]">
                 <div className=" flex items-center space-x-1">
@@ -651,7 +651,7 @@ function MyProfile() {
           {sharedPosts.map(post => (
             <div
               key={post._id}
-              className="cursor-pointer mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px] lg:ml-[35px]"
+              className="cursor-pointer mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px] mx-auto"
               onClick={() =>
                 (window.location.href = `http://localhost:5173/post/${post._id}`)
               }
