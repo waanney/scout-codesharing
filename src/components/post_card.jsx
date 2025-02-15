@@ -1,17 +1,15 @@
-import { fetchUserData_API } from '~/api/index.js';
 import { useState, useEffect } from 'react';
 import { formatMillisecondsToDate } from '~/utils/formater.js';
 import '~/utils/customeStyle.css';
 import hljs from 'highlight.js';
 import axios from 'axios';
 import { env } from '~/configs/environment.js';
+import LoadingAnimationCard from './loading_card';
 
-const PostCard = ({ post }) => {
-  const language = post.language;
-  const sourceCode = post.content.split('\n');
+const PostCard = ({ board }) => {
+  const language = board.language;
+  const sourceCode = board.content.split('\n');
   hljs.highlightAll();
-
-  const [userData, setUserData] = useState(null); // State để lưu trữ dữ liệu người dùng
   const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
   const [error, setError] = useState(null); // State để xử lý lỗi
   const [AvatarUrl, setAvatarUrl] = useState(null);
@@ -21,10 +19,8 @@ const PostCard = ({ post }) => {
     const fetchData = async () => {
       setLoading(true); // Bắt đầu loading
       try {
-        const data = await fetchUserData_API(post.userID);
-        setUserData(data);
         const avatarcontent = await axios.get(
-          `${env.API_ROOT}/v1/Auth/get-avatar/${post.userID}`,
+          `${env.API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
           { responseType: 'blob' },
         );
         const avatarUrl = URL.createObjectURL(avatarcontent.data);
@@ -38,35 +34,17 @@ const PostCard = ({ post }) => {
     };
 
     fetchData();
-  }, [post.userID]); // Dependency array: useEffect sẽ chạy lại nếu post.userID thay đổi
+  }, [board.userID]); // Dependency array: useEffect sẽ chạy lại nếu board.userID thay đổi
 
   if (loading) {
-    return (
-      <div>
-        <div className="mx-auto w-full max-w-sm rounded-md border border-black p-4">
-          <div className="flex animate-pulse space-x-4">
-            <div className="size-10 rounded-full bg-black"></div>
-            <div className="flex-1 space-y-6 py-1">
-              <div className="h-2 rounded bg-black"></div>
-              <div className="space-y-3">
-                <div className="grid grid-cols-3 gap-4">
-                  <div className="col-span-2 h-2 rounded bg-black"></div>
-                  <div className="col-span-1 h-2 rounded bg-black"></div>
-                </div>
-                <div className="h-2 rounded bg-black"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    ); // Hiển thị thông báo loading
+    return <LoadingAnimationCard />; // Hiển thị thông báo loading
   }
 
   if (error) {
     return <div>Error: {error.message || 'Failed to load user data.'}</div>; // Hiển thị thông báo lỗi
   }
 
-  if (!userData) {
+  if (!board._id) {
     return <div>Không tồn tại user data.</div>; // Trường hợp userData là null sau khi đã loading xong
   }
 
@@ -75,7 +53,9 @@ const PostCard = ({ post }) => {
   return (
     <div
       className="card bg-[#05143c]  h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
-      onClick={() => (window.location.href = `${env.FE_ROOT}/post/${post._id}`)}
+      onClick={() =>
+        (window.location.href = `${env.FE_ROOT}/post/${board._id}`)
+      }
     >
       {/*User info*/}
       <div className="cards grid grid-cols-2 gap-[10px]">
@@ -92,18 +72,18 @@ const PostCard = ({ post }) => {
             </svg>
           )}
           <div className="ml-[10px] text-white font-bold text-[20px]">
-            {userData.username}
+            {board.username}
           </div>
         </div>
         <div className="ml-[10px] text-end text-white text-[16px] font-normal">
-          {formatMillisecondsToDate(post.createdAt)}
+          {formatMillisecondsToDate(board.createdAt)}
         </div>
       </div>
 
       {/*Title*/}
       <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%] break-words">
-        {post.title.split(' ').slice(0, 20).join(' ')}
-        {post.title.split(' ').length > 20 ? '...' : ''}
+        {board.title.split(' ').slice(0, 20).join(' ')}
+        {board.title.split(' ').length > 20 ? '...' : ''}
       </div>
       {/*Code display*/}
       <div
@@ -111,7 +91,7 @@ const PostCard = ({ post }) => {
                     overflow-hidden"
       >
         <div className="ml-[5px] text-gray-500 text-[15px]">
-          {post.language}
+          {board.language}
         </div>
         {sourceCode.map((code, lineNum) => (
           <div key={lineNum} className="flex flex-row hover:bg-gray-600">

@@ -12,12 +12,13 @@ import ScrollTop from '~/components/scrollTop';
 import hljs from 'highlight.js';
 import '~/utils/customeStyle.css';
 import hljsLanguages from '~/utils/hljsLanguages.json';
-import LoadingAnimation from '~/components/loading.jsx';
+
 import { env } from '~/configs/environment.js';
 //img
 import savePost from '~/assets/save.svg';
 import editPost from '~/assets/edit.svg';
 import content from '~/assets/Content.svg';
+import LoadingAnimation from '../components/loading.jsx';
 
 const API_ROOT = env.API_ROOT;
 const FE_ROOT = env.FE_ROOT;

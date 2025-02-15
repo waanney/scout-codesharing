@@ -4,19 +4,19 @@ import PostCard from '~/components/post_card';
 import ScrollTop from '~/components/scrollTop';
 import usecheckTokenAndRedirect from '~/services/checkTokenExpiration.jsx';
 
-function Discussion({ board, paginate, totalPages, totalPosts, currentPage }) {
+export default function Discussion({
+  board,
+  paginate,
+  totalPages,
+  totalPosts,
+  currentPage,
+}) {
   usecheckTokenAndRedirect();
 
-  if (!board) {
-    return (
-      <div className="text-center text-white py-4">Không có dữ liệu bảng.</div>
-    );
-  }
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
   }
-
   window.scrollTo({
     top: 0,
     behavior: 'auto',
@@ -29,7 +29,6 @@ function Discussion({ board, paginate, totalPages, totalPosts, currentPage }) {
         <div className="mx-auto mt-[60px] md:mt-[90px] font-raleway text-[32px] md:text-[48px] text-white font-bold text-center">
           What is on?
         </div>
-
         {/* Thêm điều kiện kiểm tra bài đăng ở đây */}
         {!totalPosts || totalPosts.length === 0 ? (
           <div className="text-center text-white text-2xl mt-8">
@@ -54,22 +53,18 @@ function Discussion({ board, paginate, totalPages, totalPosts, currentPage }) {
                 ))}
               </ul>
             </nav>
-
             <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] md:gap-[66px] place-items-center">
               {board.map(board => (
                 <li key={board._id} className="w-full">
-                  <PostCard post={board} />
+                  <PostCard board={board} />
                 </li>
               ))}
             </ul>
           </>
         )}
-
         <ScrollTop />
       </div>
       <FooterAllPage />
     </>
   );
 }
-
-export default Discussion;
