@@ -14,23 +14,21 @@
 
 Liệt kê các tính năng chính của frontend. Ví dụ:
 
-*   UI/UX cho trang web
-*   Hiển thị bài post theo thời gian thực
-
-
+- UI/UX cho trang web
+- Hiển thị bài post theo thời gian thực
 
 ## Công nghệ sử dụng
 
 Liệt kê các công nghệ, ngôn ngữ và thư viện được sử dụng. Ví dụ:
 
-*   React
-*   React Router
-*   Redux
-*   Axios
-*   Tailwindcss
-*   Vite
-*   Javascript
-*   Một số thư viện bổ sung
+- React
+- React Router
+- Redux
+- Axios
+- Tailwindcss
+- Vite
+- Javascript
+- Một số thư viện bổ sung
 
 ## Cài đặt
 
