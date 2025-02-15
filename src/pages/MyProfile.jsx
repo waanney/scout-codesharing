@@ -18,8 +18,9 @@ import { env } from '~/configs/environment.js';
 import savePost from '~/assets/save.svg';
 import editPost from '~/assets/edit.svg';
 import content from '~/assets/Content.svg';
-const API_ROOT = env.API_ROOT;
 
+const API_ROOT = env.API_ROOT;
+const FE_ROOT = env.FE_ROOT;
 function MyProfile() {
   const { owner } = useParams();
   const { currentUserData, userId } = useUserData();
@@ -653,7 +654,7 @@ function MyProfile() {
               key={post._id}
               className="cursor-pointer mt-[20px] mb-[20px] w-[90%] h-[580px] bg-black bg-opacity-50 rounded-[10px] mx-auto"
               onClick={() =>
-                (window.location.href = `http://localhost:5173/post/${post._id}`)
+                (window.location.href = `${FE_ROOT}/post/${post._id}`)
               }
             >
               <div className="flex items-center space-x-1">
