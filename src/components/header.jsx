@@ -50,6 +50,27 @@ const HeaderForAllPages = () => {
     setActiveIndex(index >= 0 ? index : null);
   }, [location]);
 
+  //nếu ở page đó mà bấm vô page đó
+  const [isBorderActive, setIsBorderActive] = useState(false);
+  const [mobileBorderActiveIndex, setMobileBorderActiveIndex] = useState(null);
+
+  const handleClick = (index, isMobile = false) => {
+    if (activeIndex === index) {
+      if (isMobile) {
+        setMobileBorderActiveIndex(index); // Kích hoạt hiệu ứng viền cho mobile
+        setTimeout(() => {
+          setMobileBorderActiveIndex(null); // Tắt hiệu ứng viền sau 2 giây
+        }, 2000);
+      } else {
+        setIsBorderActive(true); // Kích hoạt hiệu ứng viền cho desktop
+        setTimeout(() => {
+          setIsBorderActive(false); // Tắt hiệu ứng viền sau 2 giây
+        }, 2000);
+      }
+    }
+    navigate(routes[index].path); // Điều hướng đến trang tương ứng
+  };
+
   useEffect(() => {
     const fetchUserData = async () => {
       if (userId) {
@@ -98,22 +119,21 @@ const HeaderForAllPages = () => {
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {routes.map(
-                (
-                  item,
-                  index, // Thay mảng cố định bằng routes
-                ) => (
-                  <div
-                    key={index}
-                    className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
-                    onMouseEnter={() => setHoveredIndex(index)}
-                    onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
-                    onClick={() => navigate(item.path)}
-                  >
-                    <span>{item.name}</span>
-                  </div>
-                ),
-              )}
+              {routes.map((item, index) => (
+                <div
+                  key={index}
+                  className={`w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10 ${
+                    activeIndex === index && isBorderActive
+                      ? 'border-2 border-red-500 animate-pulse'
+                      : ''
+                  }`}
+                  onMouseEnter={() => setHoveredIndex(index)}
+                  onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
+                  onClick={() => handleClick(index, false)}
+                >
+                  <span>{item.name}</span>
+                </div>
+              ))}
 
               {(hoveredIndex !== null || activeIndex !== null) && (
                 <div
@@ -218,8 +238,14 @@ const HeaderForAllPages = () => {
                   key={index}
                   className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
                     item.check(location.pathname) ? 'bg-blue-500/[.2]' : ''
-                  }`}
-                  onClick={() => navigate(item.path)}
+                  }
+                    ${
+                      activeIndex === index && mobileBorderActiveIndex === index
+                        ? 'border-2 border-red-500 animate-pulse'
+                        : ''
+                    }
+                  `}
+                  onClick={() => handleClick(index, true)}
                 >
                   <span className="text-[20px] pl-[10px]">
                     {item.name}
