@@ -63,40 +63,46 @@ export default function UserStorage() {
           <h1 className="text-3xl md:text-[48px] font-bold mt-8 md:mt-16 mb-5 text-center text-white pt-[50px]">
             Your saved Posts
           </h1>
-
-          {/* Pagination */}
           {pageNumbers.length > 0 && (
-            <nav className="mx-auto mb-4 md:mb-[10px] text-lg md:text-[30px]">
-              <ul className="pagination flex flex-row space-x-2 md:space-x-4 justify-center">
-                {/* Nút Previous */}
+            <nav className="mx-auto mb-4 md:mb-[10px] text-lg md:text-[30px] flex items-center justify-center">
+              <ul className="pagination flex items-center space-x-1 md:space-x-2">
                 <li className="page-item">
                   <button
                     onClick={() =>
                       handlePageChange(savedPostsData.currentPage - 1)
                     }
                     disabled={savedPostsData.currentPage === 1}
-                    className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${
+                    className={`page-link px-3 py-1 md:px-5 md:py-2 rounded ${
                       savedPostsData.currentPage === 1
                         ? 'opacity-50 cursor-not-allowed'
                         : 'text-white hover:text-white'
                     }`}
                   >
-                    Previous
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-5 h-5 md:w-6 md:h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
                   </button>
                 </li>
 
-                {/* Các số trang */}
                 {pageNumbers.map(number => (
-                  <li
-                    key={number}
-                    className={`page-item ${savedPostsData.currentPage === number ? 'active' : ''}`}
-                  >
+                  <li key={number} className="page-item">
                     <button
                       onClick={() => handlePageChange(number)}
-                      className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${
+                      className={`page-link h-[40px] w-[40px] flex items-center justify-center rounded-[15px] ${
                         savedPostsData.currentPage === number
-                          ? 'bg-white text-navy-900'
-                          : 'text-white hover:text-white'
+                          ? 'bg-blue-200'
+                          : ''
                       }`}
                     >
                       {number}
@@ -104,7 +110,6 @@ export default function UserStorage() {
                   </li>
                 ))}
 
-                {/* Nút Next */}
                 <li className="page-item">
                   <button
                     onClick={() =>
@@ -113,20 +118,32 @@ export default function UserStorage() {
                     disabled={
                       savedPostsData.currentPage === savedPostsData.totalPages
                     }
-                    className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${
+                    className={`page-link px-3 py-1 md:px-5 md:py-2 rounded ${
                       savedPostsData.currentPage === savedPostsData.totalPages
                         ? 'opacity-50 cursor-not-allowed'
                         : 'text-white hover:text-white'
                     }`}
                   >
-                    Next
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-5 h-5 md:w-6 md:h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
                   </button>
                 </li>
               </ul>
             </nav>
           )}
 
-          {/* Post Grid */}
           <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[66px]">
             {savedPostsData.posts.map(content => (
               <li key={content._id} className="bg-navy-700 rounded-lg">

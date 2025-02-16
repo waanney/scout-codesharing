@@ -13,6 +13,12 @@ export default function Discussion({
 }) {
   usecheckTokenAndRedirect();
 
+  const handlePageChange = pageNumber => {
+    if (pageNumber >= 1 && pageNumber <= totalPages) {
+      paginate(pageNumber);
+    }
+  };
+
   const pageNumbers = [];
   for (let i = 1; i <= totalPages; i++) {
     pageNumbers.push(i);
@@ -36,23 +42,80 @@ export default function Discussion({
           </div>
         ) : (
           <>
-            <nav className="mx-auto mb-[10px] text-[20px] md:text-[30px]">
-              <ul className="pagination flex flex-row space-x-2 md:space-x-4  justify-center">
-                {pageNumbers.map(number => (
-                  <li
-                    key={number}
-                    className={`page-item ${currentPage === number ? 'active' : ''}`}
+            <nav className="mx-auto mb-[10px] text-[20px] md:text-[30px] flex items-center justify-center">
+              <ul className="pagination flex items-center space-x-1 md:space-x-2">
+                {/* Nút Previous */}
+                <li className="page-item">
+                  <button
+                    onClick={() => handlePageChange(currentPage - 1)}
+                    disabled={currentPage === 1}
+                    className={`page-link px-3 py-1 md:px-5 md:py-2 rounded ${
+                      currentPage === 1
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'text-white hover:text-white'
+                    }`}
                   >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-5 h-5 md:w-6 md:h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M15 19l-7-7 7-7"
+                      />
+                    </svg>
+                  </button>
+                </li>
+
+                {/* Số trang */}
+                {pageNumbers.map(number => (
+                  <li key={number} className="page-item">
                     <button
                       onClick={() => paginate(number)}
-                      className={`page-link h-[40px] w-[40px] rounded-[15px] ${currentPage === number ? 'bg-blue-200' : ''}`}
+                      className={`page-link h-[40px] w-[40px] flex items-center justify-center rounded-[15px] ${
+                        currentPage === number ? 'bg-blue-200' : ''
+                      }`}
                     >
                       {number}
                     </button>
                   </li>
                 ))}
+
+                {/* Nút Next */}
+                <li className="page-item">
+                  <button
+                    onClick={() => handlePageChange(currentPage + 1)}
+                    disabled={currentPage === totalPages}
+                    className={`page-link px-3 py-1 md:px-5 md:py-2 rounded ${
+                      currentPage === totalPages
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'text-white hover:text-white'
+                    }`}
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      strokeWidth="2"
+                      stroke="currentColor"
+                      className="w-5 h-5 md:w-6 md:h-6"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        d="M9 5l7 7-7 7"
+                      />
+                    </svg>
+                  </button>
+                </li>
               </ul>
             </nav>
+
             <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] md:gap-[66px] place-items-center">
               {board.map(board => (
                 <li key={board._id} className="w-full">
