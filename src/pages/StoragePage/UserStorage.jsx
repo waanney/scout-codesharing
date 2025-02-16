@@ -1,59 +1,60 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import HeaderForAllPages from '~/components/header.jsx';
 import FooterAllPage from '~/components/footer.jsx';
 import ScrollTop from '~/components/scrollTop';
-//import CommentCard from '../../components/comment_card.jsx';
 import PostCard from '~/components/post_card';
 import { useState, useEffect } from 'react';
 import { fetchSavedPostsDetails_API } from '~/api/index';
-import axios from 'axios';
 import useUserId from '~/utils/useUserId';
-import { env } from '~/configs/environment.js';
-
-const API_ROOT = env.API_ROOT;
 
 export default function UserStorage() {
   const userId = useUserId();
-  //biến cho sharedPosts
-  const [savedPosts, setSavedPosts] = useState([]);
+
+  const [savedPostsData, setSavedPostsData] = useState({
+    posts: [],
+    totalCount: 0,
+    currentPage: 1,
+    totalPages: 0,
+  });
+
+  const postsPerPage = 12;
+
   useEffect(() => {
     const fetchSavedPosts = async () => {
-      const getcurrentProfile = await axios.get(
-        `${API_ROOT}/v1/Auth/${userId}`,
-      );
-      const currentProfile = getcurrentProfile.data;
-      if (currentProfile && currentProfile.savedPosts) {
-        try {
-          //console.log('Fetching saved posts...');
-          const posts = await fetchSavedPostsDetails_API(
-            currentProfile.savedPosts,
-          );
-          //console.log('Fetched posts:', posts);//log ra posts để debug
-          setSavedPosts(
-            posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-          );
-        } catch (error) {
-          console.error('Error fetching saved posts:', error);
-        }
+      try {
+        const data = await fetchSavedPostsDetails_API(
+          userId,
+          savedPostsData.currentPage,
+          postsPerPage,
+        );
+        setSavedPostsData({
+          posts: data.posts,
+          totalCount: data.totalCount,
+          currentPage: data.currentPage,
+          totalPages: data.totalPages,
+        });
+      } catch (error) {
+        console.error('Error fetching saved posts:', error);
       }
     };
+
     fetchSavedPosts();
-  }, []);
-
-  //Phân trang
-  const [currentPage, setCurrentPage] = useState(1);
-  const postsPerPage = 10;
-
-  const indexOfFirstPost = (currentPage - 1) * postsPerPage;
-  const indexOfLastPost = indexOfFirstPost + postsPerPage - 1;
-
-  const currentPosts = savedPosts
-    ? savedPosts.slice(indexOfFirstPost, indexOfLastPost + 1)
-    : [];
+  }, [userId, savedPostsData.currentPage]);
 
   const pageNumbers = [];
-  for (let i = 1; i <= Math.ceil(savedPosts.length / postsPerPage); i++) {
+  for (let i = 1; i <= savedPostsData.totalPages; i++) {
     pageNumbers.push(i);
   }
+
+  const handlePageChange = page => {
+    if (page >= 1 && page <= savedPostsData.totalPages) {
+      setSavedPostsData(prev => ({
+        ...prev,
+        currentPage: page,
+      }));
+    }
+  };
+
   return (
     <>
       <HeaderForAllPages className="sticky" />
@@ -64,29 +65,70 @@ export default function UserStorage() {
           </h1>
 
           {/* Pagination */}
-          {pageNumbers.length > 1 && (
+          {pageNumbers.length > 0 && (
             <nav className="mx-auto mb-4 md:mb-[10px] text-lg md:text-[30px]">
               <ul className="pagination flex flex-row space-x-2 md:space-x-4 justify-center">
+                {/* Nút Previous */}
+                <li className="page-item">
+                  <button
+                    onClick={() =>
+                      handlePageChange(savedPostsData.currentPage - 1)
+                    }
+                    disabled={savedPostsData.currentPage === 1}
+                    className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${
+                      savedPostsData.currentPage === 1
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'text-white hover:text-white'
+                    }`}
+                  >
+                    Previous
+                  </button>
+                </li>
+
+                {/* Các số trang */}
                 {pageNumbers.map(number => (
                   <li
                     key={number}
-                    className={`page-item ${currentPage === number ? 'active' : ''}`}
+                    className={`page-item ${savedPostsData.currentPage === number ? 'active' : ''}`}
                   >
                     <button
-                      onClick={() => setCurrentPage(number)}
-                      className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${currentPage === number ? 'bg-white text-navy-900' : 'text-white hover:text-white'}`}
+                      onClick={() => handlePageChange(number)}
+                      className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${
+                        savedPostsData.currentPage === number
+                          ? 'bg-white text-navy-900'
+                          : 'text-white hover:text-white'
+                      }`}
                     >
                       {number}
                     </button>
                   </li>
                 ))}
+
+                {/* Nút Next */}
+                <li className="page-item">
+                  <button
+                    onClick={() =>
+                      handlePageChange(savedPostsData.currentPage + 1)
+                    }
+                    disabled={
+                      savedPostsData.currentPage === savedPostsData.totalPages
+                    }
+                    className={`page-link px-2 py-1 md:px-4 md:py-2 rounded ${
+                      savedPostsData.currentPage === savedPostsData.totalPages
+                        ? 'opacity-50 cursor-not-allowed'
+                        : 'text-white hover:text-white'
+                    }`}
+                  >
+                    Next
+                  </button>
+                </li>
               </ul>
             </nav>
           )}
 
           {/* Post Grid */}
           <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[66px]">
-            {currentPosts.map(content => (
+            {savedPostsData.posts.map(content => (
               <li key={content._id} className="bg-navy-700 rounded-lg">
                 <PostCard board={content} />
               </li>

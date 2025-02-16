@@ -133,7 +133,12 @@ export default function FooterAllPage() {
                   <path d="M22.5 6.908V6.75a3 3 0 00-3-3h-15a3 3 0 00-3 3v.158l9.714 5.978a1.5 1.5 0 001.572 0L22.5 6.908z" />
                 </svg>
               </span>
-              minhnguyencong332@gmail.com
+              <a
+                href="https://mail.google.com/mail/?view=cm&to=minhnguyencong332@gmail.com"
+                target="_blank"
+              >
+                minhnguyencong332@gmail.com
+              </a>
             </p>
             <p className="mb-4 flex items-center justify-center md:justify-start">
               <span className="me-3 [&>svg]:h-5 [&>svg]:w-5">

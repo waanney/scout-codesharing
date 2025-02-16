@@ -31,9 +31,9 @@ export const fetchSharedPostsDetails_API = async boardIds => {
   return response.data;
 };
 
-export const fetchSavedPostsDetails_API = async boardIds => {
-  const response = await axios.post(`${API_ROOT}/v1/boards/saveDetails`, {
-    boardIds,
-  });
+export const fetchSavedPostsDetails_API = async (userId, page, pageSize) => {
+  const response = await axios.get(
+    `${API_ROOT}/v1/boards/saveDetails/${userId}?page=${page}&pageSize=${pageSize}`,
+  );
   return response.data;
 };
