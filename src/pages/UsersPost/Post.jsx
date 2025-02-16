@@ -258,7 +258,7 @@ function Post({ board, boardId }) {
   return (
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
-        <HeaderForAllPages className="sticky" />
+        <HeaderForAllPages className="sticky" comment={comments} />
         <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
           <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
