@@ -1,6 +1,6 @@
 // Đây là header của trang web
 import { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { logoutUser } from '~/redux/apiRequest';
@@ -24,6 +24,31 @@ const HeaderForAllPages = () => {
   const userId = useUserId();
   const [currentUserData, setcurrentUserData] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
+
+  const location = useLocation(); // Lấy thông tin location hiện tại
+
+  // Tạo mảng routes với điều kiện kiểm tra active
+  const routes = [
+    { name: 'Home', path: '/', check: path => path === '/' },
+    {
+      name: 'Discussion',
+      path: '/discussion',
+      check: path => path === '/discussion',
+    },
+    { name: 'Storage', path: '/storage', check: path => path === '/storage' },
+    {
+      name: 'Profile',
+      path: `/profile/${userId}`,
+      check: path => path.includes('/profile'),
+    },
+  ];
+
+  // Xác định active index dựa trên location
+  const [activeIndex, setActiveIndex] = useState(null);
+  useEffect(() => {
+    const index = routes.findIndex(route => route.check(location.pathname));
+    setActiveIndex(index >= 0 ? index : null);
+  }, [location]);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -73,34 +98,29 @@ const HeaderForAllPages = () => {
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile'].map(
-                (item, index) => (
+              {routes.map(
+                (
+                  item,
+                  index, // Thay mảng cố định bằng routes
+                ) => (
                   <div
                     key={index}
                     className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
-                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                    onClick={() => {
-                      // Kiểm tra nếu item là 'Profile' thì navigate tới `/profile/${currentUser._id}`
-                      if (item === 'Profile') {
-                        navigate(`/profile/${userId}`);
-                      } else {
-                        navigate(
-                          item === 'Home' ? '/' : `/${item.toLowerCase()}`,
-                        );
-                      }
-                    }}
+                    onMouseEnter={() => setHoveredIndex(index)}
+                    onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
+                    onClick={() => navigate(item.path)}
                   >
-                    <span>{item}</span>
+                    <span>{item.name}</span>
                   </div>
                 ),
               )}
 
-              {hoveredIndex !== null && (
+              {(hoveredIndex !== null || activeIndex !== null) && (
                 <div
                   className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
                   style={{
                     width: '25%',
-                    transform: `translateX(calc(100% * ${hoveredIndex}))`,
+                    transform: `translateX(calc(100% * ${hoveredIndex ?? activeIndex}))`,
                   }}
                 ></div>
               )}
@@ -169,6 +189,7 @@ const HeaderForAllPages = () => {
                 <Menu size={30} className="text-white" />
               )}
             </button>
+            {/*Menu nhỏ */}
             <div
               className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
@@ -192,26 +213,22 @@ const HeaderForAllPages = () => {
                   {currentUserData?.username}
                 </h5>
               </a>
-              {['Home', 'Discussion', 'Storage', 'Profile'].map(
-                (item, index) => (
-                  <div
-                    key={index}
-                    className="h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]"
-                    onClick={() => {
-                      // Kiểm tra nếu item là 'Profile' thì navigate tới `/profile/${currentUser._id}`
-                      if (item === 'Profile') {
-                        navigate(`/profile/${userId}`);
-                      } else {
-                        navigate(
-                          item === 'Home' ? '/' : `/${item.toLowerCase()}`,
-                        );
-                      }
-                    }}
-                  >
-                    <span className="text-[20px] pl-[10px]">{item}</span>
-                  </div>
-                ),
-              )}
+              {routes.map((item, index) => (
+                <div
+                  key={index}
+                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
+                    item.check(location.pathname) ? 'bg-blue-500/[.2]' : ''
+                  }`}
+                  onClick={() => navigate(item.path)}
+                >
+                  <span className="text-[20px] pl-[10px]">
+                    {item.name}
+                    {item.check(location.pathname) && (
+                      <span className="ml-2 w-2 h-2 bg-blue-500 rounded-full inline-block" />
+                    )}
+                  </span>
+                </div>
+              ))}
               <hr className="my-[5px]" />
               <div className="mt-[10px]">
                 <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">

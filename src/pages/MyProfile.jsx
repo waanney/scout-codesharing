@@ -37,6 +37,16 @@ function MyProfile() {
   const navigate = useNavigate();
   hljs.highlightAll();
 
+  const [personalityError, setPersonalityError] = useState(false);
+
+  const [showError, setShowError] = useState(false);
+  const [fadeError, setFadeError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [fadeSuccess, setFadeSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
   // Update line numbers when text changes
   useEffect(() => {
     const lines = text.split('\n');
@@ -53,8 +63,18 @@ function MyProfile() {
       content: text,
       username: currentUserData.username,
     };
-    createPost(newPost, dispatch, navigate);
+
+    setSuccessMessage('Create post successfully!');
+    setShowSuccess(true);
+    setFadeSuccess(false);
+
+    setTimeout(() => setFadeSuccess(true), 1500);
+    setTimeout(() => {
+      setShowSuccess(false);
+      createPost(newPost, dispatch, navigate);
+    }, 2000);
   };
+
   //biến cho myProfile
   const [intro, setIntro] = useState('');
   const [username, setUsername] = useState('');
@@ -146,7 +166,6 @@ function MyProfile() {
 
   const handleUpdateProfile = async () => {
     try {
-      // Chỉ gửi các trường cần cập nhật
       const updatedFields = {
         age: editableProfile.age,
         education: editableProfile.education,
@@ -158,11 +177,12 @@ function MyProfile() {
         updatedAt: new Date().getTime(),
         owner: currentUserData._id,
       };
-      //console.log('Dữ liệu gửi lên:', updatedFields); // In ra dữ liệu gửi lên(để debug)
+
       await axios.put(`${API_ROOT}/v1/myProfile/${userId}`, updatedFields);
       await axios.put(`${API_ROOT}/v1/Auth/change-username/${userId}`, {
         username,
       });
+
       if (selectedFile) {
         const formData = new FormData();
         formData.append('avatar', selectedFile);
@@ -177,25 +197,66 @@ function MyProfile() {
           },
         );
         setAvatarUrl(uploadResponse.data.avatarUrl);
-        console.log('Upload success:', uploadResponse.data);
       }
 
-      window.location.reload();
+      setSuccessMessage('Profile updated successfully!');
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      setTimeout(() => setFadeSuccess(true), 1500);
+      setTimeout(() => {
+        setShowSuccess(false);
+        window.location.reload(); // Reload sau khi thông báo biến mất
+      }, 2000);
+
+      setIsEditing(false);
     } catch (error) {
-      const errorMessage =
-        error.response?.data?.message || error.message || 'Cập nhật thất bại';
-      setError(errorMessage);
+      const errorMessage = error.response?.data?.message || 'Update failed';
+      setErrorMessage(errorMessage);
+
+      setShowError(true);
+      setFadeError(false);
+
+      setTimeout(() => setFadeError(true), 1500);
+      setTimeout(() => setShowError(false), 2000);
     }
   };
 
   const handleEditClick = () => {
+    if (
+      personality.length === 0 ||
+      personality.every(item => item.trim() === '')
+    ) {
+      setPersonality([]);
+    }
     setIsEditing(true);
   };
 
   const handleSaveClick = async () => {
-    //console.log('Updated profile:', editableProfile);// In ra dữ liệu gửi lên(để debug)
-    await handleUpdateProfile();
-    setIsEditing(false);
+    // Kiểm tra nếu có bất kỳ phần tử nào trong mảng bị trống
+    if (personality.some(item => item.trim() === '')) {
+      setErrorMessage('Personality cannot have empty traits!');
+      setShowError(true);
+      setFadeError(false);
+      setPersonalityError(true); // Đánh dấu lỗi
+
+      setTimeout(() => setFadeError(true), 1000);
+      setTimeout(() => setShowError(false), 1500);
+
+      return;
+    }
+
+    //Hợp lệ thì tiếp tục cập nhật
+    try {
+      await handleUpdateProfile();
+      setIsEditing(false);
+      setPersonalityError(false);
+    } catch (error) {
+      setErrorMessage('Failed to update profile.');
+      setShowError(true);
+      setFadeError(false);
+      setErrorMessage(error);
+    }
   };
 
   const handleKeyDown = e => {
@@ -310,6 +371,32 @@ function MyProfile() {
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
         <div className=" top-0 flex items-center flex-col ">
           <div className="h-[440px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
+            {showError && (
+              <div className="fixed inset-0 flex items-center justify-center z-10">
+                <div
+                  className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
+                  ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
+                >
+                  <p className="text-base md:text-[22px] font-bold text-center text-white">
+                    {errorMessage}
+                  </p>
+                </div>
+              </div>
+            )}
+            {showSuccess && (
+              <div className="fixed inset-0 flex items-center justify-center z-10">
+                <div
+                  className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
+                  ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
+                >
+                  <p className="text-base md:text-[22px] font-bold text-center text-white">
+                    {successMessage}
+                  </p>
+                </div>
+              </div>
+            )}
             <a className="flex flex-col items-center">
               <div className="relative flex items-center justify-center w-full">
                 <h2 className="font-Manrope font-extrabold text-[16px] mt-[10px]">
@@ -448,13 +535,25 @@ function MyProfile() {
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
-            <div className="flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto">
+            <div
+              className={`flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto 
+              ${personalityError ? 'border-red-500 animate-shake' : ''}`}
+              style={{
+                border: personalityError ? '2px solid red' : 'none',
+                padding: '5px',
+              }}
+            >
               {isEditing ? (
                 <>
-                  {personality?.map((trait, index) => (
+                  {personality.map((trait, index) => (
                     <div
                       key={index}
-                      className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative"
+                      className={`px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative 
+                        ${trait.trim() === '' ? 'border-red-500 animate-shake' : ''}`}
+                      style={{
+                        border: trait.trim() === '' ? '2px solid red' : 'none',
+                        padding: '5px',
+                      }}
                     >
                       <input
                         value={trait}
@@ -464,7 +563,7 @@ function MyProfile() {
                           setPersonality(newTraits);
                         }}
                         className="bg-transparent border-none outline-none text-center text-sm"
-                        style={{ width: '100%', padding: '0' }}
+                        placeholder="Enter trait"
                       />
                       <button
                         className="relative flex right-[2px] text-red-500 font-bold text-xs"
