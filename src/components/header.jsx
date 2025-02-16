@@ -55,20 +55,27 @@ const HeaderForAllPages = () => {
   const [mobileBorderActiveIndex, setMobileBorderActiveIndex] = useState(null);
 
   const handleClick = (index, isMobile = false) => {
+    const targetPath = routes[index].path;
+
+    if (
+      targetPath.includes('/profile') &&
+      !location.pathname.includes(`/profile/${userId}`)
+    ) {
+      navigate(`/profile/${userId}`);
+      return;
+    }
+
     if (activeIndex === index) {
       if (isMobile) {
-        setMobileBorderActiveIndex(index); // Kích hoạt hiệu ứng viền cho mobile
-        setTimeout(() => {
-          setMobileBorderActiveIndex(null); // Tắt hiệu ứng viền sau 2 giây
-        }, 2000);
+        setMobileBorderActiveIndex(index);
+        setTimeout(() => setMobileBorderActiveIndex(null), 2000);
       } else {
-        setIsBorderActive(true); // Kích hoạt hiệu ứng viền cho desktop
-        setTimeout(() => {
-          setIsBorderActive(false); // Tắt hiệu ứng viền sau 2 giây
-        }, 2000);
+        setIsBorderActive(true);
+        setTimeout(() => setIsBorderActive(false), 2000);
       }
     }
-    navigate(routes[index].path); // Điều hướng đến trang tương ứng
+
+    navigate(targetPath);
   };
 
   useEffect(() => {
