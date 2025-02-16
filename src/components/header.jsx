@@ -172,11 +172,23 @@ const HeaderForAllPages = () => {
             <div
               className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
-              <a className="flex items-center mt-[20px]">
-                <svg height="50" width="50" xmlns="http://www.w3.org/2000/svg">
-                  <circle r="25" cx="25" cy="25" fill="#D9D9D9" />
-                </svg>
-                <h5 className="ml-[5px] font-Raleway font-bold text-[30px]">
+              <a className="flex items-center">
+                {AvatarUrl ? (
+                  <img
+                    className="aspect-square h-[30px] w-[30px] rounded-full"
+                    src={AvatarUrl}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <svg
+                    height="30"
+                    width="30"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
+                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                  </svg>
+                )}
+                <h5 className="ml-[5px] font-Raleway font-bold text-[22px] text-nowrap">
                   {currentUserData?.username}
                 </h5>
               </a>
