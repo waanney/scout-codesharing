@@ -91,7 +91,7 @@ function MyProfile() {
     return (
       savedProfile || {
         age: currentUserData?.age || ' ',
-        education: currentUserData?.education || ' ',
+        workplace: currentUserData?.workplace || ' ',
         occupation: currentUserData?.occupation || ' ',
         location: currentUserData?.location || ' ',
       }
@@ -140,13 +140,13 @@ function MyProfile() {
   }, [owner]);
 
   const handleProfileChange = (field, value) => {
-    const maxLength = (field === 'education' || field === 'location') ? 40 : 15;
+    const maxLength = field === 'workplace' || field === 'location' ? 40 : 15;
     if (value.length <= maxLength) {
-    setEditableProfile(prev => ({
-      ...prev,
-      [field]: value
-    }));
-  }
+      setEditableProfile(prev => ({
+        ...prev,
+        [field]: value,
+      }));
+    }
 
     if (field === 'personality') {
       setPersonality(value);
@@ -156,13 +156,13 @@ function MyProfile() {
       setIntro(value);
     }
   };
-  const getPlaceholder = (field) => {
-    if (field === 'education') {
-      return "Max 40 characters";
+  const getPlaceholder = field => {
+    if (field === 'workplace') {
+      return 'Max 40 characters';
     } else if (field === 'location') {
-      return "Max 40 characters";
+      return 'Max 40 characters';
     } else {
-      return "Max 15 characters";
+      return 'Max 15 characters';
     }
   };
   //console.log('Editable profile:', editableProfile);// In ra để debug
@@ -180,7 +180,7 @@ function MyProfile() {
     try {
       const updatedFields = {
         age: editableProfile.age,
-        education: editableProfile.education,
+        workplace: editableProfile.workplace,
         occupation: editableProfile.occupation,
         location: editableProfile.location,
         Introduction: intro,
@@ -467,7 +467,7 @@ function MyProfile() {
               )}
             </a>
             <div className="grid grid-cols-[3fr_7fr]">
-              {['age', 'education', 'occupation', 'location'].map(field => (
+              {['age', 'workplace', 'occupation', 'location'].map(field => (
                 <React.Fragment key={field}>
                   <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[30px]">
                     {field.toUpperCase()}
@@ -609,9 +609,7 @@ function MyProfile() {
         </div>
 
         <div className="flex-1 flex-col ">
-          <div
-            className=" mt-[20px] lg:mt-[125px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto bg-black"
-          >
+          <div className=" mt-[20px] lg:mt-[125px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto bg-black">
             <form
               onSubmit={handleCreatepost}
               className="flex-col  rounded-[10px]"
