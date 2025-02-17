@@ -140,10 +140,13 @@ function MyProfile() {
   }, [owner]);
 
   const handleProfileChange = (field, value) => {
+    const maxLength = (field === 'education' || field === 'location') ? 40 : 15;
+    if (value.length <= maxLength) {
     setEditableProfile(prev => ({
       ...prev,
-      [field]: value,
+      [field]: value
     }));
+  }
 
     if (field === 'personality') {
       setPersonality(value);
@@ -151,6 +154,15 @@ function MyProfile() {
 
     if (field === 'Introduction') {
       setIntro(value);
+    }
+  };
+  const getPlaceholder = (field) => {
+    if (field === 'education') {
+      return "Max 40 characters";
+    } else if (field === 'location') {
+      return "Max 40 characters";
+    } else {
+      return "Max 15 characters";
     }
   };
   //console.log('Editable profile:', editableProfile);// In ra để debug
@@ -369,8 +381,8 @@ function MyProfile() {
     <>
       <HeaderForAllPages className="sticky" />
       <div className="flex lg:flex-row flex-col overflow-x-hidden">
-        <div className=" top-0 flex items-center flex-col ">
-          <div className="h-[440px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
+        <div className="top-0 flex flex-col items-center">
+          <div className="h-[440px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[125px] lg:ml-[35px] rounded-[10px]">
             {showError && (
               <div className="fixed inset-0 flex items-center justify-center z-10">
                 <div
@@ -407,7 +419,6 @@ function MyProfile() {
                       onChange={e => setUsername(e.target.value)}
                       className="bg-transparent text-white rounded-[2px] text-[15px] w-[150px] h-[40px] resize-none overflow-hidden"
                       style={{ border: 'solid 2px #EAEBF6' }}
-                      maxLength="15"
                       placeholder="Maximum 15 chars"
                     />
                   ) : (
@@ -455,13 +466,13 @@ function MyProfile() {
                 />
               )}
             </a>
-            <div className="grid grid-cols-2">
+            <div className="grid grid-cols-[3fr_7fr]">
               {['age', 'education', 'occupation', 'location'].map(field => (
                 <React.Fragment key={field}>
-                  <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[15px]">
+                  <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[30px]">
                     {field.toUpperCase()}
                   </div>
-                  <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[15px]">
+                  <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[30px]">
                     {isEditing ? (
                       field === 'age' ? (
                         <input
@@ -483,7 +494,7 @@ function MyProfile() {
                           }
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
                           style={{ border: 'solid 2px #EAEBF6' }}
-                          placeholder="Less than 15"
+                          placeholder={getPlaceholder(field)}
                         />
                       )
                     ) : (
@@ -494,15 +505,14 @@ function MyProfile() {
               ))}
             </div>
           </div>
-          <div className="flex h-[92px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
+          <div className="flex h-[120px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
             <img className="h-[13px] w-[14px] m-[11px]" src={content}></img>
-
-            <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px]">
+            <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px] flex-grow">
               {isEditing ? (
                 <textarea
                   value={intro} // Bind the textarea value
                   onChange={e => setIntro(e.target.value)}
-                  className="bg-transparent text-white rounded-[2px] text-[11px] w-[170px] h-[70px] resize-none overflow-hidden"
+                  className="bg-transparent text-white rounded-[2px] text-[11px] w-[90%] lg:w-[250px] h-[100px] resize-none overflow-hidden"
                   style={{
                     lineHeight: '1.5rem',
                     padding: '5px',
@@ -531,7 +541,7 @@ function MyProfile() {
               )}
             </div>
           </div>
-          <div className="h-[100px] lg:w-[250px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] mb-[20px] rounded-[10px]">
+          <div className="h-[120px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] mb-[20px] rounded-[10px]">
             <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
               PERSONALITY
             </span>
@@ -600,7 +610,7 @@ function MyProfile() {
 
         <div className="flex-1 flex-col ">
           <div
-            className={`mt-[20px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto  bg-black ${sharedPosts.length > 0 && sharedPosts[0] !== null && sharedPosts[0] !== undefined ? 'lg:mt-[125px]' : 'lg:mt-[-30px]'}`}
+            className=" mt-[20px] lg:mt-[125px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto bg-black"
           >
             <form
               onSubmit={handleCreatepost}
