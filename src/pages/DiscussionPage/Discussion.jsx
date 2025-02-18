@@ -3,7 +3,6 @@ import FooterAllPage from '~/components/footer.jsx';
 import PostCard from '~/components/post_card';
 import ScrollTop from '~/components/scrollTop';
 import usecheckTokenAndRedirect from '~/services/checkTokenExpiration.jsx';
-import SearchBar from '~/components/searchBar';
 export default function Discussion({
   board,
   paginate,
@@ -31,7 +30,6 @@ export default function Discussion({
   return (
     <>
       <HeaderForAllPages className="sticky" />
-      <SearchBar/>
       <div className="flex flex-col min-h-screen bg-[#0b2878] p-4 md:p-8">
         <div className="mx-auto mt-[60px] md:mt-[90px] font-raleway text-[32px] md:text-[48px] text-white font-bold text-center">
           What is on?

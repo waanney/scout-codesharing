@@ -37,3 +37,11 @@ export const fetchSavedPostsDetails_API = async (userId, page) => {
   );
   return response.data;
 };
+
+export const searchResults = async (searchTerm) => {
+  const response = await axios.get(
+    `${API_ROOT}/v1/boards/search/content?q=${searchTerm}`,
+  );
+  return response.data;
+
+};

@@ -15,7 +15,7 @@ import UserStorage from './StoragePage/UserStorage';
 import Changepassword from './Changepassword';
 import Forgotpassword from './Forgotpassword.jsx';
 import Resetpassword from './Resetpassword.jsx';
-
+import SearchBarPage from './SearchBar.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -65,6 +65,10 @@ const router = createBrowserRouter([
       {
         path: '/changepassword',
         element: <Changepassword />,
+      },
+      {
+        path: '/search',
+        element: <SearchBarPage/>
       },
     ],
   },
