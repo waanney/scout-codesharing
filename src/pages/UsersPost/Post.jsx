@@ -13,7 +13,7 @@ import {
   commentPost_API,
   commentInlinePost_API,
 } from '../../redux/apiRequest.js';
-import { useState, useEffect } from 'react';
+import { useState, useEffect,useRef } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
@@ -107,6 +107,15 @@ function Post({ board, boardId }) {
   const language = board.language;
   const sourceCode = board.content.split('\n');
   hljs.highlightAll();
+  const PostsRef = useRef(null)
+
+  useEffect(() => {
+    if (PostsRef.current) {
+      PostsRef.current.querySelectorAll("pre code").forEach((block) => {
+        hljs.highlightElement(block)
+      })
+    }
+  }, [board])
 
   // handle comment inline
   const [line_content, setLineContent] = useState('');
