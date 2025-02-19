@@ -21,10 +21,8 @@ const PostCard = ({ board }) => {
       try {
         const avatarcontent = await axios.get(
           `${env.API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
-          { responseType: 'blob' },
         );
-        const avatarUrl = URL.createObjectURL(avatarcontent.data);
-        setAvatarUrl(avatarUrl);
+        setAvatarUrl(avatarcontent.data.avatarUrl);
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);

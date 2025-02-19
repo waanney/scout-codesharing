@@ -13,7 +13,7 @@ import {
   commentPost_API,
   commentInlinePost_API,
 } from '../../redux/apiRequest.js';
-import { useState, useEffect,useRef } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
@@ -83,10 +83,8 @@ function Post({ board, boardId }) {
       try {
         const avatarcontent = await axios.get(
           `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
-          { responseType: 'blob' },
         );
-        const avatarUrl = URL.createObjectURL(avatarcontent.data);
-        setAvatarUrl(avatarUrl);
+        setAvatarUrl(avatarcontent.data.avatarUrl);
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);
@@ -107,15 +105,15 @@ function Post({ board, boardId }) {
   const language = board.language;
   const sourceCode = board.content.split('\n');
   hljs.highlightAll();
-  const PostsRef = useRef(null)
+  const PostsRef = useRef(null);
 
   useEffect(() => {
     if (PostsRef.current) {
-      PostsRef.current.querySelectorAll("pre code").forEach((block) => {
-        hljs.highlightElement(block)
-      })
+      PostsRef.current.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+      });
     }
-  }, [board])
+  }, [board]);
 
   // handle comment inline
   const [line_content, setLineContent] = useState('');

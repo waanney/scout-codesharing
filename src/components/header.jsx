@@ -86,10 +86,8 @@ const HeaderForAllPages = () => {
           setcurrentUserData(response.data);
           const avatarcontent = await axios.get(
             `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
-            { responseType: 'blob' },
           );
-          const avatarUrl = URL.createObjectURL(avatarcontent.data);
-          setAvatarUrl(avatarUrl);
+          setAvatarUrl(avatarcontent.data.avatarUrl);
         } catch (error) {
           console.error('Error fetching user data:', error);
         }
