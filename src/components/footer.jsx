@@ -100,9 +100,6 @@ export default function FooterAllPage() {
                 Community
               </a>
             </p>
-            <p>
-              <a href="#!">Help</a>
-            </p>
           </div>
 
           <div>
