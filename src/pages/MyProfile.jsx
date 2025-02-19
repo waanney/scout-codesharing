@@ -1,60 +1,62 @@
-import React from 'react';
-import HeaderForAllPages from '~/components/header.jsx';
-import FooterAllPage from '~/components/footer.jsx';
-import { createPost } from '~/redux/apiRequest.js';
-import { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { useNavigate, useParams } from 'react-router-dom';
-import axios from 'axios';
-import { fetchSharedPostsDetails_API } from '~/api/index.js';
-import useUserData from '~/hooks/useUserData.js';
-import ScrollTop from '~/components/scrollTop';
-import hljs from 'highlight.js';
-import '~/utils/customeStyle.css';
-import hljsLanguages from '~/utils/hljsLanguages.json';
-import SharedPostCo from '../components/sharePosts.jsx';
-import { env } from '~/configs/environment.js';
-//img
-import savePost from '~/assets/save.svg';
-import editPost from '~/assets/edit.svg';
-import content from '~/assets/Content.svg';
-import LoadingAnimation from '../components/loading.jsx';
+"use client"
 
-const API_ROOT = env.API_ROOT;
+import React, { useState, useRef, useEffect } from "react"
+import HeaderForAllPages from "~/components/header.jsx"
+import FooterAllPage from "~/components/footer.jsx"
+import { createPost } from "~/redux/apiRequest.js"
+import { useDispatch } from "react-redux"
+import { useNavigate, useParams } from "react-router-dom"
+import axios from "axios"
+import { fetchSharedPostsDetails_API } from "~/api/index.js"
+import useUserData from "~/hooks/useUserData.js"
+import ScrollTop from "~/components/scrollTop"
+import hljs from "highlight.js"
+import "~/utils/customeStyle.css"
+import hljsLanguages from "~/utils/hljsLanguages.json"
+import SharedPostCo from "../components/sharePosts.jsx"
+import { env } from "~/configs/environment.js"
+import AvatarCropTool from "../components/avatar_crop.jsx"
+//img
+import savePost from "~/assets/save.svg"
+import editPost from "~/assets/edit.svg"
+import content from "~/assets/Content.svg"
+import LoadingAnimation from "../components/loading.jsx"
+
+const API_ROOT = env.API_ROOT
 
 function MyProfile() {
-  const { owner } = useParams();
-  const { currentUserData, userId } = useUserData();
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [language, setLanguage] = useState('');
-  const [text, setText] = useState('');
-  const [lineNumbers, setLineNumbers] = useState([true]);
-  const textareaRef = useRef(null);
-  const lineHeight = '1.5rem';
-  const numberOfVisibleLines = 12;
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  hljs.highlightAll();
+  const { owner } = useParams()
+  const { currentUserData, userId } = useUserData()
+  const [title, setTitle] = useState("")
+  const [description, setDescription] = useState("")
+  const [language, setLanguage] = useState("")
+  const [text, setText] = useState("")
+  const [lineNumbers, setLineNumbers] = useState([true])
+  const textareaRef = useRef(null)
+  const lineHeight = "1.5rem"
+  const numberOfVisibleLines = 12
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  hljs.highlightAll()
 
-  const [personalityError, setPersonalityError] = useState(false);
+  const [personalityError, setPersonalityError] = useState(false)
 
-  const [showError, setShowError] = useState(false);
-  const [fadeError, setFadeError] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
+  const [showError, setShowError] = useState(false)
+  const [fadeError, setFadeError] = useState(false)
+  const [errorMessage, setErrorMessage] = useState("")
 
-  const [showSuccess, setShowSuccess] = useState(false);
-  const [fadeSuccess, setFadeSuccess] = useState(false);
-  const [successMessage, setSuccessMessage] = useState('');
+  const [showSuccess, setShowSuccess] = useState(false)
+  const [fadeSuccess, setFadeSuccess] = useState(false)
+  const [successMessage, setSuccessMessage] = useState("")
 
   // Update line numbers when text changes
   useEffect(() => {
-    const lines = text.split('\n');
-    setLineNumbers(lines.map(() => true));
-  }, []);
+    const lines = text.split("\n")
+    setLineNumbers(lines.map(() => true))
+  }, [text]) // Added text dependency
 
-  const handleCreatepost = e => {
-    e.preventDefault();
+  const handleCreatepost = (e) => {
+    e.preventDefault()
     const newPost = {
       title: title,
       description: description,
@@ -62,119 +64,103 @@ function MyProfile() {
       userId: userId,
       content: text,
       username: currentUserData.username,
-    };
+    }
 
-    setSuccessMessage('Create post successfully!');
-    setShowSuccess(true);
-    setFadeSuccess(false);
+    setSuccessMessage("Create post successfully!")
+    setShowSuccess(true)
+    setFadeSuccess(false)
 
-    setTimeout(() => setFadeSuccess(true), 1500);
+    setTimeout(() => setFadeSuccess(true), 1500)
     setTimeout(() => {
-      setShowSuccess(false);
-      createPost(newPost, dispatch, navigate);
-    }, 2000);
-  };
+      setShowSuccess(false)
+      createPost(newPost, dispatch, navigate)
+    }, 2000)
+  }
 
   //biến cho myProfile
-  const [intro, setIntro] = useState('');
-  const [username, setUsername] = useState('');
-  const [personality, setPersonality] = useState([]);
-  const [profileData, setProfileData] = useState(null);
-  const [AvatarUrl, setAvatarUrl] = useState(null);
-  const [currentUserAvt, setCurrentUserAvt] = useState(null);
-  const [selectedFile, setSelectedFile] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [intro, setIntro] = useState("")
+  const [username, setUsername] = useState("")
+  const [personality, setPersonality] = useState([])
+  const [profileData, setProfileData] = useState(null)
+  const [AvatarUrl, setAvatarUrl] = useState(null)
+  const [currentUserAvt, setCurrentUserAvt] = useState(null)
+  const [selectedFile, setSelectedFile] = useState(null)
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [isEditing, setIsEditing] = useState(false)
   const [editableProfile, setEditableProfile] = useState(() => {
-    const savedProfile = JSON.parse(localStorage.getItem('editableProfile'));
+    const savedProfile = JSON.parse(localStorage.getItem("editableProfile"))
     return (
       savedProfile || {
-        age: currentUserData?.age || ' ',
-        workplace: currentUserData?.workplace || ' ',
-        occupation: currentUserData?.occupation || ' ',
-        location: currentUserData?.location || ' ',
+        age: currentUserData?.age || " ",
+        workplace: currentUserData?.workplace || " ",
+        occupation: currentUserData?.occupation || " ",
+        location: currentUserData?.location || " ",
       }
-    );
-  });
+    )
+  })
 
   // Fetch profile dựa trên owner
   useEffect(() => {
     const fetchProfile = async () => {
-      setLoading(true);
-      setError(null);
+      setLoading(true)
+      setError(null)
       try {
         // Fetch profile dựa trên owner
-        const response = await axios.get(`${API_ROOT}/v1/myProfile/${owner}`);
-        setProfileData(response.data);
+        const response = await axios.get(`${API_ROOT}/v1/myProfile/${owner}`)
+        setProfileData(response.data)
         //đưa thay đổi vào editableProfile luôn
-        setEditableProfile(response.data);
-        setIntro(response.data.Introduction || '');
-        setPersonality(response.data.personality || []);
-        setUsername(response.data.username || '');
-        const avatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${owner}`,
-          { responseType: 'blob' },
-        );
-        const avatarUrl = URL.createObjectURL(avatarcontent.data);
-        setAvatarUrl(avatarUrl);
-        const currentUseravatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
-          { responseType: 'blob' },
-        );
-        const currentUserAvatarUrl = URL.createObjectURL(
-          currentUseravatarcontent.data,
-        );
-        setCurrentUserAvt(currentUserAvatarUrl);
+        setEditableProfile(response.data)
+        setIntro(response.data.Introduction || "")
+        setPersonality(response.data.personality || [])
+        setUsername(response.data.username || "")
+        const avatarcontent = await axios.get(`${API_ROOT}/v1/Auth/get-avatar/${owner}`, { responseType: "blob" })
+        const avatarUrl = URL.createObjectURL(avatarcontent.data)
+        setAvatarUrl(avatarUrl)
+        const currentUseravatarcontent = await axios.get(`${API_ROOT}/v1/Auth/get-avatar/${userId}`, {
+          responseType: "blob",
+        })
+        const currentUserAvatarUrl = URL.createObjectURL(currentUseravatarcontent.data)
+        setCurrentUserAvt(currentUserAvatarUrl)
       } catch (error) {
-        const errorMessage =
-          error.response?.data?.message ||
-          error.message ||
-          'Không thể tải dữ liệu profile';
-        setError(errorMessage);
+        const errorMessage = error.response?.data?.message || error.message || "Không thể tải dữ liệu profile"
+        setError(errorMessage)
       } finally {
-        setLoading(false);
+        setLoading(false)
       }
-    };
-    fetchProfile();
-  }, [owner]);
+    }
+    fetchProfile()
+  }, [owner, userId]) // Added userId dependency
 
   const handleProfileChange = (field, value) => {
-    const maxLength = field === 'workplace' || field === 'location' ? 40 : 15;
+    const maxLength = field === "workplace" || field === "location" ? 40 : 15
     if (value.length <= maxLength) {
-      setEditableProfile(prev => ({
+      setEditableProfile((prev) => ({
         ...prev,
         [field]: value,
-      }));
+      }))
     }
 
-    if (field === 'personality') {
-      setPersonality(value);
+    if (field === "personality") {
+      setPersonality(value)
     }
 
-    if (field === 'Introduction') {
-      setIntro(value);
+    if (field === "Introduction") {
+      setIntro(value)
     }
-  };
-  const getPlaceholder = field => {
-    if (field === 'workplace') {
-      return 'Max 40 characters';
-    } else if (field === 'location') {
-      return 'Max 40 characters';
+  }
+  const getPlaceholder = (field) => {
+    if (field === "workplace") {
+      return "Max 40 characters"
+    } else if (field === "location") {
+      return "Max 40 characters"
     } else {
-      return 'Max 15 characters';
+      return "Max 15 characters"
     }
-  };
+  }
   //console.log('Editable profile:', editableProfile);// In ra để debug
 
-  const handleFileChange = event => {
-    const files = event.target.files;
-    if (files && files.length > 0) {
-      const file = files[0];
-      setSelectedFile(file);
-      setAvatarUrl(URL.createObjectURL(file));
-    }
-  };
+  
 
   const handleUpdateProfile = async () => {
     try {
@@ -188,185 +174,197 @@ function MyProfile() {
         username: username,
         updatedAt: new Date().getTime(),
         owner: currentUserData._id,
-      };
-
-      await axios.put(`${API_ROOT}/v1/myProfile/${userId}`, updatedFields);
-      await axios.put(`${API_ROOT}/v1/Auth/change-username/${userId}`, {
-        username,
-      });
-
-      if (selectedFile) {
-        const formData = new FormData();
-        formData.append('avatar', selectedFile);
-
-        const uploadResponse = await axios.put(
-          `${API_ROOT}/v1/Auth/avatar/${userId}`,
-          formData,
-          {
-            headers: {
-              'Content-Type': 'multipart/form-data',
-            },
-          },
-        );
-        setAvatarUrl(uploadResponse.data.avatarUrl);
       }
 
-      setSuccessMessage('Profile updated successfully!');
-      setShowSuccess(true);
-      setFadeSuccess(false);
+      await axios.put(`${API_ROOT}/v1/myProfile/${userId}`, updatedFields)
+      await axios.put(`${API_ROOT}/v1/Auth/change-username/${userId}`, {
+        username,
+      })
 
-      setTimeout(() => setFadeSuccess(true), 1500);
+      if (selectedFile) {
+        const formData = new FormData()
+        formData.append("avatar", selectedFile)
+
+        const uploadResponse = await axios.put(`${API_ROOT}/v1/Auth/avatar/${userId}`, formData, {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        })
+        setAvatarUrl(uploadResponse.data.avatarUrl)
+      }
+
+      setSuccessMessage("Profile updated successfully!")
+      setShowSuccess(true)
+      setFadeSuccess(false)
+
+      setTimeout(() => setFadeSuccess(true), 1500)
       setTimeout(() => {
-        setShowSuccess(false);
-        window.location.reload(); // Reload sau khi thông báo biến mất
-      }, 2000);
+        setShowSuccess(false)
+        window.location.reload() // Reload sau khi thông báo biến mất
+      }, 2000)
 
-      setIsEditing(false);
+      setIsEditing(false)
     } catch (error) {
-      const errorMessage = error.response?.data?.message || 'Update failed';
-      setErrorMessage(errorMessage);
+      const errorMessage = error.response?.data?.message || "Update failed"
+      setErrorMessage(errorMessage)
 
-      setShowError(true);
-      setFadeError(false);
+      setShowError(true)
+      setFadeError(false)
 
-      setTimeout(() => setFadeError(true), 1500);
-      setTimeout(() => setShowError(false), 2000);
+      setTimeout(() => setFadeError(true), 1500)
+      setTimeout(() => setShowError(false), 2000)
     }
-  };
+  }
 
   const handleEditClick = () => {
-    if (
-      personality.length === 0 ||
-      personality.every(item => item.trim() === '')
-    ) {
-      setPersonality([]);
+    if (personality.length === 0 || personality.every((item) => item.trim() === "")) {
+      setPersonality([])
     }
-    setIsEditing(true);
-  };
+    setIsEditing(true)
+  }
 
   const handleSaveClick = async () => {
     // Kiểm tra nếu có bất kỳ phần tử nào trong mảng bị trống
-    if (personality.some(item => item.trim() === '')) {
-      setErrorMessage('Personality cannot have empty traits!');
-      setShowError(true);
-      setFadeError(false);
-      setPersonalityError(true); // Đánh dấu lỗi
+    if (personality.some((item) => item.trim() === "")) {
+      setErrorMessage("Personality cannot have empty traits!")
+      setShowError(true)
+      setFadeError(false)
+      setPersonalityError(true) // Đánh dấu lỗi
 
-      setTimeout(() => setFadeError(true), 1000);
-      setTimeout(() => setShowError(false), 1500);
+      setTimeout(() => setFadeError(true), 1000)
+      setTimeout(() => setShowError(false), 1500)
 
-      return;
+      return
     }
 
     //Hợp lệ thì tiếp tục cập nhật
     try {
-      await handleUpdateProfile();
-      setIsEditing(false);
-      setPersonalityError(false);
+      await handleUpdateProfile()
+      setIsEditing(false)
+      setPersonalityError(false)
     } catch (error) {
-      setErrorMessage('Failed to update profile.');
-      setShowError(true);
-      setFadeError(false);
-      setErrorMessage(error);
+      setErrorMessage("Failed to update profile.")
+      setShowError(true)
+      setFadeError(false)
+      setErrorMessage(error)
     }
-  };
+  }
 
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
-      const newLineNumbers = [...lineNumbers];
-      newLineNumbers.push(true);
-      setLineNumbers(newLineNumbers);
+  const handleKeyDown = (e) => {
+    if (e.key === "Enter") {
+      const newLineNumbers = [...lineNumbers]
+      newLineNumbers.push(true)
+      setLineNumbers(newLineNumbers)
     }
-  };
+  }
 
-  const handleInputChange = e => {
-    const maxCharsPerLine = 80;
-    let value = e.target.value;
+  const handleInputChange = (e) => {
+    const maxCharsPerLine = 80
+    const value = e.target.value
 
     // Split the input text into an array of lines
-    const lines = value.split('\n');
+    const lines = value.split("\n")
 
     // Process each line to enforce the character limit and break lines
-    const updatedLines = lines.map(line => {
+    const updatedLines = lines.map((line) => {
       if (line.length > maxCharsPerLine) {
         // Break the line at maxCharsPerLine if it's longer
-        const chunks = [];
+        const chunks = []
         while (line.length > maxCharsPerLine) {
-          chunks.push(line.slice(0, maxCharsPerLine));
-          line = line.slice(maxCharsPerLine);
+          chunks.push(line.slice(0, maxCharsPerLine))
+          line = line.slice(maxCharsPerLine)
         }
-        if (line.length > 0) chunks.push(line); // Append the remaining part of the line
-        return chunks.join('\n');
+        if (line.length > 0) chunks.push(line) // Append the remaining part of the line
+        return chunks.join("\n")
       }
-      return line; // No modification if within the limit
-    });
+      return line // No modification if within the limit
+    })
 
     // Join the updated lines and set it as the new value
-    setText(updatedLines.join('\n'));
-  };
+    setText(updatedLines.join("\n"))
+  }
 
   //Hiển thị các Language
-  const langlist = hljsLanguages;
+  const langlist = hljsLanguages
 
   //biến cho sharedPosts
-  const [sharedPosts, setSharedPosts] = useState([]);
-  const [sharedPostAvatars, setSharedPostAvatars] = useState({});
-  const fetchAvatarForPost = async userId => {
+  const [sharedPosts, setSharedPosts] = useState([])
+  const [sharedPostAvatars, setSharedPostAvatars] = useState({})
+
+  const fetchAvatar = async (userId) => {
     try {
-      const response = await axios.get(
-        `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
-        {
-          responseType: 'blob',
-        },
-      );
-      return URL.createObjectURL(response.data);
+      const response = await axios.get(`${API_ROOT}/v1/Auth/get-avatar/${userId}`, { responseType: "blob" })
+      return URL.createObjectURL(response.data)
     } catch (error) {
-      console.error('Error fetching avatar:', error);
-      return null;
+      console.error("Error fetching avatar:", error)
+      return null
     }
-  };
+  }
+
   useEffect(() => {
     const fetchSharedPosts = async () => {
-      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
-      const currentProfile = getcurrentProfile.data;
+      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`)
+      const currentProfile = getcurrentProfile.data
       if (currentProfile && currentProfile.sharedPosts) {
         try {
-          //console.log('Fetching shared posts...');
-          const posts = await fetchSharedPostsDetails_API(
-            currentProfile.sharedPosts,
-          );
-          const avatarPromises = posts.map(post =>
-            fetchAvatarForPost(post.userId),
-          );
-          const avatars = await Promise.all(avatarPromises);
-          // Tạo object avatar mapping
+          const posts = await fetchSharedPostsDetails_API(currentProfile.sharedPosts)
+          const avatars = await Promise.all(posts.map((post) => fetchAvatar(post.userId)))
           const avatarMap = posts.reduce((acc, post, index) => {
-            acc[post._id] = avatars[index];
-            return acc;
-          }, {});
-          setSharedPostAvatars(avatarMap);
-          setSharedPosts(
-            posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-          );
+            acc[post._id] = avatars[index]
+            return acc
+          }, {})
+          setSharedPostAvatars(avatarMap)
+          setSharedPosts(posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)))
         } catch (error) {
-          const errorMessage =
-            error.response?.data?.message ||
-            error.message ||
-            'Lỗi khi tải bài viết chia sẻ';
-          setError(errorMessage);
+          const errorMessage = error.response?.data?.message || error.message || "Lỗi khi tải bài viết chia sẻ"
+          setError(errorMessage)
         }
       }
-    };
-    fetchSharedPosts();
-  }, [owner]);
+    }
+    fetchSharedPosts()
+  }, [owner]) // Removed fetchAvatar dependency
+
+  const handleAvatarSave = async (croppedAvatarURL) => {
+    try {
+      const response = await fetch(croppedAvatarURL)
+      const blob = await response.blob()
+      const file = new File([blob], "avatar.jpg", { type: "image/jpeg" })
+
+      const formData = new FormData()
+      formData.append("avatar", file)
+
+      const uploadResponse = await axios.put(`${API_ROOT}/v1/Auth/avatar/${userId}`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      })
+
+      setAvatarUrl(uploadResponse.data.avatarUrl)
+      setSuccessMessage("Avatar updated successfully!")
+      setShowSuccess(true)
+      setFadeSuccess(false)
+
+      setTimeout(() => setFadeSuccess(true), 1500)
+      setTimeout(() => {
+        setShowSuccess(false)
+      }, 2000)
+    } catch (error) {
+      setErrorMessage("Failed to update avatar.")
+      setShowError(true)
+      setFadeError(false)
+      setTimeout(() => setFadeError(true), 1500)
+      setTimeout(() => setShowError(false), 2000)
+    }
+  }
+
   if (loading) {
-    <LoadingAnimation />;
+    return <LoadingAnimation />
   }
   if (error) {
-    return <div className="text-red-500 p-4">Lỗi: {error}</div>;
+    return <div className="text-red-500 p-4">Lỗi: {error}</div>
   }
   if (!loading && !profileData) {
-    return <div className="p-4">Không tìm thấy profile</div>;
+    return <div className="p-4">Không tìm thấy profile</div>
   }
   return (
     <>
@@ -378,12 +376,10 @@ function MyProfile() {
               <div className="fixed inset-0 flex items-center justify-center z-10">
                 <div
                   className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
-                  ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                  ${fadeError ? "opacity-0 visibility-hidden" : "opacity-100 visibility-visible"} 
                   transition-all duration-1000 ease-in-out flex items-center justify-center`}
                 >
-                  <p className="text-base md:text-[22px] font-bold text-center text-white">
-                    {errorMessage}
-                  </p>
+                  <p className="text-base md:text-[22px] font-bold text-center text-white">{errorMessage}</p>
                 </div>
               </div>
             )}
@@ -391,12 +387,10 @@ function MyProfile() {
               <div className="fixed inset-0 flex items-center justify-center z-10">
                 <div
                   className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
-                  ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                  ${fadeSuccess ? "opacity-0 visibility-hidden" : "opacity-100 visibility-visible"} 
                   transition-all duration-1000 ease-in-out flex items-center justify-center`}
                 >
-                  <p className="text-base md:text-[22px] font-bold text-center text-white">
-                    {successMessage}
-                  </p>
+                  <p className="text-base md:text-[22px] font-bold text-center text-white">{successMessage}</p>
                 </div>
               </div>
             )}
@@ -407,9 +401,9 @@ function MyProfile() {
                     <input
                       type="text"
                       value={username} // Bind the textarea value
-                      onChange={e => setUsername(e.target.value)}
+                      onChange={(e) => setUsername(e.target.value)}
                       className="bg-transparent text-white rounded-[2px] text-[15px] w-[150px] h-[40px] resize-none overflow-hidden"
-                      style={{ border: 'solid 2px #EAEBF6' }}
+                      style={{ border: "solid 2px #EAEBF6" }}
                       placeholder="Maximum 15 chars"
                     />
                   ) : (
@@ -422,67 +416,37 @@ function MyProfile() {
                       className="absolute right-[5px] mt-[-5px]"
                       onClick={isEditing ? handleSaveClick : handleEditClick}
                     >
-                      <img
-                        src={isEditing ? savePost : editPost}
-                        alt={isEditing ? 'Save icon' : 'Edit icon'}
-                      />
+                      <img src={isEditing ? savePost : editPost} alt={isEditing ? "Save icon" : "Edit icon"} />
                     </button>
                   </div>
                 )}
               </div>
-              {AvatarUrl ? (
-                <img
-                  src={AvatarUrl}
-                  className="aspect-square h-[142px] w-[142px] rounded-full"
-                  alt="Avatar"
-                />
-              ) : (
-                <svg
-                  className="my-[12px]"
-                  height="142"
-                  width="142"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <circle r="71" cx="71" cy="71" fill="#D9D9D9" />
-                </svg>
-              )}
-              {isEditing && (
-                <input
-                  className="flex items-center w-[250px] text-wrap"
-                  type="file"
-                  accept="image/*"
-                  onChange={handleFileChange}
-                />
-              )}
+              <AvatarCropTool onSave={handleAvatarSave} initialAvatarUrl={AvatarUrl} isEditing={isEditing} />
             </a>
             <div className="grid grid-cols-[3fr_7fr]">
-              {['age', 'workplace', 'occupation', 'location'].map(field => (
+              {["age", "workplace", "occupation", "location"].map((field) => (
                 <React.Fragment key={field}>
                   <div className="text-[11px] font-Manrope text-[#A3A3A3] ml-[15px] mt-[30px]">
                     {field.toUpperCase()}
                   </div>
                   <div className="text-[11px] font-Manrope text-[#EAEBF6] mr-[28px] mt-[30px]">
                     {isEditing ? (
-                      field === 'age' ? (
+                      field === "age" ? (
                         <input
                           type="number"
                           value={editableProfile[field]} // Bind input value to state
-                          onChange={e =>
-                            handleProfileChange(field, e.target.value)
-                          }
+                          onChange={(e) => handleProfileChange(field, e.target.value)}
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
                           placeholder="Age"
-                          style={{ border: 'solid 2px #EAEBF6' }}
+                          style={{ border: "solid 2px #EAEBF6" }}
                         />
                       ) : (
                         <input
                           type="text"
                           value={editableProfile[field]} // Bind input value to state
-                          onChange={e =>
-                            handleProfileChange(field, e.target.value)
-                          }
+                          onChange={(e) => handleProfileChange(field, e.target.value)}
                           className="bg-transparent border-solid border-white text-white rounded-[2px] text-[11px] w-full"
-                          style={{ border: 'solid 2px #EAEBF6' }}
+                          style={{ border: "solid 2px #EAEBF6" }}
                           placeholder={getPlaceholder(field)}
                         />
                       )
@@ -495,34 +459,34 @@ function MyProfile() {
             </div>
           </div>
           <div className="flex h-[120px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
-            <img className="h-[13px] w-[14px] m-[11px]" src={content}></img>
+            <img className="h-[13px] w-[14px] m-[11px]" src={content || "/placeholder.svg"}></img>
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px] flex-grow">
               {isEditing ? (
                 <textarea
                   value={intro} // Bind the textarea value
-                  onChange={e => setIntro(e.target.value)}
+                  onChange={(e) => setIntro(e.target.value)}
                   className="bg-transparent text-white rounded-[2px] text-[11px] w-[90%] lg:w-[250px] h-[100px] resize-none overflow-hidden"
                   style={{
-                    lineHeight: '1.5rem',
-                    padding: '5px',
-                    border: 'solid 2px #EAEBF6',
+                    lineHeight: "1.5rem",
+                    padding: "5px",
+                    border: "solid 2px #EAEBF6",
                   }}
                   maxLength="75"
                   placeholder="Introduce yourself in 75 characters or less"
                   rows={1} // Initial row count
-                  onInput={e => {
-                    e.target.style.height = 'auto'; // Reset height
-                    e.target.style.height = `${e.target.scrollHeight}px`; // Adjust height dynamically
+                  onInput={(e) => {
+                    e.target.style.height = "auto" // Reset height
+                    e.target.style.height = `${e.target.scrollHeight}px` // Adjust height dynamically
                   }}
                 />
               ) : (
                 <div
                   className="bg-transparent text-white rounded-[2px] text-[11px] w-full"
                   style={{
-                    whiteSpace: 'pre-wrap', // Preserve line breaks and spaces
-                    wordBreak: 'break-word', // Handle long strings
-                    lineHeight: '1.5rem',
-                    padding: '5px',
+                    whiteSpace: "pre-wrap", // Preserve line breaks and spaces
+                    wordBreak: "break-word", // Handle long strings
+                    lineHeight: "1.5rem",
+                    padding: "5px",
                   }}
                 >
                   {intro}
@@ -531,15 +495,13 @@ function MyProfile() {
             </div>
           </div>
           <div className="h-[120px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] mb-[20px] rounded-[10px]">
-            <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">
-              PERSONALITY
-            </span>
+            <span className="text-[12px] font-Manrope font-bold text-[#9F9F9F] ml-[11px] mt-[11px] ">PERSONALITY</span>
             <div
               className={`flex flex-wrap gap-[4px] mx-[11px] mt-[8px] max-h-[60px] overflow-y-auto 
-              ${personalityError ? 'border-red-500 animate-shake' : ''}`}
+              ${personalityError ? "border-red-500 animate-shake" : ""}`}
               style={{
-                border: personalityError ? '2px solid red' : 'none',
-                padding: '5px',
+                border: personalityError ? "2px solid red" : "none",
+                padding: "5px",
               }}
             >
               {isEditing ? (
@@ -548,29 +510,25 @@ function MyProfile() {
                     <div
                       key={index}
                       className={`px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium flex items-center relative 
-                        ${trait.trim() === '' ? 'border-red-500 animate-shake' : ''}`}
+                        ${trait.trim() === "" ? "border-red-500 animate-shake" : ""}`}
                       style={{
-                        border: trait.trim() === '' ? '2px solid red' : 'none',
-                        padding: '5px',
+                        border: trait.trim() === "" ? "2px solid red" : "none",
+                        padding: "5px",
                       }}
                     >
                       <input
                         value={trait}
-                        onChange={e => {
-                          const newTraits = [...personality];
-                          newTraits[index] = e.target.value;
-                          setPersonality(newTraits);
+                        onChange={(e) => {
+                          const newTraits = [...personality]
+                          newTraits[index] = e.target.value
+                          setPersonality(newTraits)
                         }}
                         className="bg-transparent border-none outline-none text-center text-sm"
                         placeholder="Enter trait"
                       />
                       <button
                         className="relative flex right-[2px] text-red-500 font-bold text-xs"
-                        onClick={() =>
-                          setPersonality(
-                            personality.filter((_, i) => i !== index),
-                          )
-                        }
+                        onClick={() => setPersonality(personality.filter((_, i) => i !== index))}
                       >
                         x
                       </button>
@@ -578,17 +536,14 @@ function MyProfile() {
                   ))}
                   <div
                     className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
-                    onClick={() => setPersonality([...personality, ''])}
+                    onClick={() => setPersonality([...personality, ""])}
                   >
                     +
                   </div>
                 </>
               ) : (
                 editableProfile.personality?.map((trait, index) => (
-                  <div
-                    key={index}
-                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
-                  >
+                  <div key={index} className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium">
                     {trait}
                   </div>
                 ))
@@ -599,31 +554,22 @@ function MyProfile() {
 
         <div className="flex-1 flex-col ">
           <div className=" mt-[20px] lg:mt-[125px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto bg-black">
-            <form
-              onSubmit={handleCreatepost}
-              className="flex-col  rounded-[10px]"
-            >
+            <form onSubmit={handleCreatepost} className="flex-col  rounded-[10px]">
               <div className="flex justify-between mt-[10px] mx-[10px]">
                 <div className=" flex items-center space-x-1">
                   <a className="flex items-center">
                     {currentUserAvt ? (
                       <img
                         className="aspect-square h-[30px] w-[30px] rounded-full"
-                        src={currentUserAvt}
+                        src={currentUserAvt || "/placeholder.svg"}
                         alt="currentUserAvt"
                       />
                     ) : (
-                      <svg
-                        height="30"
-                        width="30"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
+                      <svg height="30" width="30" xmlns="http://www.w3.org/2000/svg">
                         <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                       </svg>
                     )}
-                    <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">
-                      {currentUserData?.username}
-                    </h5>
+                    <h5 className="ml-[5px] font-Raleway font-bold text-[22px]">{currentUserData?.username}</h5>
                   </a>
                 </div>
                 <button
@@ -641,7 +587,7 @@ function MyProfile() {
                   maxLength="60"
                   placeholder="Add your title here!(Maximum 60 characters)"
                   required
-                  onChange={e => setTitle(e.target.value)}
+                  onChange={(e) => setTitle(e.target.value)}
                 />
 
                 {/* Description Input */}
@@ -651,7 +597,7 @@ function MyProfile() {
                   maxLength="60"
                   placeholder="Describe your problem...(Maximum 60 characters)"
                   required
-                  onChange={e => setDescription(e.target.value)}
+                  onChange={(e) => setDescription(e.target.value)}
                 />
 
                 {/* Language Selector */}
@@ -661,7 +607,7 @@ function MyProfile() {
                   name="langSelect"
                   value={language}
                   required
-                  onChange={e => setLanguage(e.target.value)}
+                  onChange={(e) => setLanguage(e.target.value)}
                 >
                   <optgroup label="Choose Language..." className="bg-slate-800">
                     <option value="" disabled hidden>
@@ -681,24 +627,19 @@ function MyProfile() {
                   <div
                     className="py-2 px-2 text-right bg-opacity-50 bg-muted font-mono select-none overflow-hidden"
                     style={{
-                      minWidth: '3rem',
+                      minWidth: "3rem",
                       height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
                     }}
                   >
                     <div
                       className="h-full"
                       style={{
-                        transform: textareaRef.current
-                          ? `translateY(-${textareaRef.current.scrollTop}px)`
-                          : 'none',
+                        transform: textareaRef.current ? `translateY(-${textareaRef.current.scrollTop}px)` : "none",
                       }}
                     >
                       {Array.from(
                         {
-                          length: Math.max(
-                            numberOfVisibleLines,
-                            lineNumbers.length,
-                          ),
+                          length: Math.max(numberOfVisibleLines, lineNumbers.length),
                         },
                         (_, index) => (
                           <div
@@ -710,7 +651,7 @@ function MyProfile() {
                               opacity: index < lineNumbers.length ? 1 : 0,
                             }}
                           >
-                            {(index + 1).toString().padStart(2, '0')}
+                            {(index + 1).toString().padStart(2, "0")}
                           </div>
                         ),
                       )}
@@ -723,13 +664,12 @@ function MyProfile() {
                     value={text}
                     onChange={handleInputChange}
                     onKeyDown={handleKeyDown}
-                    onScroll={e => {
-                      const target = e.target;
+                    onScroll={(e) => {
+                      const target = e.target
                       if (target) {
-                        const lineNumbersContainer =
-                          target.previousSibling.firstChild;
+                        const lineNumbersContainer = target.previousSibling.firstChild
                         if (lineNumbersContainer) {
-                          lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`;
+                          lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`
                         }
                       }
                     }}
@@ -738,7 +678,7 @@ function MyProfile() {
                     style={{
                       lineHeight,
                       height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                      overflowY: 'auto',
+                      overflowY: "auto",
                     }}
                     aria-label="Numbered text editor"
                   />
@@ -747,17 +687,19 @@ function MyProfile() {
             </form>
           </div>
           {/*shareposts*/}
-          <SharedPostCo sharedPosts={sharedPosts} 
-            sharedPostAvatars={sharedPostAvatars} 
-            AvatarUrl={AvatarUrl} 
-            profileData={profileData} 
+          <SharedPostCo
+            sharedPosts={sharedPosts}
+            sharedPostAvatars={sharedPostAvatars}
+            AvatarUrl={AvatarUrl}
+            profileData={profileData}
           />
         </div>
       </div>
       <ScrollTop />
       <FooterAllPage />
     </>
-  );
+  )
 }
 
-export default MyProfile;
+export default MyProfile
+
