@@ -9,7 +9,7 @@ import LoadingAnimationCard from './loading_card';
 const PostCard = ({ board }) => {
   const language = board.language;
   const sourceCode = board.content.split('\n');
-  hljs.highlightAll();
+  // hljs.highlightAll();
   const [loading, setLoading] = useState(true); // State để theo dõi trạng thái loading
   const [error, setError] = useState(null); // State để xử lý lỗi
   const [AvatarUrl, setAvatarUrl] = useState(null);
@@ -33,6 +33,12 @@ const PostCard = ({ board }) => {
 
     fetchData();
   }, [board.userID]); // Dependency array: useEffect sẽ chạy lại nếu board.userID thay đổi
+
+  useEffect(() => {
+    if (sourceCode.length > 0) {
+      hljs.highlightAll();
+    }
+  }, [sourceCode]);
 
   if (loading) {
     return <LoadingAnimationCard />; // Hiển thị thông báo loading

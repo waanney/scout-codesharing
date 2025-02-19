@@ -3,6 +3,9 @@ import FooterAllPage from '~/components/footer.jsx';
 import PostCard from '~/components/post_card';
 import ScrollTop from '~/components/scrollTop';
 import usecheckTokenAndRedirect from '~/services/checkTokenExpiration.jsx';
+import { useEffect } from 'react';
+import hljs from 'highlight.js';
+
 export default function Discussion({
   board,
   paginate,
@@ -26,6 +29,12 @@ export default function Discussion({
     top: 0,
     behavior: 'auto',
   });
+
+  useEffect(() => {
+    if (board && board.length > 0) {
+      hljs.highlightAll();
+    }
+  }, [board]);
 
   return (
     <>

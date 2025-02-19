@@ -6,6 +6,7 @@ import PostCard from '~/components/post_card';
 import { useState, useEffect } from 'react';
 import { fetchSavedPostsDetails_API } from '~/api/index';
 import useUserId from '~/utils/useUserId';
+import hljs from 'highlight.js';
 
 export default function UserStorage() {
   const userId = useUserId();
@@ -40,6 +41,12 @@ export default function UserStorage() {
 
     fetchSavedPosts();
   }, [userId, savedPostsData.currentPage]);
+
+  useEffect(() => {
+    if (savedPostsData.posts.length > 0) {
+      hljs.highlightAll();
+    }
+  }, [savedPostsData.posts]);
 
   const pageNumbers = [];
   for (let i = 1; i <= savedPostsData.totalPages; i++) {
