@@ -27,7 +27,6 @@ function Signup() {
       password: Password,
       confirmPassword: ConfirmPassword,
     };
-    console.log(newUser);
     registerUser(newUser, dispatch, navigate);
   };
   const [showError, setShowError] = useState(false);
