@@ -1,5 +1,3 @@
-"use client"
-
 import { useEffect, useRef } from "react"
 import hljs from "highlight.js"
 import { env } from "~/configs/environment.js"

@@ -1,7 +1,7 @@
 import { Send } from 'lucide-react';
 import { Save } from 'lucide-react';
 import { Share } from 'lucide-react';
-import { MessageSquareText } from 'lucide-react';
+import { MessageSquareText, Ellipsis } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import CommentCard from '../../components/comment_card.jsx';
@@ -25,7 +25,6 @@ const API_ROOT = env.API_ROOT;
 
 function Post({ board, boardId }) {
   const { currentUserData, userId } = useUserData();
-
   const [content, setContent] = useState('');
   const [comments, setComments] = useState([]);
   // State để lưu danh sách comment
@@ -249,6 +248,13 @@ function Post({ board, boardId }) {
   const [fullText, setFullText] = useState(false);
   const isClamp = board?.description.length >= 78;
 
+  //delete comment box
+  const [openMenuId, setOpenMenuId] = useState(null);
+
+  const toggleMenu = (id) => {
+    setOpenMenuId(openMenuId === id ? null : id);
+  };
+
   //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
@@ -350,16 +356,39 @@ function Post({ board, boardId }) {
               {comments.map(comment => (
                 <div
                   key={comment._id}
-                  className="w-[95%] rounded-[10px] mb-4 p-[15px 5px] bg-slate-500"
+                  className="w-[100%] rounded-[10px] mb-4 p-[15px 5px] bg-blue-950"
                 >
-                  <div className="text-white text-2xl pl-[10px] font-bold leading-9">
+                  <div className="flex justify-between text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${comment.userId}`}
                     >
                       {comment.username}
                     </a>
+                    {comment.userId === userId && (
+                    <div className="relative">
+                      <div 
+                      onClick={() => toggleMenu(comment._id)}
+                      >
+                        <Ellipsis className="h-[30px] w-[30px] mr-[5px] cursor-pointer" />
+                      </div>
+                      {openMenuId === comment._id && (
+                      <div
+                        className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-800 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
+                        openMenuId === comment._id
+                          ? 'opacity-100 translate-y-0 pointer-events-auto' 
+                          : 'opacity-0 -translate-y-5 pointer-events-none'
+                        }`}
+                      >
+                      <button className="flex h-10 w-full cursor-pointer items-center px-3 transition-all hover:bg-gray-700 hover:rounded-[10px]">
+                        <p className="font-medium text-red-600 text-[20px]">Delete</p>
+                      </button>
+                    </div>
+                    )}
+                    </div>
+                    )}
                   </div>
+                  
                   <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
                     {comment.content}
                   </div>
