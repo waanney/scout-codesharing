@@ -76,7 +76,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           <img src={upvoteC} alt="Upvote" />
         </button>
         <span
-          className={`text-[24px] ml-2 ${isUpvoted ? 'text-blue-500 hover:bg-gray-100' : 'hover:bg-gray-100'}`}
+          className={`text-[24px] ml-2 ${isUpvoted ? 'text-blue-500 ' : ''}`}
         >
           {upvote}
         </span>
@@ -92,7 +92,7 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
           <img src={downvoteC} alt="Downvote" />
         </button>
         <span
-          className={`text-[24px] ml-2 ${isDownvoted ? 'text-orange-500 hover:bg-gray-100' : 'hover:bg-gray-100'}`}
+          className={`text-[24px] ml-2 ${isDownvoted ? 'text-orange-500 ' : ''}`}
         >
           {downvote}
         </span>

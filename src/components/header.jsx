@@ -129,7 +129,7 @@ const HeaderForAllPages = () => {
                   key={index}
                   className={`w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10 ${
                     activeIndex === index && isBorderActive
-                      ? 'border-2 border-red-500 animate-pulse'
+                      ? 'border-2 border-red-500 animate-pulse rounded-[10px]'
                       : ''
                   }`}
                   onMouseEnter={() => setHoveredIndex(index)}
