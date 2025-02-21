@@ -55,74 +55,71 @@ export default function Discussion({
           </div>
         ) : (
           <>
-            <nav className="mx-auto mb-[10px] text-[20px] md:text-[30px] flex items-center justify-center">
-              <ul className="pagination flex items-center space-x-1 md:space-x-2">
-                {/* Nút Previous */}
-                <li className="page-item">
+            <nav aria-label="Page navigation" className="flex justify-center"> 
+              <ul className="inline-flex -space-x-px text-sm mb-2"> 
+                <li>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
-                    className={`page-link px-3 py-1 md:px-5 md:py-2 rounded ${currentPage === 1
-                      ? 'opacity-50 cursor-not-allowed'
-                      : 'text-white hover:text-white'
-                      }`}
+                    className={`flex items-center justify-center px-3 py-2 mr-2 leading-tight rounded-full 
+              ${currentPage === 1
+                        ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
+                        : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
+                      } `} 
                   >
                     <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      className="w-12 h-12 bg-gray-900 rounded-full"
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M15 19l-7-7 7-7"
+                        fillRule="evenodd"
+                        d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z"
+                        clipRule="evenodd"
                       />
                     </svg>
                   </button>
                 </li>
 
-                {/* Số trang */}
-                <div className='flex bg-gray-900 opacity-60 rounded-[20px] h-[50px] w-[250px]'>
-                  <div className='ml-5 mr-14'>Page</div>
-                  <form className='mt-1' onSubmit={handleSummit}>
-                    <input
-                      type='tel'
-                      className='w-10 bg-black opacity-30 h-8 rounded-[10px] border-gray-600 border-2'
-                      required
-                      value={pageNumber}
-                      onChange={handleChange}
-                    >
-                    </input>
-                  </form>
-                  <div className='ml-3'>
-                    /{totalPages}
+                <li>
+                  <div className="flex items-center justify-center px-3 py-2 leading-tight text-gray-700 bg-gray-900 border border-black rounded-full">
+                    <span className="mr-2">Trang</span>
+                    <form onSubmit={handleSummit} className="inline-block"> 
+                      <input
+                        type="tel"
+                        className="w-10 text-center bg-gray-800 border border-black rounded-md"
+                        required
+                        value={pageNumber}
+                        onChange={handleChange}
+                      />
+                    </form>
+                    <span className="ml-2">/ {totalPages}</span>
                   </div>
-                </div>
-                {/* Nút Next */}
-                <li className="page-item">
+                </li>
+
+                <li>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
-                    className={`page-link px-3 py-1 md:px-5 md:py-2 rounded ${currentPage === totalPages
-                      ? 'opacity-50 cursor-not-allowed'
-                      : 'text-white hover:text-white'
-                      }`}
+                    className={`flex items-center justify-center px-3 py-2 leading-tight rounded-full ml-2
+              ${currentPage === totalPages
+                        ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
+                        : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
+                      } `} 
                   >
                     <svg
+                      className="w-5 h-5"
+                      aria-hidden="true"
+                      fill="currentColor"
+                      viewBox="0 0 20 20"
                       xmlns="http://www.w3.org/2000/svg"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      strokeWidth="2"
-                      stroke="currentColor"
-                      className="w-12 h-12 bg-gray-900 rounded-full"
                     >
                       <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        d="M9 5l7 7-7 7"
+                        fillRule="evenodd"
+                        d="M7.293 14.707a1 1 0 010-1.414l3.293-3.293-3.293-3.293a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z"
+                        clipRule="evenodd"
                       />
                     </svg>
                   </button>

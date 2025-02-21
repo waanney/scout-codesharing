@@ -35,11 +35,17 @@ const HeaderForAllPages = () => {
       path: '/discussion',
       check: path => path === '/discussion',
     },
-    { name: 'Storage', path: '/storage', check: path => path === '/storage' },
+    //{ name: 'Storage', path: '/storage', check: path => path === '/storage' },
     {
       name: 'Profile',
       path: `/profile/${userId}`,
       check: path => path.includes('/profile'),
+    },
+    {
+      name: 'Search',
+      path: '/search',
+      check: path => path.includes('/search'),
+
     },
   ];
 
@@ -119,7 +125,6 @@ const HeaderForAllPages = () => {
               />
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
-
             <div
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
@@ -127,11 +132,10 @@ const HeaderForAllPages = () => {
               {routes.map((item, index) => (
                 <div
                   key={index}
-                  className={`w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10 ${
-                    activeIndex === index && isBorderActive
+                  className={`w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10 ${activeIndex === index && isBorderActive
                       ? 'border-2 border-red-500 animate-pulse rounded-[10px]'
                       : ''
-                  }`}
+                    }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
                   onClick={() => handleClick(index, false)}
@@ -177,12 +181,19 @@ const HeaderForAllPages = () => {
               </a>
 
               <div
-                className={`absolute right-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
-                  open
+                className={`absolute right-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${open
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'
-                }`}
+                  }`}
               >
+                <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
+                  <Link
+                    to="/storage"
+                    className=" hover:cursor-pointer"
+                  >
+                    <p className="font-medium">Storage</p>
+                  </Link>
+                </button>
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
                   <Link
                     to="/changepassword"
@@ -241,13 +252,11 @@ const HeaderForAllPages = () => {
               {routes.map((item, index) => (
                 <div
                   key={index}
-                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
-                    item.check(location.pathname) ? 'bg-blue-500/[.2]' : ''
-                  }
-                    ${
-                      activeIndex === index && mobileBorderActiveIndex === index
-                        ? 'border-2 border-red-500 animate-pulse'
-                        : ''
+                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${item.check(location.pathname) ? 'bg-blue-500/[.2]' : ''
+                    }
+                    ${activeIndex === index && mobileBorderActiveIndex === index
+                      ? 'border-2 border-red-500 animate-pulse'
+                      : ''
                     }
                   `}
                   onClick={() => handleClick(index, true)}
@@ -262,7 +271,15 @@ const HeaderForAllPages = () => {
               ))}
               <hr className="my-[5px]" />
               <div className="mt-[10px]">
-                <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">
+                <div className="h-[70px] grid-flow-row justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">
+                    <button className="w-full h-full px-[5px]">
+                    <Link
+                      to="/storage"
+                      className="hover:cursor-pointer w-full h-full flex items-center"
+                    >
+                      <p className="font-medium text-[18px]">Storage</p>
+                    </Link>
+                  </button>
                   <button className="w-full h-full px-[5px]">
                     <Link
                       to="/changepassword"
@@ -273,7 +290,7 @@ const HeaderForAllPages = () => {
                   </button>
                 </div>
 
-                <div className="h-[70px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
+                <div className="h-[200px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
                   <button
                     onClick={handleLogout}
                     className="w-full h-full px-[5px] text-red-600"
@@ -309,7 +326,7 @@ const HeaderForAllPages = () => {
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+              {['Home', 'Discussion', 'Storage', 'Profile', 'Search'].map(
                 (item, index) => (
                   <div
                     key={index}
@@ -357,7 +374,7 @@ const HeaderForAllPages = () => {
             <div
               className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile'].map(
+              {['Home', 'Discussion', 'Storage', 'Profile', 'Search'].map(
                 (item, index) => (
                   <div
                     key={index}

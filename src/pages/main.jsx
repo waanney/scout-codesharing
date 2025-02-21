@@ -15,7 +15,7 @@ import UserStorage from './StoragePage/UserStorage';
 import Changepassword from './Changepassword';
 import Forgotpassword from './Forgotpassword.jsx';
 import Resetpassword from './Resetpassword.jsx';
-import SearchBarPage from './SearchBar.jsx';
+import SearchBarPage from './SearchBarPage.jsx';
 const router = createBrowserRouter([
   {
     path: '/',
