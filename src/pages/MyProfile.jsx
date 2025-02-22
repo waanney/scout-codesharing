@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import HeaderForAllPages from '~/components/header.jsx';
 import FooterAllPage from '~/components/footer.jsx';
@@ -21,7 +19,6 @@ import savePost from '~/assets/save.svg';
 import editPost from '~/assets/edit.svg';
 import content from '~/assets/Content.svg';
 import LoadingAnimation from '../components/loading.jsx';
-
 const API_ROOT = env.API_ROOT;
 
 function MyProfile() {
@@ -371,13 +368,13 @@ function MyProfile() {
       setTimeout(() => setFadeSuccess(true), 1500);
       setTimeout(() => {
         setShowSuccess(false);
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setErrorMessage(error);
       setShowError(true);
       setFadeError(false);
       setTimeout(() => setFadeError(true), 1500);
-      setTimeout(() => setShowError(false), 2000);
+      setTimeout(() => setShowError(false), 1000);
     }
   };
 

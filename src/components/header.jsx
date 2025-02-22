@@ -1,5 +1,5 @@
 // Đây là header của trang web
-import { useState } from 'react';
+import { useState,useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -106,6 +106,20 @@ const HeaderForAllPages = () => {
     // localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
   };
 
+  const menuRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(null);
+      }
+    };
+
+    document.addEventListener("click", handleClickOutside);
+    return () => {
+      document.removeEventListener("click", handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="fixed w-full px-[10px] z-20 bg-[#0b2878] h-[80px]">
       {currentUser ? (
@@ -154,6 +168,7 @@ const HeaderForAllPages = () => {
             <div
               className="hidden lg:flex h-[30px] w-[20%] relative items-center space-x-1 cursor-pointer justify-end"
               onClick={() => setOpen(!open)}
+              ref={menuRef}
             >
               <a className="flex items-center">
                 {AvatarUrl ? (

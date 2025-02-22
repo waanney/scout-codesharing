@@ -13,7 +13,7 @@ import {
   commentPost_API,
   commentInlinePost_API,
 } from '../../redux/apiRequest.js';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef,useCallback } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
@@ -250,10 +250,31 @@ function Post({ board, boardId }) {
 
   //delete comment box
   const [openMenuId, setOpenMenuId] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
+  const menuRef = useRef(null);
 
   const toggleMenu = (id) => {
     setOpenMenuId(openMenuId === id ? null : id);
   };
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener("mousedown", handleClickOutside); 
+    return () => {
+      document.removeEventListener("mousedown", handleClickOutside); 
+    };
+  }, []);
+  const handleDeleteClick = useCallback((commentId, event) => {
+    event.stopPropagation();
+    setCommentToDelete(commentId); 
+    setShowConfirmModal(true);     
+    setOpenMenuId(null);         
+  }, []);
 
   //loading data
   if (loading) {
@@ -366,28 +387,32 @@ function Post({ board, boardId }) {
                       {comment.username}
                     </a>
                     {comment.userId === userId && (
-                    <div className="relative">
-                      <div 
-                      onClick={() => toggleMenu(comment._id)}
-                      >
-                        <Ellipsis className="h-[30px] w-[30px] mr-[5px] cursor-pointer" />
-                      </div>
+                    <div className="relative" ref={menuRef}>
+                        <Ellipsis 
+                          className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
+                          onClick={() => toggleMenu(comment._id)}
+                        />
                       {openMenuId === comment._id && (
                       <div
-                        className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-800 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
+                        className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
                         openMenuId === comment._id
                           ? 'opacity-100 translate-y-0 pointer-events-auto' 
                           : 'opacity-0 -translate-y-5 pointer-events-none'
                         }`}
                       >
-                      <button className="flex h-10 w-full cursor-pointer items-center px-3 transition-all hover:bg-gray-700 hover:rounded-[10px]">
+                      <button 
+                        className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                        onClick={(event) => handleDeleteClick(comment._id, event)}
+                      >
                         <p className="font-medium text-red-600 text-[20px]">Delete</p>
                       </button>
                     </div>
                     )}
                     </div>
+                    
                     )}
                   </div>
+                  
                   
                   <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
                     {comment.content}
@@ -400,6 +425,35 @@ function Post({ board, boardId }) {
                   />
                 </div>
               ))}
+              {showConfirmModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50">
+                  <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                    <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                    <p>Are you sure you want to delete this post?</p>
+                    <div className="flex justify-between mt-4">
+                      <button 
+                        className="px-4 py-2 bg-gray-300 rounded-md mr-2" 
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setShowConfirmModal(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-red-600 text-white rounded-md"
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          setShowConfirmModal(false);
+                          setOpenMenuId(null);
+                        }}
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <form
               onSubmit={handleComment}
