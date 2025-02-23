@@ -2,7 +2,7 @@
 import HeaderForAllPages from '~/components/header.jsx';
 import FooterAllPage from '~/components/footer.jsx';
 import ScrollTop from '~/components/scrollTop';
-import PostCard from '~/components/post_card';
+import SavePostCard from '~/components/save_post_card';
 import { useState, useEffect } from 'react';
 import { fetchSavedPostsDetails_API } from '~/api/index';
 import useUserId from '~/utils/useUserId';
@@ -154,7 +154,7 @@ export default function UserStorage() {
           <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[66px]">
             {savedPostsData.posts.map(content => (
               <li key={content._id} className="bg-navy-700 rounded-lg">
-                <PostCard board={content} />
+                <SavePostCard board={content} />
               </li>
             ))}
           </ul>
