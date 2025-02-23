@@ -761,6 +761,7 @@ function MyProfile() {
             AvatarUrl={AvatarUrl}
             profileData={profileData}
             onDeletePost={handleDeletePost}
+            owner={owner}
           />
         </div>
       </div>

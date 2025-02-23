@@ -13,6 +13,7 @@ const SharedPostCo = ({
   AvatarUrl,
   profileData,
   onDeletePost,
+  owner,
 }) => {
   const FE_ROOT = env.FE_ROOT;
   const sharedPostsRef = useRef(null);
@@ -129,8 +130,7 @@ const SharedPostCo = ({
       {sharedPosts.map(post => (
         <div
           key={post._id}
-          className="cursor-pointer mt-5 mb-5 w-[90%] h-[580px] bg-black bg-opacity-50 rounded-lg mx-auto"
-          onClick={() => (window.location.href = `${FE_ROOT}/post/${post._id}`)}
+          className="mt-5 mb-5 w-[90%] h-[580px] bg-black bg-opacity-50 rounded-lg mx-auto"
         >
           {/* Header */}
           <div className="flex items-center justify-between p-2">
@@ -150,26 +150,28 @@ const SharedPostCo = ({
             </a>
 
             {/* Only Show Menu if the Logged-in User Owns the Post */}
-            <div className="relative" ref={menuRef}>
-              <Ellipsis
-                className="flex h-[30px] w-[30px] cursor-pointer "
-                onClick={event => toggleMenu(post._id, event)}
-              />
-              <div
-                className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
-                  openMenuId
-                    ? 'opacity-100 translate-y-0 pointer-events-auto'
-                    : 'opacity-0 -translate-y-5 pointer-events-none'
-                }`}
-              >
-                <button
-                  className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
-                  onClick={event => handleDeleteClick(post._id, event)}
+            {owner === userId && (
+              <div className="relative" ref={menuRef}>
+                <Ellipsis
+                  className="flex h-[30px] w-[30px] cursor-pointer "
+                  onClick={event => toggleMenu(post._id, event)}
+                />
+                <div
+                  className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
+                    openMenuId
+                      ? 'opacity-100 translate-y-0 pointer-events-auto'
+                      : 'opacity-0 -translate-y-5 pointer-events-none'
+                  }`}
                 >
-                  Delete
-                </button>
+                  <button
+                    className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                    onClick={event => handleDeleteClick(post._id, event)}
+                  >
+                    Delete
+                  </button>
+                </div>
               </div>
-            </div>
+            )}
             {showConfirmModal && (
               <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                 <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
@@ -198,7 +200,12 @@ const SharedPostCo = ({
           </div>
 
           {/* Shared Post */}
-          <div className="mt-5 w-[90%] mx-auto h-[85%] border border-gray-300 rounded-lg">
+          <div
+            className="cursor-pointer mt-5 w-[90%] mx-auto h-[85%] border border-gray-300 rounded-lg"
+            onClick={() =>
+              (window.location.href = `${FE_ROOT}/post/${post._id}`)
+            }
+          >
             <div className="flex items-center p-2">
               {sharedPostAvatars[post._id] ? (
                 <img
