@@ -377,6 +377,11 @@ function MyProfile() {
       setTimeout(() => setShowError(false), 1000);
     }
   };
+  const handleDeletePost = deletedPostId => {
+    setSharedPosts(prevPosts =>
+      prevPosts.filter(post => post._id !== deletedPostId),
+    );
+  };
 
   if (loading) {
     return <LoadingAnimation />;
@@ -755,6 +760,7 @@ function MyProfile() {
             sharedPostAvatars={sharedPostAvatars}
             AvatarUrl={AvatarUrl}
             profileData={profileData}
+            onDeletePost={handleDeletePost}
           />
         </div>
       </div>
