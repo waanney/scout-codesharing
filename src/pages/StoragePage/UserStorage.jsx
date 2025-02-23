@@ -62,6 +62,18 @@ export default function UserStorage() {
     }
   };
 
+  const handleDeletePost = async deletedPostId => {
+    try {
+      setSavedPostsData(prev => ({
+        ...prev,
+        posts: prev.posts.filter(post => post._id !== deletedPostId),
+        totalCount: prev.totalCount - 1,
+      }));
+    } catch (error) {
+      console.error('Error updating UI after deletion:', error);
+    }
+  };
+
   return (
     <>
       <HeaderForAllPages className="sticky" />
@@ -154,7 +166,7 @@ export default function UserStorage() {
           <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[66px]">
             {savedPostsData.posts.map(content => (
               <li key={content._id} className="bg-navy-700 rounded-lg">
-                <SavePostCard board={content} />
+                <SavePostCard board={content} onDeletePost={handleDeletePost} />
               </li>
             ))}
           </ul>
