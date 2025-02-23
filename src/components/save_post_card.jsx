@@ -81,7 +81,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
 
     try {
       await axios.put(
-        `${API_ROOT}/v1/Auth/delete-savedpost/${userId}/${postToDelete}`,
+        `${API_ROOT}/v1/boards/delete-savedpost/${userId}/${postToDelete}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
