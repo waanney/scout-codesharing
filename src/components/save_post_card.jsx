@@ -26,7 +26,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
     const fetchData = async () => {
       try {
         const avatarcontent = await axios.get(
-          `${env.API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
+          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
         );
         setAvatarUrl(avatarcontent.data.avatarUrl);
       } catch (err) {
@@ -80,7 +80,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
     if (!postToDelete) return;
 
     try {
-      await axios.delete(
+      await axios.put(
         `${API_ROOT}/v1/Auth/delete-savedpost/${userId}/${postToDelete}`,
         {
           headers: {
