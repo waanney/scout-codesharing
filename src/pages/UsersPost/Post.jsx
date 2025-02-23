@@ -13,7 +13,7 @@ import {
   commentPost_API,
   commentInlinePost_API,
 } from '../../redux/apiRequest.js';
-import { useState, useEffect, useRef,useCallback } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
@@ -27,7 +27,6 @@ function Post({ board, boardId }) {
   const { currentUserData, userId } = useUserData();
   const [content, setContent] = useState('');
   const [comments, setComments] = useState([]);
-  // State để lưu danh sách comment
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
@@ -49,7 +48,6 @@ function Post({ board, boardId }) {
     try {
       const response = await commentPost_API(newComment, dispatch, navigate);
 
-      // Kiểm tra response và response.data
       if (!response || !response.data) {
         throw new Error('Không nhận được phản hồi từ server');
       }
@@ -70,13 +68,12 @@ function Post({ board, boardId }) {
       console.error('Error posting comment:', error);
     }
   };
-  // lấy data user
 
+  // lấy data user
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
   useEffect(() => {
-    // Lấy thông tin user từ API
     const fetchData = async () => {
       setLoading(true);
       try {
@@ -93,12 +90,11 @@ function Post({ board, boardId }) {
     };
 
     fetchData();
-  }, [board.userID]); // Chỉ chạy khi board.userID thay đổi
+  }, [board.userID]);
 
   useEffect(() => {
-    // Cập nhật state comments khi board.comments thay đổi
     setComments(board.comments || []);
-  }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
+  }, [board.comments]);
 
   // highlight code
   const language = board.language;
@@ -120,7 +116,6 @@ function Post({ board, boardId }) {
   const [commentsByLine, setCommentsByLine] = useState([]);
 
   useEffect(() => {
-    // Group comments by lineNumber whenever commentsInline changes
     const groupedComments = board?.commentsInline.reduce((acc, comment) => {
       if (!acc[comment.lineNumber]) {
         acc[comment.lineNumber] = [];
@@ -145,7 +140,6 @@ function Post({ board, boardId }) {
       username: currentUserData.username,
       lineNumber: lineNumber,
     };
-    // api
     try {
       const response = await commentInlinePost_API(
         newLineComment,
@@ -157,14 +151,13 @@ function Post({ board, boardId }) {
       setComments(prevComments => {
         if (!Array.isArray(prevComments)) {
           console.error('prevComments is not an array:', prevComments);
-          return createdComment ? [createdComment] : []; // Trả về mảng mới nếu prevComments không phải mảng
+          return createdComment ? [createdComment] : [];
         }
         return createdComment
           ? [...prevComments, createdComment]
           : prevComments;
       });
 
-      // Cập nhật commentsByLine một cách chính xác
       setCommentsByLine(prevCommentsByLine => {
         const updatedLineComments = prevCommentsByLine[lineNumber]
           ? [...prevCommentsByLine[lineNumber]]
@@ -188,14 +181,13 @@ function Post({ board, boardId }) {
       setLineContent('');
     } catch (error) {
       console.error('Error posting comment:', error);
-      alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.'); // Thông báo lỗi cho người dùng
+      alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.');
     }
   };
 
   const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra xem boardId có trong danh sách sharedPosts của currentUserData hay không
     const isBoardShared = currentUserData?.sharedPosts.some(
       postId => postId.toString() === boardId,
     );
@@ -203,7 +195,6 @@ function Post({ board, boardId }) {
   }, [boardId, currentUserData]);
 
   const handleShare = async () => {
-    // If already shared, do nothing
     if (isShared) return;
 
     try {
@@ -221,7 +212,6 @@ function Post({ board, boardId }) {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra xem boardId có trong danh sách sharedPosts của currentUserData hay không
     const isBoardSaved = currentUserData?.savedPosts.some(
       postId => postId.toString() === boardId,
     );
@@ -254,27 +244,60 @@ function Post({ board, boardId }) {
   const [commentToDelete, setCommentToDelete] = useState(null);
   const menuRef = useRef(null);
 
-  const toggleMenu = (id) => {
+  const toggleMenu = id => {
     setOpenMenuId(openMenuId === id ? null : id);
   };
+
   useEffect(() => {
-    const handleClickOutside = (event) => {
+    const handleClickOutside = event => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpenMenuId(null);
       }
     };
 
-    document.addEventListener("mousedown", handleClickOutside); 
+    document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      document.removeEventListener("mousedown", handleClickOutside); 
+      document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
   const handleDeleteClick = useCallback((commentId, event) => {
     event.stopPropagation();
-    setCommentToDelete(commentId); 
-    setShowConfirmModal(true);     
-    setOpenMenuId(null);         
+    setCommentToDelete(commentId);
+    setShowConfirmModal(true);
+    setOpenMenuId(null);
   }, []);
+
+  const handleConfirmDelete = async event => {
+    event.stopPropagation();
+    if (!commentToDelete) return;
+
+    try {
+      await axios.delete(`${API_ROOT}/v1/Comment/${commentToDelete}/delete`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      setComments(prevComments =>
+        prevComments.filter(comment => comment._id !== commentToDelete),
+      );
+
+      setCommentsByLine(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(line => {
+          updated[line] = updated[line].filter(c => c._id !== commentToDelete);
+        });
+        return updated;
+      });
+
+      setShowConfirmModal(false);
+      setCommentToDelete(null);
+    } catch (error) {
+      console.error('Error deleting comment:', error);
+      alert('Failed to delete comment.');
+    }
+  };
 
   //loading data
   if (loading) {
@@ -387,33 +410,35 @@ function Post({ board, boardId }) {
                       {comment.username}
                     </a>
                     {comment.userId === userId && (
-                    <div className="relative" ref={menuRef}>
-                        <Ellipsis 
+                      <div className="relative" ref={menuRef}>
+                        <Ellipsis
                           className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
                           onClick={() => toggleMenu(comment._id)}
                         />
-                      {openMenuId === comment._id && (
-                      <div
-                        className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
-                        openMenuId === comment._id
-                          ? 'opacity-100 translate-y-0 pointer-events-auto' 
-                          : 'opacity-0 -translate-y-5 pointer-events-none'
-                        }`}
-                      >
-                      <button 
-                        className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
-                        onClick={(event) => handleDeleteClick(comment._id, event)}
-                      >
-                        <p className="font-medium text-red-600 text-[20px]">Delete</p>
-                      </button>
-                    </div>
-                    )}
-                    </div>
-                    
+                        {openMenuId === comment._id && (
+                          <div
+                            className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
+                              openMenuId === comment._id
+                                ? 'opacity-100 translate-y-0 pointer-events-auto'
+                                : 'opacity-0 -translate-y-5 pointer-events-none'
+                            }`}
+                          >
+                            <button
+                              className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                              onClick={event =>
+                                handleDeleteClick(comment._id, event)
+                              }
+                            >
+                              <p className="font-medium text-red-600 text-[20px]">
+                                Delete
+                              </p>
+                            </button>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
-                  
-                  
+
                   <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
                     {comment.content}
                   </div>
@@ -429,11 +454,11 @@ function Post({ board, boardId }) {
                 <div className="fixed inset-0 flex items-center justify-center z-50">
                   <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
                     <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
-                    <p>Are you sure you want to delete this post?</p>
+                    <p>Are you sure you want to delete this comment?</p>
                     <div className="flex justify-between mt-4">
-                      <button 
-                        className="px-4 py-2 bg-gray-300 rounded-md mr-2" 
-                        onClick={(event) => {
+                      <button
+                        className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                        onClick={event => {
                           event.stopPropagation();
                           setShowConfirmModal(false);
                         }}
@@ -442,11 +467,7 @@ function Post({ board, boardId }) {
                       </button>
                       <button
                         className="px-4 py-2 bg-red-600 text-white rounded-md"
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          setShowConfirmModal(false);
-                          setOpenMenuId(null);
-                        }}
+                        onClick={handleConfirmDelete}
                       >
                         Confirm
                       </button>
@@ -481,7 +502,6 @@ function Post({ board, boardId }) {
               </div>
               {sourceCode.map((code, lineNum) => (
                 <div key={lineNum} className="flex">
-                  {/* Button */}
                   <button
                     onClick={() => {
                       const NewOpen = new Array(sourceCode.length).fill(false);
