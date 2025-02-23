@@ -30,6 +30,14 @@ function Post({ board, boardId }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  const [showError, setShowError] = useState(false);
+  const [fadeError, setFadeError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [fadeSuccess, setFadeSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
   // handle comment post
   const handleComment = async e => {
     e.preventDefault();
@@ -291,11 +299,23 @@ function Post({ board, boardId }) {
         return updated;
       });
 
+      setSuccessMessage('Delete comment successfully!');
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      setTimeout(() => setFadeSuccess(true), 1500);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 1000);
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message);
+      setShowError(true);
+      setFadeError(false);
+      setTimeout(() => setFadeError(true), 1500);
+      setTimeout(() => setShowError(false), 1000);
+    } finally {
       setShowConfirmModal(false);
       setCommentToDelete(null);
-    } catch (error) {
-      console.error('Error deleting comment:', error);
-      alert('Failed to delete comment.');
     }
   };
 
@@ -316,6 +336,32 @@ function Post({ board, boardId }) {
     <>
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
         <HeaderForAllPages className="sticky" comment={comments} />
+        {showError && (
+          <div className="fixed inset-0 flex items-center justify-center z-10">
+            <div
+              className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
+              ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                transition-all duration-1000 ease-in-out flex items-center justify-center`}
+            >
+              <p className="text-base md:text-[22px] font-bold text-center text-white">
+                {errorMessage}
+              </p>
+            </div>
+          </div>
+        )}
+        {showSuccess && (
+          <div className="fixed inset-0 flex items-center justify-center z-10">
+            <div
+              className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
+              ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+              transition-all duration-1000 ease-in-out flex items-center justify-center`}
+            >
+              <p className="text-base md:text-[22px] font-bold text-center text-white">
+                {successMessage}
+              </p>
+            </div>
+          </div>
+        )}
         <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
           <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
