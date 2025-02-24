@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useEffect, useRef } from 'react';
 import VanillaTilt from 'vanilla-tilt';
 import HeaderForAllPages from '~/components/header.jsx';
@@ -13,8 +14,7 @@ import StorageImg from '~/assets/Storage.svg';
 import NewfeedImg from '~/assets/Newfeed.svg';
 import PostImG from '~/assets/Posts.svg';
 import BackgroundImg from '~/assets/Scout_blur.png';
-import Scene from '../components/threedlogo.jsx';
-import Name from '../components/threedname.jsx';
+import Scene from '~/components/threedlogo.jsx';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);
@@ -102,9 +102,9 @@ function HomePage() {
   return (
     <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden">
       <HeaderForAllPages className="sticky" />
-      
+
       <div className="h-screen w-full flex justify-center items-center">
-        <Scene/>
+        <Scene />
       </div>
 
       <div className="relative p-[20px]">
