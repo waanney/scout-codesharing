@@ -17,7 +17,7 @@ const SharedPostCo = ({
 }) => {
   const FE_ROOT = env.FE_ROOT;
   const sharedPostsRef = useRef(null);
-  const menuRef = useRef(null);
+  const menuRefs = useRef({});
   const [openMenuId, setOpenMenuId] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
@@ -33,12 +33,16 @@ const SharedPostCo = ({
 
   const toggleMenu = (id, event) => {
     event.stopPropagation();
-    setOpenMenuId(openMenuId === id ? null : id);
+    setOpenMenuId(prevId => (prevId === id ? null : id));
   };
 
   useEffect(() => {
     const handleClickOutside = event => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (
+        openMenuId &&
+        menuRefs.current[openMenuId] &&
+        !menuRefs.current[openMenuId].contains(event.target)
+      ) {
         setOpenMenuId(null);
       }
     };
@@ -47,7 +51,7 @@ const SharedPostCo = ({
     return () => {
       document.removeEventListener('click', handleClickOutside);
     };
-  }, []);
+  }, [openMenuId]);
 
   const handleDeleteClick = (commentId, event) => {
     event.stopPropagation();
@@ -151,14 +155,17 @@ const SharedPostCo = ({
 
             {/* Only Show Menu if the Logged-in User Owns the Post */}
             {owner === userId && (
-              <div className="relative" ref={menuRef}>
+              <div
+                className="relative"
+                ref={el => (menuRefs.current[post._id] = el)}
+              >
                 <Ellipsis
                   className="flex h-[30px] w-[30px] cursor-pointer "
                   onClick={event => toggleMenu(post._id, event)}
                 />
                 <div
                   className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
-                    openMenuId
+                    openMenuId === post._id
                       ? 'opacity-100 translate-y-0 pointer-events-auto'
                       : 'opacity-0 -translate-y-5 pointer-events-none'
                   }`}

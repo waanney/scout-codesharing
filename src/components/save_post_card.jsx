@@ -17,7 +17,6 @@ const SavePostCard = ({ board, onDeletePost }) => {
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
   const userId = useUserId();
-  const [openMenuId, setOpenMenuId] = useState(null);
   const [postToDelete, setPostToDelete] = useState(null);
   const savePostRef = useRef(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
@@ -45,29 +44,12 @@ const SavePostCard = ({ board, onDeletePost }) => {
   }, [sourceCode]);
 
   // Notification states
-//   const [showError, setShowError] = useState(false);
-//   const [fadeError, setFadeError] = useState(false);
-//   const [errorMessage, setErrorMessage] = useState('');
-//   const [showSuccess, setShowSuccess] = useState(false);
-//   const [fadeSuccess, setFadeSuccess] = useState(false);
-//   const [successMessage, setSuccessMessage] = useState('');
-  const [notification, setNotification] = useState(null);
-
-//   // Handle outside click
-//   useEffect(() => {
-//     const handleClickOutside = event => {
-//       if (
-//         savePostRef.current &&
-//         !savePostRef.current.contains(event.target) &&
-//         openMenuId
-//       ) {
-//         setOpenMenuId(null);
-//       }
-//     };
-
-//     document.addEventListener('click', handleClickOutside);
-//     return () => document.removeEventListener('click', handleClickOutside);
-//   }, [openMenuId]);
+  //   const [showError, setShowError] = useState(false);
+  //   const [fadeError, setFadeError] = useState(false);
+  //   const [errorMessage, setErrorMessage] = useState('');
+  //   const [showSuccess, setShowSuccess] = useState(false);
+  //   const [fadeSuccess, setFadeSuccess] = useState(false);
+  //   const [successMessage, setSuccessMessage] = useState('');
 
   // Toggle menu/confirm modal
   const handleDeleteClick = (boardId, event) => {
@@ -91,16 +73,12 @@ const SavePostCard = ({ board, onDeletePost }) => {
           },
         },
       );
-
       onDeletePost(postToDelete);
-      setNotification({ type: 'success', message: 'Post removed successfully!' });
     } catch (error) {
-        setNotification({ type: 'error', message: error.response?.data?.message || 'Delete post failed!' });
+      console.error('Error deleting post:', error);
     } finally {
-        setShowConfirmModal(false);
-        setPostToDelete(null);
-        setTimeout(() => setNotification(null), 3000); 
-
+      setShowConfirmModal(false);
+      setPostToDelete(null);
     }
   };
 
@@ -110,23 +88,6 @@ const SavePostCard = ({ board, onDeletePost }) => {
 
   return (
     <div>
-      {/* Notification Display */}
-      {notification && (
-        <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div
-            className={`w-full max-w-[450px] h-[110px] rounded-[10px] 
-            ${notification.type === 'success' ? 'bg-gradient-to-r from-green-500 to-green-700' : 'bg-gradient-to-r from-[#cc3333] to-[#661a1a]'}
-             transition-all duration-500 ease-in-out flex items-center justify-center
-             ${notification ? 'opacity-100 visibility-visible' : 'opacity-0 visibility-hidden'}`}
-          >
-            <p className="text-base md:text-[22px] font-bold text-center text-white">
-              {notification.message}
-            </p>
-          </div>
-        </div>
-      )}
-
-        
       <div
         className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
         onClick={() =>
@@ -214,7 +175,6 @@ const SavePostCard = ({ board, onDeletePost }) => {
           </div>
         </div>
       )}
-
     </div>
   );
 };

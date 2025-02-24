@@ -319,14 +319,14 @@ function Post({ board, boardId }) {
     }
   };
 
-  //delete post 
+  //delete post
   const [openPostMenuId, setOpenPostMenuId] = useState(null);
   const [showPostConfirmModal, setShowPostConfirmModal] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
   const menuPostRef = useRef(null);
 
   const togglePostMenu = id => {
-    setOpenPostMenuId(openMenuId === id ? null : id);
+    setOpenPostMenuId(prevId => (prevId === id ? null : id));
   };
 
   useEffect(() => {
@@ -342,53 +342,50 @@ function Post({ board, boardId }) {
     };
   }, []);
 
-  const handlePostDeleteClick = useCallback((commentId, event) => {
-    event.stopPropagation();
-    setPostToDelete(commentId);
-    setShowPostConfirmModal(true);
-    setOpenPostMenuId(null);
-  }, []);
+  const handlePostDeleteClick = useCallback(
+    (postId, event) => {
+      event.stopPropagation();
+      setPostToDelete(postId);
+      setShowPostConfirmModal(true);
+      setOpenPostMenuId(null);
+    },
+    [board.userId, userId],
+  );
 
   const handlePostConfirmDelete = async event => {
     event.stopPropagation();
-    if (!commentToDelete) return;
+    if (!postToDelete || board.userId !== userId) return;
 
     try {
-      // await axios.delete(`${API_ROOT}/v1/Comment/${commentToDelete}/delete`, {
-      //   headers: {
-      //     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
-      //   },
-      // });
+      const response = await axios.delete(
+        `${API_ROOT}/v1/boards/delete-post/${postToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        },
+      );
 
-      // setComments(prevComments =>
-      //   prevComments.filter(comment => comment._id !== commentToDelete),
-      // );
+      setSuccessMessage(response.data.message);
+      setShowSuccess(true);
+      setFadeSuccess(false);
 
-      // setCommentsByLine(prev => {
-      //   const updated = { ...prev };
-      //   Object.keys(updated).forEach(line => {
-      //     updated[line] = updated[line].filter(c => c._id !== commentToDelete);
-      //   });
-      //   return updated;
-      // });
-
-      // setSuccessMessage('Delete comment successfully!');
-      // setShowSuccess(true);
-      // setFadeSuccess(false);
-
-      // setTimeout(() => setFadeSuccess(true), 1500);
-      // setTimeout(() => {
-      //   setShowSuccess(false);
-      // }, 1000);
+      setTimeout(() => {
+        setFadeSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          navigate('/discussion');
+        }, 1000);
+      }, 1500);
     } catch (error) {
-      setErrorMessage(error.response?.data?.message);
+      setErrorMessage(error.response?.data?.message || 'Failed to delete post');
       setShowError(true);
       setFadeError(false);
       setTimeout(() => setFadeError(true), 1500);
       setTimeout(() => setShowError(false), 1000);
     } finally {
-      setShowConfirmModal(false);
-      setCommentToDelete(null);
+      setShowPostConfirmModal(false);
+      setPostToDelete(null);
     }
   };
   //loading data
@@ -466,80 +463,80 @@ function Post({ board, boardId }) {
                 </div>
               </div>
               <div className="card flex flex-col bg-[#05143c]">
-              <div className="relative" ref={menuPostRef}>
-                        <Ellipsis
-                          className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
-                          onClick={() => togglePostMenu(board._id)}
-                        />
-                         
-                          <div
-                            className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-95 shadow-lg transition-all duration-300 transform ${
-                              openPostMenuId === board._id
-                                ? 'opacity-100 translate-y-0 pointer-events-auto'
-                                : 'opacity-0 -translate-y-5 pointer-events-none'
-                            }`}
-                          >
-                            <button
-                              className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
-                              onClick={event =>
-                                handlePostDeleteClick(board._id, event)
-                              }
-                            >
-                              <p className="font-medium text-red-600 text-[20px]">
-                                Delete
-                              </p>
-                            </button>
-                  <button
-                    onClick={handleShare}
-                    className={`flex flex-row w-full py-2 justify-center rounded-md hover:bg-gray-600  ${
-                      isShared
-                        ? 'bg-transparent text-blue-500 cursor-not-allowed'
-                        : 'hover:scale-110 text-white'
+                <div className="relative" ref={menuPostRef}>
+                  <Ellipsis
+                    className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
+                    onClick={() => togglePostMenu(board._id)}
+                  />
+
+                  <div
+                    className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-95 shadow-lg transition-all duration-300 transform ${
+                      openPostMenuId === board._id
+                        ? 'opacity-100 translate-y-0 pointer-events-auto'
+                        : 'opacity-0 -translate-y-5 pointer-events-none'
                     }`}
-                    disabled={isShared}
                   >
-                    <Share
-                      className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`}
-                    />
-                    {isShared ? 'Shared' : 'Share'}
-                  </button>
-                  <button
-                    onClick={handleSave}
-                    className={`flex flex-row justify-center py-2 w-full hover:bg-gray-600 rounded-md  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
-                    disabled={isSaved}
-                  >
-                    <Save className="h-[30px] w-[30px]" />
-                    {isSaved ? 'Saved' : 'Save'}
-                  </button>
-                          </div>
-                        
-                      </div>
-                      {showPostConfirmModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                  <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
-                    <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
-                    <p>Are you sure you want to delete this post?</p>
-                    <div className="flex justify-between mt-4">
+                    {board.userId === userId && (
                       <button
-                        className="px-4 py-2 bg-gray-300 rounded-md mr-2"
-                        onClick={event => {
-                          event.stopPropagation();
-                          setShowPostConfirmModal(false);
-                        }}
+                        className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                        onClick={event =>
+                          handlePostDeleteClick(board._id, event)
+                        }
                       >
-                        Cancel
+                        <p className="font-medium text-red-600 text-[20px]">
+                          Delete
+                        </p>
                       </button>
-                      <button
-                        className="px-4 py-2 bg-red-600 text-white rounded-md"
-                        onClick={handlePostConfirmDelete}
-                      >
-                        Confirm
-                      </button>
-                    </div>
+                    )}
+                    <button
+                      onClick={handleShare}
+                      className={`flex flex-row w-full py-2 justify-center rounded-md hover:bg-gray-600  ${
+                        isShared
+                          ? 'bg-transparent text-blue-500 cursor-not-allowed'
+                          : 'hover:scale-110 text-white'
+                      }`}
+                      disabled={isShared}
+                    >
+                      <Share
+                        className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`}
+                      />
+                      {isShared ? 'Shared' : 'Share'}
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      className={`flex flex-row justify-center py-2 w-full hover:bg-gray-600 rounded-md  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
+                      disabled={isSaved}
+                    >
+                      <Save className="h-[30px] w-[30px]" />
+                      {isSaved ? 'Saved' : 'Save'}
+                    </button>
                   </div>
                 </div>
-              )}
-                
+                {showPostConfirmModal && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                      <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                      <p>Are you sure you want to delete this post?</p>
+                      <div className="flex justify-between mt-4">
+                        <button
+                          className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                          onClick={event => {
+                            event.stopPropagation();
+                            setShowPostConfirmModal(false);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-600 text-white rounded-md"
+                          onClick={handlePostConfirmDelete}
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             <div className="text-white">

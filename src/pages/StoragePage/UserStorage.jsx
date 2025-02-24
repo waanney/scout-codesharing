@@ -62,16 +62,25 @@ export default function UserStorage() {
     }
   };
 
-  const handleDeletePost = async deletedPostId => {
-    try {
-      setSavedPostsData(prev => ({
+  const [notification, setNotification] = useState(null);
+
+  const handleDeletePost = deletedPostId => {
+    setSavedPostsData(prev => {
+      const updatedPosts = prev.posts.filter(
+        post => post._id !== deletedPostId,
+      );
+      return {
         ...prev,
-        posts: prev.posts.filter(post => post._id !== deletedPostId),
-        totalCount: prev.totalCount - 1,
-      }));
-    } catch (error) {
-      console.error('Error updating UI after deletion:', error);
-    }
+        posts: updatedPosts,
+        totalCount: updatedPosts.length,
+        totalPages: Math.ceil(updatedPosts.length / postsPerPage),
+        currentPage: updatedPosts.length === 0 ? 1 : prev.currentPage,
+      };
+    });
+
+    setNotification({ type: 'success', message: 'Post removed successfully!' });
+
+    setTimeout(() => setNotification(null), 1000);
   };
 
   return (
@@ -163,10 +172,29 @@ export default function UserStorage() {
             </nav>
           )}
 
+          {notification && (
+            <div className="fixed inset-0 flex items-center justify-center z-50">
+              <div
+                className={`w-full max-w-[450px] h-[110px] rounded-[10px] 
+                ${notification.type === 'success' ? 'bg-gradient-to-r from-green-500 to-green-700' : 'bg-gradient-to-r from-[#cc3333] to-[#661a1a]'}
+                  transition-all duration-500 ease-in-out flex items-center justify-center
+                  ${notification ? 'opacity-100 visibility-visible' : 'opacity-0 visibility-hidden'}`}
+              >
+                <p className="text-base md:text-[22px] font-bold text-center text-white">
+                  {notification.message}
+                </p>
+              </div>
+            </div>
+          )}
+
           <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-[66px]">
             {savedPostsData.posts.map(content => (
               <li key={content._id} className="bg-navy-700 rounded-lg">
-                <SavePostCard board={content} onDeletePost={handleDeletePost} />
+                <SavePostCard
+                  board={content}
+                  onDeletePost={handleDeletePost}
+                  setNotification={setNotification}
+                />
               </li>
             ))}
           </ul>
