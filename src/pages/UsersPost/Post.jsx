@@ -319,6 +319,78 @@ function Post({ board, boardId }) {
     }
   };
 
+  //delete post 
+  const [openPostMenuId, setOpenPostMenuId] = useState(null);
+  const [showPostConfirmModal, setShowPostConfirmModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const menuPostRef = useRef(null);
+
+  const togglePostMenu = id => {
+    setOpenPostMenuId(openMenuId === id ? null : id);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuPostRef.current && !menuPostRef.current.contains(event.target)) {
+        setOpenPostMenuId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handlePostDeleteClick = useCallback((commentId, event) => {
+    event.stopPropagation();
+    setPostToDelete(commentId);
+    setShowPostConfirmModal(true);
+    setOpenPostMenuId(null);
+  }, []);
+
+  const handlePostConfirmDelete = async event => {
+    event.stopPropagation();
+    if (!commentToDelete) return;
+
+    try {
+      // await axios.delete(`${API_ROOT}/v1/Comment/${commentToDelete}/delete`, {
+      //   headers: {
+      //     Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+      //   },
+      // });
+
+      // setComments(prevComments =>
+      //   prevComments.filter(comment => comment._id !== commentToDelete),
+      // );
+
+      // setCommentsByLine(prev => {
+      //   const updated = { ...prev };
+      //   Object.keys(updated).forEach(line => {
+      //     updated[line] = updated[line].filter(c => c._id !== commentToDelete);
+      //   });
+      //   return updated;
+      // });
+
+      // setSuccessMessage('Delete comment successfully!');
+      // setShowSuccess(true);
+      // setFadeSuccess(false);
+
+      // setTimeout(() => setFadeSuccess(true), 1500);
+      // setTimeout(() => {
+      //   setShowSuccess(false);
+      // }, 1000);
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message);
+      setShowError(true);
+      setFadeError(false);
+      setTimeout(() => setFadeError(true), 1500);
+      setTimeout(() => setShowError(false), 1000);
+    } finally {
+      setShowConfirmModal(false);
+      setCommentToDelete(null);
+    }
+  };
   //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
@@ -337,7 +409,7 @@ function Post({ board, boardId }) {
       <div className="flex min-h-screen flex-col bg-[#0b2878]">
         <HeaderForAllPages className="sticky" comment={comments} />
         {showError && (
-          <div className="fixed inset-0 flex items-center justify-center z-10">
+          <div className="fixed inset-0 flex items-center justify-center z-50">
             <div
               className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
               ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
@@ -350,7 +422,7 @@ function Post({ board, boardId }) {
           </div>
         )}
         {showSuccess && (
-          <div className="fixed inset-0 flex items-center justify-center z-10">
+          <div className="fixed inset-0 flex items-center justify-center z-50">
             <div
               className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
               ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
@@ -362,7 +434,7 @@ function Post({ board, boardId }) {
             </div>
           </div>
         )}
-        <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
+        <div className="cards grid w-full lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
           <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
@@ -394,10 +466,32 @@ function Post({ board, boardId }) {
                 </div>
               </div>
               <div className="card flex flex-col bg-[#05143c]">
-                <div>
+              <div className="relative" ref={menuPostRef}>
+                        <Ellipsis
+                          className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
+                          onClick={() => togglePostMenu(board._id)}
+                        />
+                         
+                          <div
+                            className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-95 shadow-lg transition-all duration-300 transform ${
+                              openPostMenuId === board._id
+                                ? 'opacity-100 translate-y-0 pointer-events-auto'
+                                : 'opacity-0 -translate-y-5 pointer-events-none'
+                            }`}
+                          >
+                            <button
+                              className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                              onClick={event =>
+                                handlePostDeleteClick(board._id, event)
+                              }
+                            >
+                              <p className="font-medium text-red-600 text-[20px]">
+                                Delete
+                              </p>
+                            </button>
                   <button
                     onClick={handleShare}
-                    className={`flex flex-row items-center rounded-md ${
+                    className={`flex flex-row w-full py-2 justify-center rounded-md hover:bg-gray-600  ${
                       isShared
                         ? 'bg-transparent text-blue-500 cursor-not-allowed'
                         : 'hover:scale-110 text-white'
@@ -409,17 +503,43 @@ function Post({ board, boardId }) {
                     />
                     {isShared ? 'Shared' : 'Share'}
                   </button>
-                </div>
-                <div>
                   <button
                     onClick={handleSave}
-                    className={`flex flex-row items-center  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
+                    className={`flex flex-row justify-center py-2 w-full hover:bg-gray-600 rounded-md  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
                     disabled={isSaved}
                   >
                     <Save className="h-[30px] w-[30px]" />
                     {isSaved ? 'Saved' : 'Save'}
                   </button>
+                          </div>
+                        
+                      </div>
+                      {showPostConfirmModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                  <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                    <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                    <p>Are you sure you want to delete this post?</p>
+                    <div className="flex justify-between mt-4">
+                      <button
+                        className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                        onClick={event => {
+                          event.stopPropagation();
+                          setShowPostConfirmModal(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-red-600 text-white rounded-md"
+                        onClick={handlePostConfirmDelete}
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </div>
                 </div>
+              )}
+                
               </div>
             </div>
             <div className="text-white">
@@ -497,7 +617,7 @@ function Post({ board, boardId }) {
                 </div>
               ))}
               {showConfirmModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50">
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
                   <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
                     <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
                     <p>Are you sure you want to delete this comment?</p>
@@ -524,7 +644,7 @@ function Post({ board, boardId }) {
             </div>
             <form
               onSubmit={handleComment}
-              className="flex flex-row px-[20px] py-[20px] pt-4 md:pb-6"
+              className="flex flex-row px-[20px] py-[20px] pt-[10px] md:pb-6"
             >
               <input
                 value={content}
