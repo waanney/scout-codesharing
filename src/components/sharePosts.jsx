@@ -249,7 +249,7 @@ const SharedPostCo = ({
               </div>
             ) : (
               <p className="text-center mt-4">
-                No content available for this post.
+                Owner has deleted or hidden this post.
               </p>
             )}
           </div>
