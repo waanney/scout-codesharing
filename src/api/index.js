@@ -24,10 +24,8 @@ export const fetchUserData_API = async userID => {
   return response.data;
 };
 
-export const fetchSharedPostsDetails_API = async boardIds => {
-  const response = await axios.post(`${API_ROOT}/v1/boards/details`, {
-    boardIds,
-  });
+export const fetchSharedPostsDetails_API = async (currentUser, page) => {
+  const response = await axios.get(`${API_ROOT}/v1/boards/shareDetails/${currentUser}?page=${page}`);
   return response.data;
 };
 

@@ -14,26 +14,39 @@ export default function Discussion({
   currentPage,
 }) {
   usecheckTokenAndRedirect();
-  const [pageNumber, setPageNumber] = useState();
-  const handleChange = (event) => {
-    setPageNumber(event.target.value);
+  const [pageNumber, setPageNumber] = useState(currentPage);
+  const [inputValue, setInputValue] = useState(''); 
+
+  const handleChange = (e) => {
+    const newValue = e.target.value;
+    setInputValue(newValue); 
+    if (newValue === '') {
+      setPageNumber(currentPage); 
+    } else if (!isNaN(newValue)) {
+      setPageNumber(parseInt(newValue));
+    }
   };
+
   const handleSummit = (event) => {
     event.preventDefault();
-    paginate(pageNumber);
-  }
+    if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
+      paginate(pageNumber);
+      setInputValue(''); 
+    }
+  };
+
   const handlePageChange = (pageNumber) => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       paginate(pageNumber);
     }
   };
 
-
-
-  window.scrollTo({
-    top: 0,
-    behavior: 'auto',
-  });
+  useEffect(() => {
+    window.scrollTo({
+      top: 0,
+      behavior: 'auto',
+    });
+  }, [currentPage]); 
 
   useEffect(() => {
     if (board && board.length > 0) {
@@ -48,24 +61,23 @@ export default function Discussion({
         <div className="mx-auto mt-[60px] md:mt-[90px] font-raleway text-[32px] md:text-[48px] text-white font-bold text-center">
           What is on?
         </div>
-        {/* Thêm điều kiện kiểm tra bài đăng ở đây */}
         {!totalPosts || totalPosts.length === 0 ? (
           <div className="text-center text-white text-2xl mt-8">
             No posts yet.
           </div>
         ) : (
           <>
-            <nav aria-label="Page navigation" className="flex justify-center"> 
-              <ul className="inline-flex -space-x-px text-sm mb-2"> 
+            <nav aria-label="Page navigation" className="flex justify-center">
+              <ul className="inline-flex -space-x-px text-sm mb-2">
                 <li>
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                     className={`flex items-center justify-center px-3 py-2 mr-2 leading-tight rounded-full 
-              ${currentPage === 1
+                      ${currentPage === 1
                         ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
                         : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
-                      } `} 
+                      } `}
                   >
                     <svg
                       className="w-5 h-5"
@@ -82,32 +94,31 @@ export default function Discussion({
                     </svg>
                   </button>
                 </li>
-
                 <li>
                   <div className="flex items-center justify-center px-3 py-2 leading-tight text-gray-700 bg-gray-900 border border-black rounded-full">
                     <span className="mr-2">Trang</span>
-                    <form onSubmit={handleSummit} className="inline-block"> 
+                    <form onSubmit={handleSummit} className="inline-block">
                       <input
                         type="tel"
-                        className="w-10 text-center bg-gray-800 border border-black rounded-md"
+                        className="w-10 text-white text-center bg-gray-800 border border-black rounded-md"
                         required
-                        value={pageNumber}
+                        value={inputValue} 
+                        placeholder={inputValue === '' ? currentPage : ''} 
                         onChange={handleChange}
                       />
                     </form>
                     <span className="ml-2">/ {totalPages}</span>
                   </div>
                 </li>
-
                 <li>
                   <button
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                     className={`flex items-center justify-center px-3 py-2 leading-tight rounded-full ml-2
-              ${currentPage === totalPages
+                      ${currentPage === totalPages
                         ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
                         : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
-                      } `} 
+                      } `}
                   >
                     <svg
                       className="w-5 h-5"
@@ -126,9 +137,8 @@ export default function Discussion({
                 </li>
               </ul>
             </nav>
-
             <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] md:gap-[66px] place-items-center">
-              {board.map(board => (
+              {board.map((board) => (
                 <li key={board._id} className="w-full">
                   <PostCard board={board} />
                 </li>

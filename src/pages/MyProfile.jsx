@@ -7,7 +7,6 @@ import { createPost } from '~/redux/apiRequest.js';
 import { useDispatch } from 'react-redux';
 import { useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
-import { fetchSharedPostsDetails_API } from '~/api/index.js';
 import useUserData from '~/hooks/useUserData.js';
 import ScrollTop from '~/components/scrollTop';
 import hljs from 'highlight.js';
@@ -297,54 +296,7 @@ function MyProfile() {
   const langlist = hljsLanguages;
 
   //biến cho sharedPosts
-  const [sharedPosts, setSharedPosts] = useState([]);
-  const [sharedPostAvatars, setSharedPostAvatars] = useState({});
-
-  const fetchAvatar = async userId => {
-    try {
-      const response = await axios.get(
-        `${API_ROOT}/v1/Auth/get-avatar/${userId}`,
-      );
-      return response.data.avatarUrl;
-    } catch (error) {
-      console.error('Error fetching avatar:', error);
-      return null;
-    }
-  };
-
-  useEffect(() => {
-    const fetchSharedPosts = async () => {
-      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
-      const currentProfile = getcurrentProfile.data;
-      if (currentProfile && currentProfile.sharedPosts) {
-        try {
-          const posts = await fetchSharedPostsDetails_API(
-            currentProfile.sharedPosts,
-          );
-          const avatars = await Promise.all(
-            posts.map(post => fetchAvatar(post.userId)),
-          );
-          const avatarMap = posts.reduce((acc, post, index) => {
-            acc[post._id] = avatars[index];
-            return acc;
-          }, {});
-          setSharedPostAvatars(avatarMap);
-          setSharedPosts(
-            posts.sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)),
-          );
-        } catch (error) {
-          const errorMessage =
-            error.response?.data?.message ||
-            error.message ||
-            'Lỗi khi tải bài viết chia sẻ';
-          setError(errorMessage);
-        }
-      }
-    };
-    fetchSharedPosts();
-  }, [owner]); // Removed fetchAvatar dependency
-
-  const handleAvatarSave = async croppedAvatarURL => {
+    const handleAvatarSave = async croppedAvatarURL => {
     try {
       const response = await fetch(croppedAvatarURL);
       const blob = await response.blob();
@@ -753,11 +705,9 @@ function MyProfile() {
             </form>
           </div>
           {/*shareposts*/}
-          <SharedPostCo
-            sharedPosts={sharedPosts}
-            sharedPostAvatars={sharedPostAvatars}
-            AvatarUrl={AvatarUrl}
-            profileData={profileData}
+          <SharedPostCo 
+            currentUserData = {currentUserData}
+            AvatarUrl = {AvatarUrl}            
           />
         </div>
       </div>
