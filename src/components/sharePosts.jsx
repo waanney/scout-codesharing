@@ -52,6 +52,7 @@ const SharedPostCo = ({
       document.removeEventListener('click', handleClickOutside);
     };
   }, [openMenuId]);
+  
 
   const handleDeleteClick = (commentId, event) => {
     event.stopPropagation();

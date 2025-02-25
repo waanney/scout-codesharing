@@ -13,8 +13,8 @@ import DicussionImg from '~/assets/Discussion.png';
 import StorageImg from '~/assets/Storage.svg';
 import NewfeedImg from '~/assets/Newfeed.svg';
 import PostImG from '~/assets/Posts.svg';
-import BackgroundImg from '~/assets/Scout_blur.png';
-import Scene from '~/components/threedlogo.jsx';
+// import BackgroundImg from '~/assets/Scout_blur.png';
+import ThreeDLogo from '~/components/threedlogo.jsx';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);
@@ -91,20 +91,20 @@ function HomePage() {
     behavior: 'auto',
   });
 
-  const getBackgroundStyle = () => {
-    if (window.innerWidth < 768) {
-      return { backgroundSize: '400px 400px' }; // Mobile
-    } else {
-      return { backgroundSize: '500px 500px' }; // Desktop
-    }
-  };
+  // const getBackgroundStyle = () => {
+  //   if (window.innerWidth < 768) {
+  //     return { backgroundSize: '400px 400px' }; // Mobile
+  //   } else {
+  //     return { backgroundSize: '500px 500px' }; // Desktop
+  //   }
+  // };
 
   return (
     <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden">
       <HeaderForAllPages className="sticky" />
 
       <div className="h-screen w-full flex justify-center items-center">
-        <Scene />
+        <ThreeDLogo />
       </div>
 
       <div className="relative p-[20px]">
