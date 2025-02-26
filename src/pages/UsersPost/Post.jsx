@@ -1,7 +1,4 @@
-import { Send } from 'lucide-react';
-import { Save } from 'lucide-react';
-import { Share } from 'lucide-react';
-import { MessageSquareText } from 'lucide-react';
+import { Send, Save, Share, MessageSquareText, Copy } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import CommentCard from '../../components/comment_card.jsx';
@@ -114,6 +111,35 @@ function Post({ board, boardId }) {
       });
     }
   }, [board]);
+
+  // copy code
+  const [isCopied, setIsCopied] = useState(false);
+  const copyToClipboard = code => () => {
+    navigator.clipboard.writeText(code).then();
+    console.log('Copied to clipboard');
+    setIsCopied(true);
+  };
+
+  // // chỉnh kích thước chữ
+  // const textRef = useRef(null);
+
+  // useEffect(() => {
+  //   const adjustFontSize = () => {
+  //     const element = textRef.current;
+  //     let fontSize = parseInt(window.getComputedStyle(element).fontSize, 10);
+  //     while (element.scrollWidth > element.clientWidth && fontSize > 0) {
+  //       fontSize -= 1;
+  //       element.style.fontSize = `${fontSize}px`;
+  //     }
+  //   };
+
+  //   adjustFontSize();
+  //   window.addEventListener('resize', adjustFontSize);
+
+  //   return () => {
+  //     window.removeEventListener('resize', adjustFontSize);
+  //   };
+  // }, []);
 
   // handle comment inline
   const [line_content, setLineContent] = useState('');
@@ -264,10 +290,14 @@ function Post({ board, boardId }) {
 
   return (
     <>
-      <div className="flex min-h-screen flex-col bg-[#0b2878]">
+      <div
+        className="flex min-h-screen flex-col bg-[#0b2878]"
+        onClick={() => setOpen(Array(sourceCode.length).fill(false))}
+      >
         <HeaderForAllPages className="sticky" comment={comments} />
         <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
-          <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
+          {/*Post info*/}
+          <div className="relative card rounded-[10px] lg:h-[636px] h-[500px] w-auto bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 {AvatarUrl ? (
@@ -327,12 +357,12 @@ function Post({ board, boardId }) {
               </div>
             </div>
             <div className="text-white">
-              <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
+              <div className="text-[1.5em] w-[90%] h-[45px] text-center place-self-center font-bold leading-[150%] break-words overflow-hidden">
                 {board?.title}
               </div>
-              <div className=" w-full px-[20px]">
+              <div>
                 <div
-                  className={`h-[84px] text-xl font-normal leading-[150%] break-all ${fullText ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin' : 'line-clamp-3'}`}
+                  className={`px-[20px] w-[90%] h-[84px] text-xl font-normal leading-[150%] break-word ${fullText ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin' : 'line-clamp-3'}`}
                 >
                   {board?.description}
                 </div>
@@ -346,7 +376,7 @@ function Post({ board, boardId }) {
                 </button>
               </div>
             </div>
-            <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+            <div className="h-[38%] lg:h-[52%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
                   key={comment._id}
@@ -374,7 +404,7 @@ function Post({ board, boardId }) {
             </div>
             <form
               onSubmit={handleComment}
-              className="flex flex-row px-[20px] py-[20px] pt-4 md:pb-6"
+              className="absolute bottom-0 w-full flex flex-row px-[20px] py-[0.8rem] "
             >
               <input
                 value={content}
@@ -391,25 +421,43 @@ function Post({ board, boardId }) {
               </button>
             </form>
           </div>
+          {/*Post code*/}
           <div className="card  rounded-[10px] lg:h-[636px] h-[500px] w-full p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
             <div className="font-mono relative w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
-              <div className="ml-[10px] text-gray-500 text-[20px]">
-                {board.language}
+              <div className="flex flex-row">
+                <div className="ml-[10px] text-gray-500 text-[20px]">
+                  {board.language}
+                </div>
+                <button onClick={copyToClipboard(board.content)}>
+                  <Copy
+                    className={`absolute right-0 ${isCopied ? 'text-blue-500' : 'text-white'}`}
+                  />
+                </button>
               </div>
+
               {sourceCode.map((code, lineNum) => (
-                <div key={lineNum} className="flex">
+                <div key={lineNum} className="flex ">
                   {/* Button */}
                   <button
-                    onClick={() => {
+                    className={`text-gray-500 ${commentsByLine[lineNum + 1] ? 'text-white' : ''}  ml-[10px] right-[15px] z-10`}
+                    onClick={event => {
+                      event.stopPropagation();
                       const NewOpen = new Array(sourceCode.length).fill(false);
                       NewOpen[lineNum] = !open[lineNum];
                       setOpen(NewOpen);
                     }}
-                    className=" text-gray-500 hover:text-white ml-[10px] right-[15px] z-10"
                   >
                     <MessageSquareText className="h-[20px] w-[20px]" />
                   </button>
-                  <div className="relative flex flex-row hover:bg-gray-600 ">
+                  <div
+                    className="relative flex flex-row hover:bg-gray-600"
+                    onClick={event => {
+                      event.stopPropagation();
+                      const NewOpen = new Array(sourceCode.length).fill(false);
+                      NewOpen[lineNum] = !open[lineNum];
+                      setOpen(NewOpen);
+                    }}
+                  >
                     {/* Line Number */}
                     <div className="min-w-[30px] text-gray-400 text-right pr-[10px]">
                       {lineNum + 1}
@@ -422,11 +470,14 @@ function Post({ board, boardId }) {
 
                     {/* Popover */}
                     {open[lineNum] && (
-                      <div className="absolute top-7 left-0 z-10 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[350px]  bg-blue-950 rounded-[10px] shadow-lg p-4">
+                      <div
+                        className="absolute top-7 left-0 z-10 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[350px] bg-blue-950 rounded-[10px] shadow-lg p-4"
+                        onClick={event => event.stopPropagation()}
+                      >
                         <p className="text-center font-bold leading-[150%] text-2xl">
                           This is line {lineNum + 1}
                         </p>
-                        <div className="w-full h-[7em] md:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+                        <div className="w-full h-[7em] sm:h-[55%] md:h-[55%] lg:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
                           {(commentsByLine[lineNum + 1] || []).map(comment => (
                             <CommentCard key={comment._id} comment={comment} />
                           ))}
