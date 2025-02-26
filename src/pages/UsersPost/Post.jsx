@@ -84,7 +84,7 @@ function Post({ board, boardId }) {
       setLoading(true);
       try {
         const avatarcontent = await axios.get(
-          `<span class="math-inline">\{API\_ROOT\}/v1/Auth/get\-avatar/</span>{board.userID}`,
+          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
         );
         setAvatarUrl(avatarcontent.data.avatarUrl);
       } catch (err) {
@@ -222,7 +222,7 @@ function Post({ board, boardId }) {
 
     try {
       const response = await axios.post(
-        `<span class="math-inline">\{API\_ROOT\}/v1/boards/</span>{boardId}/share`,
+        `${API_ROOT}/v1/boards/${boardId}/share`,
         { userId: currentUserData._id },
       );
       console.log(response.data.message);
@@ -245,7 +245,7 @@ function Post({ board, boardId }) {
     if (isSaved) return;
     try {
       const response = await axios.post(
-        `<span class="math-inline">\{API\_ROOT\}/v1/boards/</span>{boardId}/save`,
+        `${API_ROOT}/v1/boards/${boardId}/save`,
         { userId: currentUserData._id },
       );
 
@@ -258,7 +258,7 @@ function Post({ board, boardId }) {
   };
   //rút gọn description
   const [fullText, setFullText] = useState(false);
-  const isClamp = board?.description && board.description.length >= 78;
+  // const isClamp = board?.description && board.description.length >= 78;
 
   //delete comment box
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -468,7 +468,7 @@ function Post({ board, boardId }) {
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${board.userId}`}
                     >
-                      {board.username} 
+                      {board.username}
                     </a>
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
@@ -556,27 +556,28 @@ function Post({ board, boardId }) {
             {board ? (
               <div className="text-white">
                 <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
-                  {board.title || ""}
+                  {board.title || ''}
                 </div>
                 <div className="w-full px-[20px]">
                   <div
                     className={`h-[84px] text-xl font-normal leading-[150%] break-all ${
-                    fullText
-                    ? "overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin"
-                    : "line-clamp-3"
+                      fullText
+                        ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin'
+                        : 'line-clamp-3'
                     }`}
                   >
-                    {board.description || "Owner has deleted or hidden this post."}
+                    {board.description ||
+                      'Owner has deleted or hidden this post.'}
                   </div>
                   {board.description && board.description.length > 100 && (
                     <button
                       className="font-bold"
                       onClick={() => setFullText(!fullText)}
                     >
-                      {fullText ? "less" : "more"}
+                      {fullText ? 'less' : 'more'}
                     </button>
                   )}
-                 </div>
+                </div>
               </div>
             ) : (
               <div className="text-white text-center text-xl font-bold">
