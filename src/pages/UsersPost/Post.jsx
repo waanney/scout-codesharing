@@ -38,7 +38,6 @@ function Post({ board, boardId }) {
   const [fadeSuccess, setFadeSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
-  // handle comment post
   const handleComment = async e => {
     e.preventDefault();
     if (!content.trim()) {
@@ -77,7 +76,6 @@ function Post({ board, boardId }) {
     }
   };
 
-  // lấy data user
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
@@ -86,7 +84,7 @@ function Post({ board, boardId }) {
       setLoading(true);
       try {
         const avatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
+          `<span class="math-inline">\{API\_ROOT\}/v1/Auth/get\-avatar/</span>{board.userID}`,
         );
         setAvatarUrl(avatarcontent.data.avatarUrl);
       } catch (err) {
@@ -104,9 +102,8 @@ function Post({ board, boardId }) {
     setComments(board.comments || []);
   }, [board.comments]);
 
-  // highlight code
   const language = board.language;
-  const sourceCode = board.content.split('\n');
+  const [sourceCode, setSourceCode] = useState(null);
   hljs.highlightAll();
   const PostsRef = useRef(null);
 
@@ -116,15 +113,26 @@ function Post({ board, boardId }) {
         hljs.highlightElement(block);
       });
     }
+    if (board?.content) {
+      const codeLines = board.content.split('\n');
+      if (Array.isArray(codeLines)) {
+        setSourceCode(codeLines);
+      } else {
+        console.error('board.content.split("\\n") is not an array:', codeLines);
+        setSourceCode([]);
+      }
+    } else {
+      setSourceCode([]);
+    }
   }, [board]);
 
-  // handle comment inline
   const [line_content, setLineContent] = useState('');
-  const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
+  const [open, setOpen] = useState([]);
   const [commentsByLine, setCommentsByLine] = useState([]);
 
   useEffect(() => {
-    const groupedComments = board?.commentsInline.reduce((acc, comment) => {
+    const comments = board?.commentsInline || []; // Use empty array if undefined
+    const groupedComments = comments.reduce((acc, comment) => {
       if (!acc[comment.lineNumber]) {
         acc[comment.lineNumber] = [];
       }
@@ -134,7 +142,14 @@ function Post({ board, boardId }) {
     setCommentsByLine(groupedComments);
   }, [board?.commentsInline]);
 
-  // summit code
+  useEffect(() => {
+    if (sourceCode && Array.isArray(sourceCode)) {
+      setOpen(Array(sourceCode.length).fill(false));
+    } else {
+      setOpen([]); // Ensure open is an empty array if sourceCode is invalid
+    }
+  }, [sourceCode]);
+
   const handleInlineComment = async (e, lineNumber) => {
     e.preventDefault();
     if (!line_content.trim()) {
@@ -207,7 +222,7 @@ function Post({ board, boardId }) {
 
     try {
       const response = await axios.post(
-        `${API_ROOT}/v1/boards/${boardId}/share`,
+        `<span class="math-inline">\{API\_ROOT\}/v1/boards/</span>{boardId}/share`,
         { userId: currentUserData._id },
       );
       console.log(response.data.message);
@@ -230,7 +245,7 @@ function Post({ board, boardId }) {
     if (isSaved) return;
     try {
       const response = await axios.post(
-        `${API_ROOT}/v1/boards/${boardId}/save`,
+        `<span class="math-inline">\{API\_ROOT\}/v1/boards/</span>{boardId}/save`,
         { userId: currentUserData._id },
       );
 
@@ -241,10 +256,9 @@ function Post({ board, boardId }) {
       console.error('Error saving post:', error);
     }
   };
-
   //rút gọn description
   const [fullText, setFullText] = useState(false);
-  const isClamp = board?.description.length >= 78;
+  const isClamp = board?.description && board.description.length >= 78;
 
   //delete comment box
   const [openMenuId, setOpenMenuId] = useState(null);
@@ -454,7 +468,7 @@ function Post({ board, boardId }) {
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${board.userId}`}
                     >
-                      {board.username}
+                      {board.username} 
                     </a>
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
@@ -539,26 +553,37 @@ function Post({ board, boardId }) {
                 )}
               </div>
             </div>
-            <div className="text-white">
-              <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
-                {board?.title}
-              </div>
-              <div className=" w-full px-[20px]">
-                <div
-                  className={`h-[84px] text-xl font-normal leading-[150%] break-all ${fullText ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin' : 'line-clamp-3'}`}
-                >
-                  {board?.description}
+            {board ? (
+              <div className="text-white">
+                <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
+                  {board.title || ""}
                 </div>
-                <button
-                  className={`font-bold ${isClamp ? '' : 'hidden'}`}
-                  onClick={() => {
-                    setFullText(!fullText);
-                  }}
-                >
-                  {fullText ? 'less' : 'more'}
-                </button>
+                <div className="w-full px-[20px]">
+                  <div
+                    className={`h-[84px] text-xl font-normal leading-[150%] break-all ${
+                    fullText
+                    ? "overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin"
+                    : "line-clamp-3"
+                    }`}
+                  >
+                    {board.description || "Owner has deleted or hidden this post."}
+                  </div>
+                  {board.description && board.description.length > 100 && (
+                    <button
+                      className="font-bold"
+                      onClick={() => setFullText(!fullText)}
+                    >
+                      {fullText ? "less" : "more"}
+                    </button>
+                  )}
+                 </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-white text-center text-xl font-bold">
+                Board data not found.
+              </div>
+            )}
+
             <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
