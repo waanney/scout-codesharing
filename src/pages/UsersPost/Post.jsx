@@ -296,8 +296,7 @@ function Post({ board, boardId }) {
       >
         <HeaderForAllPages className="sticky" comment={comments} />
         <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
-          {/*Post info*/}
-          <div className="relative card rounded-[10px] lg:h-[636px] h-[500px] w-auto bg-[#05143c]">
+          <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
                 {AvatarUrl ? (
@@ -357,12 +356,12 @@ function Post({ board, boardId }) {
               </div>
             </div>
             <div className="text-white">
-              <div className="text-[1.5em] w-[90%] h-[45px] text-center place-self-center font-bold leading-[150%] break-words overflow-hidden">
+              <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
                 {board?.title}
               </div>
-              <div>
+              <div className=" w-full px-[20px]">
                 <div
-                  className={`px-[20px] w-[90%] h-[84px] text-xl font-normal leading-[150%] break-word ${fullText ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin' : 'line-clamp-3'}`}
+                  className={`h-[84px] text-xl font-normal leading-[150%] break-all ${fullText ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin' : 'line-clamp-3'}`}
                 >
                   {board?.description}
                 </div>
@@ -376,7 +375,7 @@ function Post({ board, boardId }) {
                 </button>
               </div>
             </div>
-            <div className="h-[38%] lg:h-[52%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+            <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
                   key={comment._id}
@@ -404,7 +403,7 @@ function Post({ board, boardId }) {
             </div>
             <form
               onSubmit={handleComment}
-              className="absolute bottom-0 w-full flex flex-row px-[20px] py-[0.8rem] "
+              className="flex flex-row px-[20px] py-[20px] pt-4 md:pb-6"
             >
               <input
                 value={content}
@@ -434,9 +433,8 @@ function Post({ board, boardId }) {
                   />
                 </button>
               </div>
-
               {sourceCode.map((code, lineNum) => (
-                <div key={lineNum} className="flex ">
+                <div key={lineNum} className="flex">
                   {/* Button */}
                   <button
                     className={`text-gray-500 ${commentsByLine[lineNum + 1] ? 'text-white' : ''}  ml-[10px] right-[15px] z-10`}
@@ -477,7 +475,7 @@ function Post({ board, boardId }) {
                         <p className="text-center font-bold leading-[150%] text-2xl">
                           This is line {lineNum + 1}
                         </p>
-                        <div className="w-full h-[7em] sm:h-[55%] md:h-[55%] lg:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+                        <div className="w-full h-[7em] md:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
                           {(commentsByLine[lineNum + 1] || []).map(comment => (
                             <CommentCard key={comment._id} comment={comment} />
                           ))}
