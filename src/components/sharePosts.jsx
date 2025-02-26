@@ -52,11 +52,10 @@ const SharedPostCo = ({
       document.removeEventListener('click', handleClickOutside);
     };
   }, [openMenuId]);
-  
 
-  const handleDeleteClick = (commentId, event) => {
+  const handleDeleteClick = (postId, event) => {
     event.stopPropagation();
-    setPostToDelete(commentId);
+    setPostToDelete(postId);
     setShowConfirmModal(true);
   };
 
@@ -208,28 +207,27 @@ const SharedPostCo = ({
           </div>
 
           {/* Shared Post */}
-          <div
-            className="cursor-pointer mt-5 w-[90%] mx-auto h-[85%] border border-gray-300 rounded-lg"
-            onClick={() =>
-              (window.location.href = `${FE_ROOT}/post/${post._id}`)
-            }
-          >
-            <div className="flex items-center p-2">
-              {sharedPostAvatars[post._id] ? (
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src={sharedPostAvatars[post._id]}
-                  alt="Avatar"
-                />
-              ) : (
-                <svg height="30" width="30">
-                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                </svg>
-              )}
-              <h5 className="ml-2 font-bold text-lg">{post.username}</h5>
-            </div>
-
-            {post.content ? (
+          {post.content ? (
+            <div
+              className="cursor-pointer mt-5 w-[90%] mx-auto h-[85%] border border-gray-300 rounded-lg"
+              onClick={() =>
+                (window.location.href = `${FE_ROOT}/post/${post._id}`)
+              }
+            >
+              <div className="flex items-center p-2">
+                {sharedPostAvatars[post._id] ? (
+                  <img
+                    className="h-8 w-8 rounded-full"
+                    src={sharedPostAvatars[post._id]}
+                    alt="Avatar"
+                  />
+                ) : (
+                  <svg height="30" width="30">
+                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                  </svg>
+                )}
+                <h5 className="ml-2 font-bold text-lg">{post.username}</h5>
+              </div>
               <div>
                 <h1 className="ml-4 text-xl font-bold text-center">
                   {post.title.split(' ').slice(0, 6).join(' ')}
@@ -248,12 +246,19 @@ const SharedPostCo = ({
                   </pre>
                 </div>
               </div>
-            ) : (
+            </div>
+          ) : (
+            <div className="mt-5 w-[90%] mx-auto h-[85%] border border-gray-300 rounded-lg">
+              <div className="flex items-center p-2">
+                <svg height="30" width="30">
+                  <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                </svg>
+              </div>
               <p className="text-center mt-4">
                 Owner has deleted or hidden this post.
               </p>
-            )}
-          </div>
+            </div>
+          )}
         </div>
       ))}
     </div>
