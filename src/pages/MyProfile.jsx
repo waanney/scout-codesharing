@@ -265,6 +265,10 @@ function MyProfile() {
       newLineNumbers.push(true);
       setLineNumbers(newLineNumbers);
     }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      setText(e.target.value + '  ');
+    }
   };
 
   const handleInputChange = e => {
