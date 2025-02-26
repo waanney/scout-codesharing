@@ -11,8 +11,6 @@ import useUserId from '~/utils/useUserId';
 const API_ROOT = env.API_ROOT;
 
 const SavePostCard = ({ board, onDeletePost }) => {
-  const language = board.language;
-  const sourceCode = board.content.split('\n');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
@@ -21,37 +19,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
   const savePostRef = useRef(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
 
-  // Fetch avatar
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const avatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
-        );
-        setAvatarUrl(avatarcontent.data.avatarUrl);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [board.userID]);
-
-  // Highlight code
-  useEffect(() => {
-    if (sourceCode.length > 0) hljs.highlightAll();
-  }, [sourceCode]);
-
-  // Notification states
-  //   const [showError, setShowError] = useState(false);
-  //   const [fadeError, setFadeError] = useState(false);
-  //   const [errorMessage, setErrorMessage] = useState('');
-  //   const [showSuccess, setShowSuccess] = useState(false);
-  //   const [fadeSuccess, setFadeSuccess] = useState(false);
-  //   const [successMessage, setSuccessMessage] = useState('');
-
-  // Toggle menu/confirm modal
+  // Unified handleDeleteClick function
   const handleDeleteClick = (boardId, event) => {
     event.preventDefault();
     event.stopPropagation();
@@ -81,6 +49,78 @@ const SavePostCard = ({ board, onDeletePost }) => {
       setPostToDelete(null);
     }
   };
+
+  if (!board || !board.content) {
+    return (
+      <>
+      <div className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)] flex items-center justify-center">
+        <button
+          className="absolute top-[5px] right-[5px] z-10"
+          onClick={event => handleDeleteClick(board._id, event)}
+          ref={savePostRef}
+        >
+          <X
+            size={20}
+            className="text-white hover:text-red-600 cursor-pointer"
+          />
+        </button>
+        <div className="text-center text-white">
+          Owner has deleted or hidden this post.
+        </div>
+      </div>
+      {showConfirmModal && (
+          <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50">
+            <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+              <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+              <p>Are you sure you want to remove this saved post?</p>
+              <div className="flex justify-between mt-4">
+                <button
+                  className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                  onClick={e => {
+                    e.stopPropagation();
+                    setShowConfirmModal(false);
+                  }}
+                >
+                  Cancel
+                </button>
+                <button
+                  className="px-4 py-2 bg-red-600 text-white rounded-md"
+                  onClick={handleConfirmDelete}
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
+      </>
+    );
+  }
+
+  const language = board.language;
+  const sourceCode = board.content.split('\n');
+
+  // Fetch avatar
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const avatarcontent = await axios.get(
+          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
+        );
+        setAvatarUrl(avatarcontent.data.avatarUrl);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchData();
+  }, [board.userID]);
+
+  // Highlight code
+  useEffect(() => {
+    if (sourceCode.length > 0) hljs.highlightAll();
+  }, [sourceCode]);
 
   if (loading) return <LoadingAnimationCard />;
   if (error) return <div>Error: {error.message}</div>;
