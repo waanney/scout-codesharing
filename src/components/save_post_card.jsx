@@ -50,25 +50,54 @@ const SavePostCard = ({ board, onDeletePost }) => {
     }
   };
 
+  const language = board.language;
+  const sourceCode = board?.content?.split('\n');
+
+  // Fetch avatar
+  useEffect(() => {
+    if (!board?.userID) return;
+
+    const fetchData = async () => {
+      try {
+        const avatarcontent = await axios.get(
+          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
+        );
+        setAvatarUrl(avatarcontent.data.avatarUrl);
+      } catch (err) {
+        setError(err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [board?.userID]);
+
+  // Highlight code
+  useEffect(() => {
+    if (!sourceCode || sourceCode.length === 0) return;
+    hljs.highlightAll();
+  }, [sourceCode]);
+
   if (!board || !board.content) {
     return (
       <>
-      <div className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)] flex items-center justify-center">
-        <button
-          className="absolute top-[5px] right-[5px] z-10"
-          onClick={event => handleDeleteClick(board._id, event)}
-          ref={savePostRef}
-        >
-          <X
-            size={20}
-            className="text-white hover:text-red-600 cursor-pointer"
-          />
-        </button>
-        <div className="text-center text-white">
-          Owner has deleted or hidden this post.
+        <div className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)] flex items-center justify-center">
+          <button
+            className="absolute top-[5px] right-[5px] z-10"
+            onClick={event => handleDeleteClick(board._id, event)}
+            ref={savePostRef}
+          >
+            <X
+              size={20}
+              className="text-white hover:text-red-600 cursor-pointer"
+            />
+          </button>
+          <div className="text-center text-white">
+            Owner has deleted or hidden this post.
+          </div>
         </div>
-      </div>
-      {showConfirmModal && (
+        {showConfirmModal && (
           <div className="fixed inset-0 flex items-center justify-center z-40 bg-black bg-opacity-50">
             <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
               <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
@@ -96,31 +125,6 @@ const SavePostCard = ({ board, onDeletePost }) => {
       </>
     );
   }
-
-  const language = board.language;
-  const sourceCode = board.content.split('\n');
-
-  // Fetch avatar
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const avatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
-        );
-        setAvatarUrl(avatarcontent.data.avatarUrl);
-      } catch (err) {
-        setError(err);
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [board.userID]);
-
-  // Highlight code
-  useEffect(() => {
-    if (sourceCode.length > 0) hljs.highlightAll();
-  }, [sourceCode]);
 
   if (loading) return <LoadingAnimationCard />;
   if (error) return <div>Error: {error.message}</div>;
