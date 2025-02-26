@@ -267,7 +267,10 @@ function MyProfile() {
     }
     if (e.key === 'Tab') {
       e.preventDefault();
-      setText(e.target.value + '  ');
+      let cursorPosition = e.target.selectionStart;
+      let newText =
+        text.slice(0, cursorPosition) + '  ' + text.slice(cursorPosition);
+      setText(newText);
     }
   };
 
