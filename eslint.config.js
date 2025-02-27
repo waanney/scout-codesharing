@@ -33,6 +33,7 @@ export default [
       'react/prop-types': 0,
       'react-hooks/exhaustive-deps': 'off',
       'react/no-unescaped-entities': 'off',
+      'react/no-unknown-property': 'off',
       'react-refresh/only-export-components': [
         'warn',
         { allowConstantExport: true },
