@@ -1,5 +1,3 @@
-'use client';
-
 import React, { useState, useRef, useEffect } from 'react';
 import HeaderForAllPages from '~/components/header.jsx';
 import FooterAllPage from '~/components/footer.jsx';
@@ -20,7 +18,6 @@ import savePost from '~/assets/save.svg';
 import editPost from '~/assets/edit.svg';
 import content from '~/assets/Content.svg';
 import LoadingAnimation from '../components/loading.jsx';
-
 const API_ROOT = env.API_ROOT;
 
 function MyProfile() {
@@ -85,7 +82,7 @@ function MyProfile() {
   const [currentUserAvt, setCurrentUserAvt] = useState(null);
   // const [selectedFile, setSelectedFile] = useState(null)
   const selectedFile = null;
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [isEditing, setIsEditing] = useState(false);
   const [editableProfile, setEditableProfile] = useState(() => {
@@ -133,7 +130,7 @@ function MyProfile() {
       }
     };
     fetchProfile();
-  }, [owner, userId]); // Added userId dependency
+  }, [owner, userId]);
 
   const handleProfileChange = (field, value) => {
     const maxLength = field === 'workplace' || field === 'location' ? 40 : 15;
@@ -264,6 +261,13 @@ function MyProfile() {
       newLineNumbers.push(true);
       setLineNumbers(newLineNumbers);
     }
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      let cursorPosition = e.target.selectionStart;
+      let newText =
+        text.slice(0, cursorPosition) + '  ' + text.slice(cursorPosition);
+      setText(newText);
+    }
   };
 
   const handleInputChange = e => {
@@ -295,8 +299,7 @@ function MyProfile() {
   //Hiển thị các Language
   const langlist = hljsLanguages;
 
-  //biến cho sharedPosts
-    const handleAvatarSave = async croppedAvatarURL => {
+  const handleAvatarSave = async croppedAvatarURL => {
     try {
       const response = await fetch(croppedAvatarURL);
       const blob = await response.blob();
@@ -323,13 +326,13 @@ function MyProfile() {
       setTimeout(() => setFadeSuccess(true), 1500);
       setTimeout(() => {
         setShowSuccess(false);
-      }, 2000);
+      }, 1000);
     } catch (error) {
       setErrorMessage(error);
       setShowError(true);
       setFadeError(false);
       setTimeout(() => setFadeError(true), 1500);
-      setTimeout(() => setShowError(false), 2000);
+      setTimeout(() => setShowError(false), 1000);
     }
   };
 
@@ -705,9 +708,10 @@ function MyProfile() {
             </form>
           </div>
           {/*shareposts*/}
-          <SharedPostCo 
-            currentUserData = {currentUserData}
-            AvatarUrl = {AvatarUrl}            
+          <SharedPostCo
+            AvatarUrl={AvatarUrl}
+            profileData={profileData}
+            owner={owner}
           />
         </div>
       </div>

@@ -15,6 +15,8 @@
   "dependencies": {
     "@headlessui/react": "^2.2.0",
     "@heroicons/react": "^2.2.0",
+    "@react-three/drei": "^10.0.1",
+    "@react-three/fiber": "^9.0.4",
     "@reduxjs/toolkit": "^2.5.0",
     "@tanstack/react-query": "^4.36.1",
     "axios": "^1.7.9",
@@ -24,8 +26,8 @@
     "jwt-decode": "^4.0.0",
     "lucide-react": "^0.469.0",
     "node-modules": "^0.0.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
     "react-easy-crop": "^5.2.0",
     "react-redux": "^9.2.0",
     "react-router-dom": "^7.1.1",
@@ -33,6 +35,8 @@
     "rollup": "^4.29.2",
     "serve": "^14.2.4",
     "tailwind-scrollbar": "^3.1.0",
+    "three": "^0.173.0",
+    "three.js": "^0.77.1",
     "vanilla-tilt": "^1.8.1"
   },
   "devDependencies": {

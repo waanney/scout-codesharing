@@ -12,7 +12,8 @@ import DicussionImg from '~/assets/Discussion.png';
 import StorageImg from '~/assets/Storage.svg';
 import NewfeedImg from '~/assets/Newfeed.svg';
 import PostImG from '~/assets/Posts.svg';
-import BackgroundImg from '~/assets/Scout_blur.png';
+// import BackgroundImg from '~/assets/Scout_blur.png';
+import ThreeDLogo from '~/components/threedlogo.jsx';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);
@@ -89,28 +90,21 @@ function HomePage() {
     behavior: 'auto',
   });
 
-  const getBackgroundStyle = () => {
-    if (window.innerWidth < 768) {
-      return { backgroundSize: '400px 400px' }; // Mobile
-    } else {
-      return { backgroundSize: '500px 500px' }; // Desktop
-    }
-  };
+  // const getBackgroundStyle = () => {
+  //   if (window.innerWidth < 768) {
+  //     return { backgroundSize: '400px 400px' }; // Mobile
+  //   } else {
+  //     return { backgroundSize: '500px 500px' }; // Desktop
+  //   }
+  // };
 
   return (
     <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden">
       <HeaderForAllPages className="sticky" />
-      <h1
-        className="bg-fixed bg-no-repeat bg-center bg-cover font-raleway text-white/70 font-bold relative top-0 left-1/2 transform -translate-x-1/2 h-[500px] flex items-center justify-center text-center text-[48px] md:text-[60px] px-5 mt-[120px] mb-[90px] w-[500px] md:w-[700px]"
-        style={{
-          backgroundImage: `url(${BackgroundImg})`,
-          backgroundRepeat: 'no-repeat',
-          backgroundPosition: 'center',
-          ...getBackgroundStyle(),
-        }}
-      >
-        Source Code Open for Universal Testing
-      </h1>
+
+      <div className="h-screen w-full flex justify-center items-center">
+        <ThreeDLogo />
+      </div>
 
       <div className="relative p-[20px]">
         <h2 className="relative flex text-[60px] text-white font-bold w-full">

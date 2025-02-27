@@ -24,8 +24,10 @@ export const fetchUserData_API = async userID => {
   return response.data;
 };
 
-export const fetchSharedPostsDetails_API = async (currentUser, page) => {
-  const response = await axios.get(`${API_ROOT}/v1/boards/shareDetails/${currentUser}?page=${page}`);
+export const fetchSharedPostsDetails_API = async (currentProfile, page) => {
+  const response = await axios.get(
+    `${API_ROOT}/v1/boards/shareDetails/${currentProfile}?page=${page}`,
+  );
   return response.data;
 };
 
@@ -36,10 +38,9 @@ export const fetchSavedPostsDetails_API = async (userId, page) => {
   return response.data;
 };
 
-export const searchResults = async (searchTerm) => {
+export const searchResults = async searchTerm => {
   const response = await axios.get(
     `${API_ROOT}/v1/boards/search/content?q=${searchTerm}`,
   );
   return response.data;
-
 };
