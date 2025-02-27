@@ -185,7 +185,7 @@ const HeaderForAllPages = () => {
                   <svg
                     height="30"
                     width="30"
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                   >
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
@@ -253,7 +253,7 @@ const HeaderForAllPages = () => {
                   <svg
                     height="30"
                     width="30"
-                    xmlns="http://www.w3.org/2000/svg"
+                    xmlns="https://www.w3.org/2000/svg"
                   >
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>

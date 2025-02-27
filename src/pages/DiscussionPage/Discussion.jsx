@@ -15,27 +15,27 @@ export default function Discussion({
 }) {
   usecheckTokenAndRedirect();
   const [pageNumber, setPageNumber] = useState(currentPage);
-  const [inputValue, setInputValue] = useState(''); 
+  const [inputValue, setInputValue] = useState('');
 
-  const handleChange = (e) => {
+  const handleChange = e => {
     const newValue = e.target.value;
-    setInputValue(newValue); 
+    setInputValue(newValue);
     if (newValue === '') {
-      setPageNumber(currentPage); 
+      setPageNumber(currentPage);
     } else if (!isNaN(newValue)) {
       setPageNumber(parseInt(newValue));
     }
   };
 
-  const handleSummit = (event) => {
+  const handleSummit = event => {
     event.preventDefault();
     if (!isNaN(pageNumber) && pageNumber >= 1 && pageNumber <= totalPages) {
       paginate(pageNumber);
-      setInputValue(''); 
+      setInputValue('');
     }
   };
 
-  const handlePageChange = (pageNumber) => {
+  const handlePageChange = pageNumber => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       paginate(pageNumber);
     }
@@ -46,7 +46,7 @@ export default function Discussion({
       top: 0,
       behavior: 'auto',
     });
-  }, [currentPage]); 
+  }, [currentPage]);
 
   useEffect(() => {
     if (board && board.length > 0) {
@@ -74,9 +74,10 @@ export default function Discussion({
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}
                     className={`flex items-center justify-center px-3 py-2 mr-2 leading-tight rounded-full 
-                      ${currentPage === 1
-                        ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
-                        : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
+                      ${
+                        currentPage === 1
+                          ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
+                          : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
                       } `}
                   >
                     <svg
@@ -84,7 +85,7 @@ export default function Discussion({
                       aria-hidden="true"
                       fill="currentColor"
                       viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns="https://www.w3.org/2000/svg"
                     >
                       <path
                         fillRule="evenodd"
@@ -102,8 +103,8 @@ export default function Discussion({
                         type="tel"
                         className="w-10 text-white text-center bg-gray-800 border border-black rounded-md"
                         required
-                        value={inputValue} 
-                        placeholder={inputValue === '' ? currentPage : ''} 
+                        value={inputValue}
+                        placeholder={inputValue === '' ? currentPage : ''}
                         onChange={handleChange}
                       />
                     </form>
@@ -115,9 +116,10 @@ export default function Discussion({
                     onClick={() => handlePageChange(currentPage + 1)}
                     disabled={currentPage === totalPages}
                     className={`flex items-center justify-center px-3 py-2 leading-tight rounded-full ml-2
-                      ${currentPage === totalPages
-                        ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
-                        : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
+                      ${
+                        currentPage === totalPages
+                          ? 'text-gray-700 bg-gray-900 border border-black cursor-not-allowed'
+                          : 'text-gray-700 bg-gray-900 border border-black hover:bg-gray-800 hover:text-gray-700'
                       } `}
                   >
                     <svg
@@ -125,7 +127,7 @@ export default function Discussion({
                       aria-hidden="true"
                       fill="currentColor"
                       viewBox="0 0 20 20"
-                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns="https://www.w3.org/2000/svg"
                     >
                       <path
                         fillRule="evenodd"
@@ -138,7 +140,7 @@ export default function Discussion({
               </ul>
             </nav>
             <ul className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-[30px] md:gap-[66px] place-items-center">
-              {board.map((board) => (
+              {board.map(board => (
                 <li key={board._id} className="w-full">
                   <PostCard board={board} />
                 </li>
