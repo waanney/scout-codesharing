@@ -180,7 +180,7 @@ const SharedPostCo = ({
               </div>
             )}
             {showConfirmModal && (
-              <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+              <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-20">
                 <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
                   <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
                   <p>Are you sure you want to delete this post?</p>

@@ -393,8 +393,8 @@ function Post({ board, boardId }) {
         setTimeout(() => {
           setShowSuccess(false);
           navigate('/discussion');
-        }, 1000);
-      }, 1500);
+        }, 500);
+      }, 500);
     } catch (error) {
       setErrorMessage(error.response?.data?.message || 'Failed to delete post');
       setShowError(true);
