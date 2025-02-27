@@ -99,10 +99,10 @@ function HomePage() {
   // };
 
   return (
-    <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden">
+    <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden ">
       <HeaderForAllPages className="sticky" />
 
-      <div className="h-screen w-full flex justify-center items-center">
+      <div className="h-screen flex justify-center items-center p-[50px]">
         <ThreeDLogo />
       </div>
 
