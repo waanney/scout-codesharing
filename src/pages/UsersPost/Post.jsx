@@ -1,4 +1,5 @@
 import { Send, Save, Share, MessageSquareText, Copy } from 'lucide-react';
+import { Ellipsis } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
 import CommentCard from '../../components/comment_card.jsx';
@@ -10,7 +11,7 @@ import {
   commentPost_API,
   commentInlinePost_API,
 } from '../../redux/apiRequest.js';
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
 import '../../utils/customeStyle.css';
@@ -22,14 +23,19 @@ const API_ROOT = env.API_ROOT;
 
 function Post({ board, boardId }) {
   const { currentUserData, userId } = useUserData();
-
   const [content, setContent] = useState('');
   const [comments, setComments] = useState([]);
-  // State để lưu danh sách comment
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  // handle comment post
+  const [showError, setShowError] = useState(false);
+  const [fadeError, setFadeError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  const [showSuccess, setShowSuccess] = useState(false);
+  const [fadeSuccess, setFadeSuccess] = useState(false);
+  const [successMessage, setSuccessMessage] = useState('');
+
   const handleComment = async e => {
     e.preventDefault();
     if (!content.trim()) {
@@ -47,7 +53,6 @@ function Post({ board, boardId }) {
     try {
       const response = await commentPost_API(newComment, dispatch, navigate);
 
-      // Kiểm tra response và response.data
       if (!response || !response.data) {
         throw new Error('Không nhận được phản hồi từ server');
       }
@@ -68,15 +73,17 @@ function Post({ board, boardId }) {
       console.error('Error posting comment:', error);
     }
   };
-  // lấy data user
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
   useEffect(() => {
-    // Lấy thông tin user từ API
     const fetchData = async () => {
       setLoading(true);
+      if (!board.userID) {
+        setLoading(false);
+        return;
+      }
       try {
         const avatarcontent = await axios.get(
           `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
@@ -91,16 +98,14 @@ function Post({ board, boardId }) {
     };
 
     fetchData();
-  }, [board.userID]); // Chỉ chạy khi board.userID thay đổi
+  }, [board.userID]);
 
   useEffect(() => {
-    // Cập nhật state comments khi board.comments thay đổi
     setComments(board.comments || []);
-  }, [board.comments]); // Chỉ chạy khi board.comments thay đổi
+  }, [board.comments]);
 
-  // highlight code
   const language = board.language;
-  const sourceCode = board.content.split('\n');
+  const [sourceCode, setSourceCode] = useState(null);
   hljs.highlightAll();
   const PostsRef = useRef(null);
 
@@ -109,6 +114,17 @@ function Post({ board, boardId }) {
       PostsRef.current.querySelectorAll('pre code').forEach(block => {
         hljs.highlightElement(block);
       });
+    }
+    if (board?.content) {
+      const codeLines = board.content.split('\n');
+      if (Array.isArray(codeLines)) {
+        setSourceCode(codeLines);
+      } else {
+        console.error('board.content.split("\\n") is not an array:', codeLines);
+        setSourceCode([]);
+      }
+    } else {
+      setSourceCode([]);
     }
   }, [board]);
 
@@ -143,12 +159,12 @@ function Post({ board, boardId }) {
 
   // handle comment inline
   const [line_content, setLineContent] = useState('');
-  const [open, setOpen] = useState(Array(sourceCode.length).fill(false));
+  const [open, setOpen] = useState([]);
   const [commentsByLine, setCommentsByLine] = useState([]);
 
   useEffect(() => {
-    // Group comments by lineNumber whenever commentsInline changes
-    const groupedComments = board?.commentsInline.reduce((acc, comment) => {
+    const comments = board?.commentsInline || []; // Use empty array if undefined
+    const groupedComments = comments.reduce((acc, comment) => {
       if (!acc[comment.lineNumber]) {
         acc[comment.lineNumber] = [];
       }
@@ -158,7 +174,14 @@ function Post({ board, boardId }) {
     setCommentsByLine(groupedComments);
   }, [board?.commentsInline]);
 
-  // summit code
+  useEffect(() => {
+    if (sourceCode && Array.isArray(sourceCode)) {
+      setOpen(Array(sourceCode.length).fill(false));
+    } else {
+      setOpen([]); // Ensure open is an empty array if sourceCode is invalid
+    }
+  }, [sourceCode]);
+
   const handleInlineComment = async (e, lineNumber) => {
     e.preventDefault();
     if (!line_content.trim()) {
@@ -172,7 +195,6 @@ function Post({ board, boardId }) {
       username: currentUserData.username,
       lineNumber: lineNumber,
     };
-    // api
     try {
       const response = await commentInlinePost_API(
         newLineComment,
@@ -184,14 +206,13 @@ function Post({ board, boardId }) {
       setComments(prevComments => {
         if (!Array.isArray(prevComments)) {
           console.error('prevComments is not an array:', prevComments);
-          return createdComment ? [createdComment] : []; // Trả về mảng mới nếu prevComments không phải mảng
+          return createdComment ? [createdComment] : [];
         }
         return createdComment
           ? [...prevComments, createdComment]
           : prevComments;
       });
 
-      // Cập nhật commentsByLine một cách chính xác
       setCommentsByLine(prevCommentsByLine => {
         const updatedLineComments = prevCommentsByLine[lineNumber]
           ? [...prevCommentsByLine[lineNumber]]
@@ -215,14 +236,13 @@ function Post({ board, boardId }) {
       setLineContent('');
     } catch (error) {
       console.error('Error posting comment:', error);
-      alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.'); // Thông báo lỗi cho người dùng
+      alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.');
     }
   };
 
   const [isShared, setIsShared] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra xem boardId có trong danh sách sharedPosts của currentUserData hay không
     const isBoardShared = currentUserData?.sharedPosts.some(
       postId => postId.toString() === boardId,
     );
@@ -230,7 +250,6 @@ function Post({ board, boardId }) {
   }, [boardId, currentUserData]);
 
   const handleShare = async () => {
-    // If already shared, do nothing
     if (isShared) return;
 
     try {
@@ -248,7 +267,6 @@ function Post({ board, boardId }) {
   const [isSaved, setIsSaved] = useState(false);
 
   useEffect(() => {
-    // Kiểm tra xem boardId có trong danh sách sharedPosts của currentUserData hay không
     const isBoardSaved = currentUserData?.savedPosts.some(
       postId => postId.toString() === boardId,
     );
@@ -270,11 +288,152 @@ function Post({ board, boardId }) {
       console.error('Error saving post:', error);
     }
   };
-
   //rút gọn description
   const [fullText, setFullText] = useState(false);
-  const isClamp = board?.description.length >= 78;
+  // const isClamp = board?.description && board.description.length >= 78;
 
+  //delete comment box
+  const [openMenuId, setOpenMenuId] = useState(null);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState(null);
+  const menuRef = useRef(null);
+
+  const toggleMenu = id => {
+    setOpenMenuId(openMenuId === id ? null : id);
+  };
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpenMenuId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handleDeleteClick = useCallback((commentId, event) => {
+    event.stopPropagation();
+    setCommentToDelete(commentId);
+    setShowConfirmModal(true);
+    setOpenMenuId(null);
+  }, []);
+
+  const handleConfirmDelete = async event => {
+    event.stopPropagation();
+    if (!commentToDelete) return;
+
+    try {
+      await axios.delete(`${API_ROOT}/v1/Comment/${commentToDelete}/delete`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+        },
+      });
+
+      setComments(prevComments =>
+        prevComments.filter(comment => comment._id !== commentToDelete),
+      );
+
+      setCommentsByLine(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(line => {
+          updated[line] = updated[line].filter(c => c._id !== commentToDelete);
+        });
+        return updated;
+      });
+
+      setSuccessMessage('Delete comment successfully!');
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      setTimeout(() => setFadeSuccess(true), 1500);
+      setTimeout(() => {
+        setShowSuccess(false);
+      }, 1000);
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message);
+      setShowError(true);
+      setFadeError(false);
+      setTimeout(() => setFadeError(true), 1500);
+      setTimeout(() => setShowError(false), 1000);
+    } finally {
+      setShowConfirmModal(false);
+      setCommentToDelete(null);
+    }
+  };
+
+  //delete post
+  const [openPostMenuId, setOpenPostMenuId] = useState(null);
+  const [showPostConfirmModal, setShowPostConfirmModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const menuPostRef = useRef(null);
+
+  const togglePostMenu = id => {
+    setOpenPostMenuId(prevId => (prevId === id ? null : id));
+  };
+
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuPostRef.current && !menuPostRef.current.contains(event.target)) {
+        setOpenPostMenuId(null);
+      }
+    };
+
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  const handlePostDeleteClick = useCallback(
+    (postId, event) => {
+      event.stopPropagation();
+      setPostToDelete(postId);
+      setShowPostConfirmModal(true);
+      setOpenPostMenuId(null);
+    },
+    [board.userId, userId],
+  );
+
+  const handlePostConfirmDelete = async event => {
+    event.stopPropagation();
+    if (!postToDelete || board.userId !== userId) return;
+
+    try {
+      const response = await axios.delete(
+        `${API_ROOT}/v1/boards/delete-post/${postToDelete}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        },
+      );
+
+      setSuccessMessage(response.data.message);
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      setTimeout(() => {
+        setFadeSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          navigate('/discussion');
+        }, 500);
+      }, 500);
+    } catch (error) {
+      setErrorMessage(error.response?.data?.message || 'Failed to delete post');
+      setShowError(true);
+      setFadeError(false);
+      setTimeout(() => setFadeError(true), 1500);
+      setTimeout(() => setShowError(false), 1000);
+    } finally {
+      setShowPostConfirmModal(false);
+      setPostToDelete(null);
+    }
+  };
   //loading data
   if (loading) {
     return <div>Đang tải user data</div>;
@@ -295,7 +454,33 @@ function Post({ board, boardId }) {
         onClick={() => setOpen(Array(sourceCode.length).fill(false))}
       >
         <HeaderForAllPages className="sticky" comment={comments} />
-        <div className="cards grid lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
+        {showError && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div
+              className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
+              ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+                transition-all duration-1000 ease-in-out flex items-center justify-center`}
+            >
+              <p className="text-base md:text-[22px] font-bold text-center text-white">
+                {errorMessage}
+              </p>
+            </div>
+          </div>
+        )}
+        {showSuccess && (
+          <div className="fixed inset-0 flex items-center justify-center z-50">
+            <div
+              className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
+              ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
+              transition-all duration-1000 ease-in-out flex items-center justify-center`}
+            >
+              <p className="text-base md:text-[22px] font-bold text-center text-white">
+                {successMessage}
+              </p>
+            </div>
+          </div>
+        )}
+        <div className="cards grid w-full lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
           <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
@@ -327,68 +512,157 @@ function Post({ board, boardId }) {
                 </div>
               </div>
               <div className="card flex flex-col bg-[#05143c]">
-                <div>
-                  <button
-                    onClick={handleShare}
-                    className={`flex flex-row items-center rounded-md ${
-                      isShared
-                        ? 'bg-transparent text-blue-500 cursor-not-allowed'
-                        : 'hover:scale-110 text-white'
+                <div className="relative" ref={menuPostRef}>
+                  <Ellipsis
+                    className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
+                    onClick={() => togglePostMenu(board._id)}
+                  />
+
+                  <div
+                    className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-95 shadow-lg transition-all duration-300 transform ${
+                      openPostMenuId === board._id
+                        ? 'opacity-100 translate-y-0 pointer-events-auto'
+                        : 'opacity-0 -translate-y-5 pointer-events-none'
                     }`}
-                    disabled={isShared}
                   >
-                    <Share
-                      className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`}
-                    />
-                    {isShared ? 'Shared' : 'Share'}
-                  </button>
+                    {board.userId === userId && (
+                      <button
+                        className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                        onClick={event =>
+                          handlePostDeleteClick(board._id, event)
+                        }
+                      >
+                        <p className="font-medium text-red-600 text-[20px]">
+                          Delete
+                        </p>
+                      </button>
+                    )}
+                    <button
+                      onClick={handleShare}
+                      className={`flex flex-row w-full py-2 justify-center rounded-md hover:bg-gray-600  ${
+                        isShared
+                          ? 'bg-transparent text-blue-500 cursor-not-allowed'
+                          : 'hover:scale-110 text-white'
+                      }`}
+                      disabled={isShared}
+                    >
+                      <Share
+                        className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`}
+                      />
+                      {isShared ? 'Shared' : 'Share'}
+                    </button>
+                    <button
+                      onClick={handleSave}
+                      className={`flex flex-row justify-center py-2 w-full hover:bg-gray-600 rounded-md  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
+                      disabled={isSaved}
+                    >
+                      <Save className="h-[30px] w-[30px]" />
+                      {isSaved ? 'Saved' : 'Save'}
+                    </button>
+                  </div>
                 </div>
-                <div>
-                  <button
-                    onClick={handleSave}
-                    className={`flex flex-row items-center  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
-                    disabled={isSaved}
-                  >
-                    <Save className="h-[30px] w-[30px]" />
-                    {isSaved ? 'Saved' : 'Save'}
-                  </button>
-                </div>
+                {showPostConfirmModal && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                      <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                      <p>Are you sure you want to delete this post?</p>
+                      <div className="flex justify-between mt-4">
+                        <button
+                          className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                          onClick={event => {
+                            event.stopPropagation();
+                            setShowPostConfirmModal(false);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-600 text-white rounded-md"
+                          onClick={handlePostConfirmDelete}
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
-            <div className="text-white">
-              <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
-                {board?.title}
-              </div>
-              <div className=" w-full px-[20px]">
-                <div
-                  className={`h-[84px] text-xl font-normal leading-[150%] break-all ${fullText ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin' : 'line-clamp-3'}`}
-                >
-                  {board?.description}
+            {board ? (
+              <div className="text-white">
+                <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
+                  {board.title || ''}
                 </div>
-                <button
-                  className={`font-bold ${isClamp ? '' : 'hidden'}`}
-                  onClick={() => {
-                    setFullText(!fullText);
-                  }}
-                >
-                  {fullText ? 'less' : 'more'}
-                </button>
+                <div className="w-full px-[20px]">
+                  <div
+                    className={`h-[84px] text-xl font-normal leading-[150%] break-all ${
+                      fullText
+                        ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin'
+                        : 'line-clamp-3'
+                    }`}
+                  >
+                    {board.description ||
+                      'Owner has deleted or hidden this post.'}
+                  </div>
+                  {board.description && board.description.length > 100 && (
+                    <button
+                      className="font-bold"
+                      onClick={() => setFullText(!fullText)}
+                    >
+                      {fullText ? 'less' : 'more'}
+                    </button>
+                  )}
+                </div>
               </div>
-            </div>
+            ) : (
+              <div className="text-white text-center text-xl font-bold">
+                Board data not found.
+              </div>
+            )}
+
             <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
               {comments.map(comment => (
                 <div
                   key={comment._id}
-                  className="w-[95%] rounded-[10px] mb-4 p-[15px 5px] bg-slate-500"
+                  className="w-[100%] rounded-[10px] mb-4 p-[15px 5px] bg-blue-950"
                 >
-                  <div className="text-white text-2xl pl-[10px] font-bold leading-9">
+                  <div className="flex justify-between text-white text-2xl pl-[10px] font-bold leading-9">
                     <a
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${comment.userId}`}
                     >
                       {comment.username}
                     </a>
+                    {comment.userId === userId && (
+                      <div className="relative" ref={menuRef}>
+                        <Ellipsis
+                          className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
+                          onClick={() => toggleMenu(comment._id)}
+                        />
+                        {openMenuId === comment._id && (
+                          <div
+                            className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
+                              openMenuId === comment._id
+                                ? 'opacity-100 translate-y-0 pointer-events-auto'
+                                : 'opacity-0 -translate-y-5 pointer-events-none'
+                            }`}
+                          >
+                            <button
+                              className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                              onClick={event =>
+                                handleDeleteClick(comment._id, event)
+                              }
+                            >
+                              <p className="font-medium text-red-600 text-[20px]">
+                                Delete
+                              </p>
+                            </button>
+                          </div>
+                        )}
+                      </div>
+                    )}
                   </div>
+
                   <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
                     {comment.content}
                   </div>
@@ -400,10 +674,35 @@ function Post({ board, boardId }) {
                   />
                 </div>
               ))}
+              {showConfirmModal && (
+                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                  <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                    <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                    <p>Are you sure you want to delete this comment?</p>
+                    <div className="flex justify-between mt-4">
+                      <button
+                        className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                        onClick={event => {
+                          event.stopPropagation();
+                          setShowConfirmModal(false);
+                        }}
+                      >
+                        Cancel
+                      </button>
+                      <button
+                        className="px-4 py-2 bg-red-600 text-white rounded-md"
+                        onClick={handleConfirmDelete}
+                      >
+                        Confirm
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
             <form
               onSubmit={handleComment}
-              className="flex flex-row px-[20px] py-[20px] pt-4 md:pb-6"
+              className="flex flex-row px-[20px] py-[20px] pt-[10px] md:pb-6"
             >
               <input
                 value={content}
@@ -435,7 +734,6 @@ function Post({ board, boardId }) {
               </div>
               {sourceCode.map((code, lineNum) => (
                 <div key={lineNum} className="flex">
-                  {/* Button */}
                   <button
                     className={`text-gray-500 ${commentsByLine[lineNum + 1] ? 'text-white' : ''}  ml-[10px] right-[15px] z-10`}
                     onClick={event => {

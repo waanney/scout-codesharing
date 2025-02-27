@@ -1,5 +1,5 @@
 // Đây là header của trang web
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
@@ -45,7 +45,6 @@ const HeaderForAllPages = () => {
       name: 'Search',
       path: '/search',
       check: path => path.includes('/search'),
-
     },
   ];
 
@@ -112,6 +111,20 @@ const HeaderForAllPages = () => {
     // localStorage.removeItem('currentUser'); //xóa thông tin trong localStorage
   };
 
+  const menuRef = useRef(null);
+  useEffect(() => {
+    const handleClickOutside = event => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setOpen(null);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <div className="fixed w-full px-[10px] z-20 bg-[#0b2878] h-[80px]">
       {currentUser ? (
@@ -132,10 +145,11 @@ const HeaderForAllPages = () => {
               {routes.map((item, index) => (
                 <div
                   key={index}
-                  className={`w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10 ${activeIndex === index && isBorderActive
+                  className={`w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10 ${
+                    activeIndex === index && isBorderActive
                       ? 'border-2 border-red-500 animate-pulse rounded-[10px]'
                       : ''
-                    }`}
+                  }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
                   onClick={() => handleClick(index, false)}
@@ -158,6 +172,7 @@ const HeaderForAllPages = () => {
             <div
               className="hidden lg:flex h-[30px] w-[20%] relative items-center space-x-1 cursor-pointer justify-end"
               onClick={() => setOpen(!open)}
+              ref={menuRef}
             >
               <a className="flex items-center">
                 {AvatarUrl ? (
@@ -181,16 +196,14 @@ const HeaderForAllPages = () => {
               </a>
 
               <div
-                className={`absolute right-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${open
+                className={`absolute right-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
+                  open
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'
-                  }`}
+                }`}
               >
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
-                  <Link
-                    to="/storage"
-                    className=" hover:cursor-pointer"
-                  >
+                  <Link to="/storage" className=" hover:cursor-pointer">
                     <p className="font-medium">Storage</p>
                   </Link>
                 </button>
@@ -252,11 +265,13 @@ const HeaderForAllPages = () => {
               {routes.map((item, index) => (
                 <div
                   key={index}
-                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${item.check(location.pathname) ? 'bg-blue-500/[.2]' : ''
-                    }
-                    ${activeIndex === index && mobileBorderActiveIndex === index
-                      ? 'border-2 border-red-500 animate-pulse'
-                      : ''
+                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
+                    item.check(location.pathname) ? 'bg-blue-500/[.2]' : ''
+                  }
+                    ${
+                      activeIndex === index && mobileBorderActiveIndex === index
+                        ? 'border-2 border-red-500 animate-pulse'
+                        : ''
                     }
                   `}
                   onClick={() => handleClick(index, true)}
@@ -272,7 +287,7 @@ const HeaderForAllPages = () => {
               <hr className="my-[5px]" />
               <div className="mt-[10px]">
                 <div className="h-[70px] grid-flow-row justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">
-                    <button className="w-full h-full px-[5px]">
+                  <button className="w-full h-full px-[5px]">
                     <Link
                       to="/storage"
                       className="hover:cursor-pointer w-full h-full flex items-center"
