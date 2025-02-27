@@ -82,6 +82,10 @@ function Post({ board, boardId }) {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
+      if (!board.userID) {
+        setLoading(false);
+        return;
+      }
       try {
         const avatarcontent = await axios.get(
           `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
