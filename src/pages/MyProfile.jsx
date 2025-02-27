@@ -326,9 +326,8 @@ function MyProfile() {
             return acc;
           }, {});
           setSharedPostAvatars(avatarMap);
-          setSharedPosts(
-            posts.sort((a, b) => new Date(a.createdAt) - new Date(b.createdAt)),
-          );
+          setSharedPosts(posts.reverse());
+          setLoading(false);
         } catch (error) {
           const errorMessage =
             error.response?.data?.message ||
