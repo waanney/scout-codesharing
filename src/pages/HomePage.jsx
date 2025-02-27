@@ -90,19 +90,11 @@ function HomePage() {
     behavior: 'auto',
   });
 
-  // const getBackgroundStyle = () => {
-  //   if (window.innerWidth < 768) {
-  //     return { backgroundSize: '400px 400px' }; // Mobile
-  //   } else {
-  //     return { backgroundSize: '500px 500px' }; // Desktop
-  //   }
-  // };
-
   return (
     <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden ">
       <HeaderForAllPages className="sticky" />
 
-      <div className="h-screen flex justify-center items-center p-[50px]">
+      <div className="h-screen flex justify-center items-center p-[50px] md:pl-[200px] md:pr-[200px]">
         <ThreeDLogo />
       </div>
 
