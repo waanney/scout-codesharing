@@ -298,14 +298,14 @@ const HeaderForAllPages = () => {
                   <button className="w-full h-full px-[5px]">
                     <Link
                       to="/changepassword"
-                      className="clickchangepassword hover:cursor-pointer w-full h-full flex items-center"
+                      className="clickchangepassword hover:cursor-pointer w-full flex items-center"
                     >
                       <p className="font-medium text-[18px]">Change Password</p>
                     </Link>
                   </button>
                 </div>
 
-                <div className="h-[200px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
+                <div className="h-[50px] mt-[80px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
                   <button
                     onClick={handleLogout}
                     className="w-full h-full px-[5px] text-red-600"
@@ -341,7 +341,7 @@ const HeaderForAllPages = () => {
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
               onMouseLeave={() => setHoveredIndex(null)}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile', 'Search'].map(
+              {['Home', 'Discussion', 'Storage', 'Profile'].map(
                 (item, index) => (
                   <div
                     key={index}
