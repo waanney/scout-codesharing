@@ -286,8 +286,8 @@ const HeaderForAllPages = () => {
               ))}
               <hr className="my-[5px]" />
               <div className="mt-[10px]">
-                <div className="h-[70px] grid-flow-row justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]">
-                  <button className="w-full h-full px-[5px]">
+                <div className="h-[70px] grid-flow-row justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] ">
+                  <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link
                       to="/storage"
                       className="hover:cursor-pointer w-full h-full flex items-center"
@@ -295,24 +295,21 @@ const HeaderForAllPages = () => {
                       <p className="font-medium text-[18px]">Storage</p>
                     </Link>
                   </button>
-                  <button className="w-full h-full px-[5px]">
+                  <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link
                       to="/changepassword"
-                      className="clickchangepassword hover:cursor-pointer w-full flex items-center"
+                      className="hover:cursor-pointer w-full flex items-center"
                     >
                       <p className="font-medium text-[18px]">Change Password</p>
                     </Link>
                   </button>
-                </div>
-
-                <div className="h-[50px] mt-[80px] flex justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 hover:bg-slate-300/[.1]">
                   <button
                     onClick={handleLogout}
-                    className="w-full h-full px-[5px] text-red-600"
+                    className="w-full h-full px-[5px] text-red-600 hover:bg-slate-300/[.1] rounded-[10px]"
                   >
                     <Link
                       to="/"
-                      className="clicklogout w-full h-full flex items-center"
+                      className="w-full h-full flex items-center"
                     >
                       <p className="font-medium text-[18px]">Log out</p>
                     </Link>
