@@ -26,6 +26,7 @@ const HeaderForAllPages = () => {
   const [AvatarUrl, setAvatarUrl] = useState(null);
 
   const location = useLocation(); // Lấy thông tin location hiện tại
+  const location_1= useLocation();
 
   // Tạo mảng routes với điều kiện kiểm tra active
   const routes = [
@@ -35,7 +36,6 @@ const HeaderForAllPages = () => {
       path: '/discussion',
       check: path => path === '/discussion',
     },
-    //{ name: 'Storage', path: '/storage', check: path => path === '/storage' },
     {
       name: 'Profile',
       path: `/profile/${userId}`,
@@ -47,6 +47,10 @@ const HeaderForAllPages = () => {
       check: path => path.includes('/search'),
     },
   ];
+  const user=[
+    { name: 'Storage', path: '/storage', check: path => path === '/storage' },
+    { name: 'Change Password', path: '/changepassword', check: path => path === '/changepassword' },
+  ]
 
   // Xác định active index dựa trên location
   const [activeIndex, setActiveIndex] = useState(null);
@@ -54,12 +58,17 @@ const HeaderForAllPages = () => {
     const index = routes.findIndex(route => route.check(location.pathname));
     setActiveIndex(index >= 0 ? index : null);
   }, [location]);
+  const [activeIndex_1, setActiveIndex_1] = useState(null);
+  useEffect(() => {
+    const index = user.findIndex(route => route.check(location_1.pathname));
+    setActiveIndex_1(index >= 0 ? index : null);
+  }, [location_1]);
 
   //nếu ở page đó mà bấm vô page đó
   const [isBorderActive, setIsBorderActive] = useState(false);
   const [mobileBorderActiveIndex, setMobileBorderActiveIndex] = useState(null);
 
-  const handleClick = (index, isMobile = false) => {
+  const handleClick = (index, isMobile) => {
     const targetPath = routes[index].path;
 
     if (
@@ -71,6 +80,21 @@ const HeaderForAllPages = () => {
     }
 
     if (activeIndex === index) {
+      if (isMobile) {
+        setMobileBorderActiveIndex(index);
+        setTimeout(() => setMobileBorderActiveIndex(null), 2000);
+      } else {
+        setIsBorderActive(true);
+        setTimeout(() => setIsBorderActive(false), 2000);
+      }
+    }
+
+    navigate(targetPath);
+  };
+  const handleClick_1 = (index, isMobile) => {
+    const targetPath = user[index].path;
+
+    if (activeIndex_1 === index) {
       if (isMobile) {
         setMobileBorderActiveIndex(index);
         setTimeout(() => setMobileBorderActiveIndex(null), 2000);
@@ -286,32 +310,38 @@ const HeaderForAllPages = () => {
               ))}
               <hr className="my-[5px]" />
               <div className="mt-[10px]">
-                <div className="h-[70px] grid-flow-row justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] ">
-                  <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
-                    <Link
-                      to="/storage"
-                      className="hover:cursor-pointer w-full h-full flex items-center"
-                    >
-                      <p className="font-medium text-[18px]">Storage</p>
-                    </Link>
-                  </button>
-                  <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
-                    <Link
-                      to="/changepassword"
-                      className="hover:cursor-pointer w-full flex items-center"
-                    >
-                      <p className="font-medium text-[18px]">Change Password</p>
-                    </Link>
-                  </button>
+                <div className="h-[70px] grid-flow-row justify-start rounded-[10px] z-10 mt-[10px] ">
+                  {user.map((item, index) => (
+                <div
+                  key={index}
+                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
+                    item.check(location_1.pathname) ? 'bg-blue-500/[.2]' : ''
+                  }
+                    ${
+                      activeIndex_1 === index && mobileBorderActiveIndex === index
+                        ? 'border-2 border-red-500 animate-pulse'
+                        : ''
+                    }
+                  `}
+                  onClick={() => handleClick_1(index, true)}
+                >
+                  <span className="text-[20px] pl-[10px]">
+                    {item.name}
+                    {item.check(location_1.pathname) && (
+                      <span className="ml-2 w-2 h-2 bg-blue-500 rounded-full inline-block" />
+                    )}
+                  </span>
+                </div>
+              ))}
                   <button
                     onClick={handleLogout}
-                    className="w-full h-full px-[5px] text-red-600 hover:bg-slate-300/[.1] rounded-[10px]"
+                    className="w-full h-full px-[5px] cursor-pointer mt-[10px]  hover:font-bold  hover:bg-slate-300/[.1] rounded-[10px]"
                   >
                     <Link
                       to="/"
                       className="w-full h-full flex items-center"
                     >
-                      <p className="font-medium text-[18px]">Log out</p>
+                      <p className="text-[20px] text-red-600">Log out</p>
                     </Link>
                   </button>
                 </div>
