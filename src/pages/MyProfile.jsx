@@ -263,10 +263,15 @@ function MyProfile() {
     }
     if (e.key === 'Tab') {
       e.preventDefault();
-      let cursorPosition = e.target.selectionStart;
-      let newText =
-        text.slice(0, cursorPosition) + '  ' + text.slice(cursorPosition);
+
+      const start = e.target.selectionStart;
+      const end = e.target.selectionEnd;
+      const newText = text.substring(0, start) + '  ' + text.substring(end);
       setText(newText);
+
+      setTimeout(() => {
+        e.target.selectionStart = e.target.selectionEnd = start + 2;
+      }, 0);
     }
   };
 
