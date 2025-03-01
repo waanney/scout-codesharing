@@ -25,7 +25,6 @@ function MyProfile() {
   const { currentUserData, userId } = useUserData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [language, setLanguage] = useState('');
   const [text, setText] = useState('');
   const [lineNumbers, setLineNumbers] = useState([true]);
   const textareaRef = useRef(null);
@@ -255,54 +254,108 @@ function MyProfile() {
     }
   };
 
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
-      const newLineNumbers = [...lineNumbers];
-      newLineNumbers.push(true);
-      setLineNumbers(newLineNumbers);
-    }
-    if (e.key === 'Tab') {
-      e.preventDefault();
-
-      const start = e.target.selectionStart;
-      const end = e.target.selectionEnd;
-      const newText = text.substring(0, start) + '  ' + text.substring(end);
-      setText(newText);
-
-      setTimeout(() => {
-        e.target.selectionStart = e.target.selectionEnd = start + 2;
-      }, 0);
-    }
-  };
+  const [highlightedCode, setHighlightedCode] = useState('');
+  const [language, setLanguage] = useState('');
+  const highlightedCodeRef = useRef(null);
+  const lineNumbersRef = useRef(null);
+  const langlist = hljsLanguages;
 
   const handleInputChange = e => {
     const maxCharsPerLine = 80;
     const value = e.target.value;
 
-    // Split the input text into an array of lines
     const lines = value.split('\n');
 
-    // Process each line to enforce the character limit and break lines
     const updatedLines = lines.map(line => {
       if (line.length > maxCharsPerLine) {
-        // Break the line at maxCharsPerLine if it's longer
         const chunks = [];
         while (line.length > maxCharsPerLine) {
           chunks.push(line.slice(0, maxCharsPerLine));
           line = line.slice(maxCharsPerLine);
         }
-        if (line.length > 0) chunks.push(line); // Append the remaining part of the line
+        if (line.length > 0) chunks.push(line);
         return chunks.join('\n');
       }
-      return line; // No modification if within the limit
+      return line;
     });
 
-    // Join the updated lines and set it as the new value
-    setText(updatedLines.join('\n'));
+    const wrappedText = updatedLines.join('\n');
+
+    setText(wrappedText);
+    if (hljs.getLanguage(language)) {
+      setHighlightedCode(
+        hljs.highlight(wrappedText, { language: language }).value,
+      );
+    } else {
+      setHighlightedCode(hljs.highlightAuto(wrappedText).value);
+    }
   };
 
-  //Hiển thị các Language
-  const langlist = hljsLanguages;
+  const handleKeyDown = e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const { selectionStart, selectionEnd } = e.target;
+      const startLine =
+        text.substring(0, selectionStart).split('\n').length - 1;
+      const endLine = text.substring(0, selectionEnd).split('\n').length - 1;
+      const lines = text.split('\n');
+
+      const uniqueLines = new Set();
+      for (let i = startLine; i <= endLine; i++) {
+        uniqueLines.add(i);
+      }
+
+      uniqueLines.forEach(i => {
+        lines[i] = '  ' + lines[i];
+      });
+
+      const newText = lines.join('\n');
+      setText(newText);
+      if (hljs.getLanguage(language)) {
+        setHighlightedCode(
+          hljs.highlight(newText, { language: language }).value,
+        );
+      } else {
+        setHighlightedCode(hljs.highlightAuto(newText).value);
+      }
+
+      const newStart =
+        text.split('\n').slice(0, startLine).join('\n').length +
+        (startLine > 0 ? 1 : 0) +
+        2 * uniqueLines.size;
+      const newEnd =
+        text.split('\n').slice(0, endLine).join('\n').length +
+        lines[endLine].length +
+        (endLine > 0 ? 1 : 0);
+
+      e.target.selectionStart = newStart;
+      e.target.selectionEnd = newEnd;
+    }
+  };
+  const handleLanguageChange = e => {
+    setLanguage(e.target.value);
+    if (hljs.getLanguage(e.target.value)) {
+      setHighlightedCode(
+        hljs.highlight(text, { language: e.target.value }).value,
+      );
+    } else {
+      setHighlightedCode(hljs.highlightAuto(text).value);
+    }
+  };
+
+  useEffect(() => {
+    if (highlightedCodeRef.current && textareaRef.current) {
+      highlightedCodeRef.current.style.height =
+        textareaRef.current.style.height;
+    }
+  }, [highlightedCode]);
+
+  useEffect(() => {
+    if (lineNumbersRef.current && textareaRef.current) {
+      lineNumbersRef.current.style.height = textareaRef.current.style.height;
+    }
+  }, [numberOfVisibleLines, lineHeight]);
+
   const handleAvatarSave = async croppedAvatarURL => {
     try {
       const response = await fetch(croppedAvatarURL);
@@ -339,8 +392,6 @@ function MyProfile() {
       setTimeout(() => setShowError(false), 1000);
     }
   };
-
-  //Highlight code
   const hljscode = useRef(null);
   useEffect(() => {
     if (hljscode.current) {
@@ -370,8 +421,7 @@ function MyProfile() {
                 <div
                   className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
                   ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
-                >
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}>
                   <p className="text-base md:text-[22px] font-bold text-center text-white">
                     {errorMessage}
                   </p>
@@ -383,8 +433,7 @@ function MyProfile() {
                 <div
                   className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
                   ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
-                >
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}>
                   <p className="text-base md:text-[22px] font-bold text-center text-white">
                     {successMessage}
                   </p>
@@ -411,8 +460,7 @@ function MyProfile() {
                   <div>
                     <button
                       className="absolute right-[5px] mt-[-5px]"
-                      onClick={isEditing ? handleSaveClick : handleEditClick}
-                    >
+                      onClick={isEditing ? handleSaveClick : handleEditClick}>
                       <img
                         src={isEditing ? savePost : editPost}
                         alt={isEditing ? 'Save icon' : 'Edit icon'}
@@ -469,8 +517,7 @@ function MyProfile() {
           <div className="flex h-[120px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
             <img
               className="h-[13px] w-[14px] m-[11px]"
-              src={content || '/placeholder.svg'}
-            ></img>
+              src={content || '/placeholder.svg'}></img>
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px] flex-grow">
               {isEditing ? (
                 <textarea
@@ -498,8 +545,7 @@ function MyProfile() {
                     wordBreak: 'break-word', // Handle long strings
                     lineHeight: '1.5rem',
                     padding: '5px',
-                  }}
-                >
+                  }}>
                   {intro}
                 </div>
               )}
@@ -515,8 +561,7 @@ function MyProfile() {
               style={{
                 border: personalityError ? '2px solid red' : 'none',
                 padding: '5px',
-              }}
-            >
+              }}>
               {isEditing ? (
                 <>
                   {personality.map((trait, index) => (
@@ -527,8 +572,7 @@ function MyProfile() {
                       style={{
                         border: trait.trim() === '' ? '2px solid red' : 'none',
                         padding: '5px',
-                      }}
-                    >
+                      }}>
                       <input
                         value={trait}
                         onChange={e => {
@@ -545,16 +589,14 @@ function MyProfile() {
                           setPersonality(
                             personality.filter((_, i) => i !== index),
                           )
-                        }
-                      >
+                        }>
                         x
                       </button>
                     </div>
                   ))}
                   <div
                     className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
-                    onClick={() => setPersonality([...personality, ''])}
-                  >
+                    onClick={() => setPersonality([...personality, ''])}>
                     +
                   </div>
                 </>
@@ -562,8 +604,7 @@ function MyProfile() {
                 editableProfile.personality?.map((trait, index) => (
                   <div
                     key={index}
-                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
-                  >
+                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium">
                     {trait}
                   </div>
                 ))
@@ -576,8 +617,7 @@ function MyProfile() {
           <div className=" mt-[20px] lg:mt-[125px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto bg-black">
             <form
               onSubmit={handleCreatepost}
-              className="flex-col  rounded-[10px]"
-            >
+              className="flex-col  rounded-[10px]">
               <div className="flex justify-between mt-[10px] mx-[10px]">
                 <div className=" flex items-center space-x-1">
                   <a className="flex items-center">
@@ -591,8 +631,7 @@ function MyProfile() {
                       <svg
                         height="30"
                         width="30"
-                        xmlns="https://www.w3.org/2000/svg"
-                      >
+                        xmlns="https://www.w3.org/2000/svg">
                         <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                       </svg>
                     )}
@@ -603,8 +642,7 @@ function MyProfile() {
                 </div>
                 <button
                   type="submit"
-                  className="cursor-pointer transition-all mb-[5px] bg-white text-black font-bold text-[18px] px-6 py-2 mt-[4px] rounded-lg border-slate-200 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
-                >
+                  className="cursor-pointer transition-all mb-[5px] bg-white text-black font-bold text-[18px] px-6 py-2 mt-[4px] rounded-lg border-slate-200 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
                   Create
                 </button>
               </div>
@@ -636,8 +674,7 @@ function MyProfile() {
                   name="langSelect"
                   value={language}
                   required
-                  onChange={e => setLanguage(e.target.value)}
-                >
+                  onChange={handleLanguageChange}>
                   <optgroup label="Choose Language..." className="bg-slate-800">
                     <option value="" disabled hidden>
                       Choose Language...
@@ -652,22 +689,20 @@ function MyProfile() {
 
                 {/* Code Editor */}
                 <div className="bg-black bg-opacity-50 rounded-[5px] flex mt-[5px]">
-                  {/* Line Numbers */}
                   <div
                     className="py-2 px-2 text-right bg-opacity-50 bg-muted font-mono select-none overflow-hidden"
                     style={{
                       minWidth: '3rem',
                       height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                    }}
-                  >
+                    }}>
                     <div
                       className="h-full"
+                      ref={lineNumbersRef}
                       style={{
                         transform: textareaRef.current
                           ? `translateY(-${textareaRef.current.scrollTop}px)`
                           : 'none',
-                      }}
-                    >
+                      }}>
                       {Array.from(
                         {
                           length: Math.max(
@@ -683,43 +718,55 @@ function MyProfile() {
                               height: lineHeight,
                               lineHeight,
                               opacity: index < lineNumbers.length ? 1 : 0,
-                            }}
-                          >
+                            }}>
                             {(index + 1).toString().padStart(2, '0')}
                           </div>
                         ),
                       )}
                     </div>
                   </div>
+                  <div className="relative flex-1 ">
+                    {/* Highlighted Code */}
+                    <pre
+                      ref={highlightedCodeRef}
+                      className="absolute left-0 top-0 w-full p-2 overflow-y-auto"
+                      style={{
+                        lineHeight,
+                        pointerEvents: 'none',
+                      }}
+                      dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                    />
 
-                  {/* Textarea */}
-                  <textarea
-                    ref={textareaRef}
-                    value={text}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                    onScroll={e => {
-                      const target = e.target;
-                      if (target) {
-                        const lineNumbersContainer =
-                          target.previousSibling.firstChild;
-                        if (lineNumbersContainer) {
-                          lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`;
+                    {/* Textarea */}
+                    <textarea
+                      ref={textareaRef}
+                      value={text}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      onScroll={e => {
+                        const target = e.target;
+                        if (
+                          target &&
+                          highlightedCodeRef.current &&
+                          lineNumbersRef.current
+                        ) {
+                          highlightedCodeRef.current.scrollTop =
+                            target.scrollTop;
+                          lineNumbersRef.current.style.transform = `translateY(-${target.scrollTop}px)`;
                         }
-                      }
-                    }}
-                    className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono opacity-0"
-                    placeholder="Put your codes here..."
-                    style={{
-                      lineHeight,
-                      height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                      overflowY: 'auto',
-                    }}
-                    aria-label="Numbered text editor"
-                  />
-                  <pre className="absolute ml-[50px] flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono">
-                    <code>{text}</code>
-                  </pre>
+                      }}
+                      className="absolute inset-0 p-2 bg-transparent border-none outline-none resize-none font-mono w-full"
+                      placeholder="Put your codes here..."
+                      style={{
+                        lineHeight,
+                        overflowY: 'auto',
+                        backgroundColor: 'transparent',
+                        color: 'transparent',
+                        caretColor: 'white',
+                      }}
+                      aria-label="Numbered text editor"
+                    />
+                  </div>
                 </div>
               </div>
             </form>
