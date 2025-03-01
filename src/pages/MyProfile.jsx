@@ -303,7 +303,6 @@ function MyProfile() {
 
   //Hiển thị các Language
   const langlist = hljsLanguages;
-
   const handleAvatarSave = async croppedAvatarURL => {
     try {
       const response = await fetch(croppedAvatarURL);
@@ -340,6 +339,16 @@ function MyProfile() {
       setTimeout(() => setShowError(false), 1000);
     }
   };
+
+  //Highlight code
+  const hljscode = useRef(null);
+  useEffect(() => {
+    if (hljscode.current) {
+      hljscode.current.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+      });
+    }
+  }, [text]);
 
   if (loading) {
     return <LoadingAnimation />;
@@ -642,7 +651,7 @@ function MyProfile() {
                 </select>
 
                 {/* Code Editor */}
-                <div className=" bg-black bg-opacity-50 rounded-[5px] flex mt-[5px]">
+                <div className="bg-black bg-opacity-50 rounded-[5px] flex mt-[5px]">
                   {/* Line Numbers */}
                   <div
                     className="py-2 px-2 text-right bg-opacity-50 bg-muted font-mono select-none overflow-hidden"
@@ -699,7 +708,7 @@ function MyProfile() {
                         }
                       }
                     }}
-                    className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
+                    className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono opacity-0"
                     placeholder="Put your codes here..."
                     style={{
                       lineHeight,
@@ -708,6 +717,9 @@ function MyProfile() {
                     }}
                     aria-label="Numbered text editor"
                   />
+                  <pre className="absolute ml-[50px] flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono">
+                    <code>{text}</code>
+                  </pre>
                 </div>
               </div>
             </form>
