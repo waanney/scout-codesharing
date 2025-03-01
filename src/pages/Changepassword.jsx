@@ -187,7 +187,7 @@ function Changepassword() {
                 className="w-full md:w-auto flex items-center justify-center h-[50px] px-6 md:px-8 bg-[#3366cc] bg-opacity-50 font-Inter font-bold text-base md:text-[25px] rounded-[10px] cursor-pointer"
                 disabled={isFetching}
               >
-                {isFetching ? 'Đang xử lý...' : 'Change'}
+                {isFetching ? 'Loading...' : 'Change'}
               </button>
             </div>
           </form>
