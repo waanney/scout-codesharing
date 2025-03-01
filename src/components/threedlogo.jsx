@@ -66,7 +66,7 @@ export default function ThreeDLogo() {
       <ambientLight intensity={0.3} />
       <directionalLight position={[5, 5, 5]} intensity={0.5} />
       <FourArcs />
-      <OrbitControls enableZoom={true} />
+      <OrbitControls enableZoom={false} enablePan={true} enableRotate={true} enableContextMenu={false}/>
     </Canvas>
   );
 }

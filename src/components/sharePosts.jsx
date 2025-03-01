@@ -320,7 +320,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                     {post.description.split(' ').slice(0, 20).join(' ')}
                     {post.description.split(' ').length > 20 ? '...' : ''}
                   </h2>
-                  <div className="w-[95%] h-[370px] bg-black bg-opacity-50 rounded-md mx-auto overflow-y-auto p-4">
+                  <div className="w-[95%] h-[370px] bg-black bg-opacity-50 rounded-md mx-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin p-4">
                     <div className="text-gray-400 text-lg">{post.language}</div>
                     <pre className="w-full h-full m-0 p-0">
                       <code className={`language-${post.language}`}>
