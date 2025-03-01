@@ -732,6 +732,7 @@ function MyProfile() {
                       className="absolute left-0 top-0 w-full p-2 overflow-y-auto"
                       style={{
                         lineHeight,
+                        height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
                         pointerEvents: 'none',
                       }}
                       dangerouslySetInnerHTML={{ __html: highlightedCode }}
@@ -759,6 +760,7 @@ function MyProfile() {
                       placeholder="Put your codes here..."
                       style={{
                         lineHeight,
+                        height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
                         overflowY: 'auto',
                         backgroundColor: 'transparent',
                         color: 'transparent',
