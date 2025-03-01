@@ -720,15 +720,18 @@ function Post({ board, boardId }) {
             </form>
           </div>
           {/*Post code*/}
-          <div className="card  rounded-[10px] lg:h-[636px] h-[500px] w-full p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
-            <div className="font-mono relative w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
+          <div className="relative card rounded-[10px] lg:h-[636px] h-[500px] w-full p-[10px]  swiper swiper-initialized swiper-horizontal swiper-backface-hidden aos-init aos-animate bg-[#05143c]">
+            <div className="font-mono w-full h-full bg-[#00000080] overflow-x-auto overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-[#00000000] scrollbar-thin">
               <div className="flex flex-row">
                 <div className="ml-[10px] text-gray-500 text-[20px]">
                   {board.language}
                 </div>
-                <button onClick={copyToClipboard(board.content)}>
+                <button
+                  onClick={copyToClipboard(board.content)}
+                  className="absolute right-3"
+                >
                   <Copy
-                    className={`absolute right-0 ${isCopied ? 'text-blue-500' : 'text-white'}`}
+                    className={`${isCopied ? 'text-blue-500' : 'text-white'}`}
                   />
                 </button>
               </div>
