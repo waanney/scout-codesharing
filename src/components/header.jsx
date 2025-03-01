@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import { Menu, X, Bell } from 'lucide-react';
 import { env } from '~/configs/environment.js';
 import logo from '~/assets/Scout.ico';
+import { io } from 'socket.io-client';
 const API_ROOT = env.API_ROOT;
 
 const HeaderForAllPages = () => {
@@ -127,11 +128,62 @@ const HeaderForAllPages = () => {
   }, []);
 
   //Notification
+  const socket = useRef(null);
   const [openNotification, setOpenNotification] = useState(false);
+  const [notifications, setNotifications] = useState([]);
   const [openNotification_1, setOpenNotification_1] = useState(false);
-  const [notificationCount, setNotificationCount] = useState(5);
+  const [notificationCount, setNotificationCount] = useState(0);
   const lineHeight = '2rem';
   const numberOfVisibleLines = 10;
+
+  useEffect(() => {
+    socket.current = io(API_ROOT, {
+      withCredentials: true,
+      transports: ['websocket', 'polling'],
+    });
+
+    if (currentUser) {
+      socket.current.emit('registerUser', userId);
+    }
+
+    socket.current.on('newNotification', () => {
+      fetchNotifications();
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [currentUser, userId]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [userId]);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(`${API_ROOT}/v1/notification/${userId}`);
+      setNotifications(response.data.notifications);
+      setNotificationCount(response.data.unreadCount);
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    }
+  };
+
+  const handleNotificationClick = async () => {
+    try {
+      await axios.put(`${API_ROOT}/v1/notification/${userId}/mark-as-read`);
+      setNotifications(prev =>
+        prev.map(notification => ({ ...notification, isRead: true })),
+      );
+      setNotificationCount(0);
+      // setNotifications(prevNotifications => prevNotifications.map(notification =>
+      //   notification._id === notificationId ? { ...notification, isRead: true } : notification
+      // ));
+      // setNotificationCount(prevCount => prevCount - 1);
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
+  };
 
   return (
     <div className="fixed w-full px-[10px] z-20 bg-[#0b2878] h-[80px]">
@@ -148,7 +200,8 @@ const HeaderForAllPages = () => {
             </a>
             <div
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
-              onMouseLeave={() => setHoveredIndex(null)}>
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
               {routes.map((item, index) => (
                 <div
                   key={index}
@@ -159,7 +212,8 @@ const HeaderForAllPages = () => {
                   }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
-                  onClick={() => handleClick(index, false)}>
+                  onClick={() => handleClick(index, false)}
+                >
                   <span>{item.name}</span>
                 </div>
               ))}
@@ -170,13 +224,15 @@ const HeaderForAllPages = () => {
                   style={{
                     width: '25%',
                     transform: `translateX(calc(100% * ${hoveredIndex ?? activeIndex}))`,
-                  }}></div>
+                  }}
+                ></div>
               )}
             </div>
 
             <div
               className="hidden lg:flex h-[30px] w-[20%] relative items-center space-x-1 cursor-pointer justify-end"
-              ref={menuRef}>
+              ref={menuRef}
+            >
               <div className="relative inline-flex items-center">
                 <Bell
                   className="transition-colors duration-200 cursor-pointer mr-[10px]"
@@ -190,6 +246,7 @@ const HeaderForAllPages = () => {
                   onClick={() => {
                     setOpenNotification(!openNotification);
                     setOpen(false);
+                    if (!openNotification) handleNotificationClick();
                   }}
                 />
                 {notificationCount > 0 && (
@@ -207,12 +264,31 @@ const HeaderForAllPages = () => {
                 style={{
                   minWidth: '3rem',
                   height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                }}></div>
+                }}
+              >
+                <ul className="py-1">
+                  {notifications?.length > 0 ? (
+                    notifications.map(notification => (
+                      <li
+                        key={notification._id}
+                        className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${!notification.isRead ? 'font-bold' : ''}`}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        {notification.message}
+                      </li>
+                    ))
+                  ) : (
+                    <p className="px-4 py-2 text-gray-400">No notifications</p>
+                  )}
+                </ul>
+              </div>
+
               <div
                 onClick={() => {
                   setOpen(!open);
                   setOpenNotification(false);
-                }}>
+                }}
+              >
                 <a className="flex items-center">
                   {AvatarUrl ? (
                     <img
@@ -224,7 +300,8 @@ const HeaderForAllPages = () => {
                     <svg
                       height="30"
                       width="30"
-                      xmlns="https://www.w3.org/2000/svg">
+                      xmlns="https://www.w3.org/2000/svg"
+                    >
                       <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                     </svg>
                   )}
@@ -239,7 +316,8 @@ const HeaderForAllPages = () => {
                   open
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'
-                }`}>
+                }`}
+              >
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
                   <Link to="/storage" className=" hover:cursor-pointer">
                     <p className="font-medium">Storage</p>
@@ -248,14 +326,16 @@ const HeaderForAllPages = () => {
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
                   <Link
                     to="/changepassword"
-                    className="clickchangepassword hover:cursor-pointer">
+                    className="clickchangepassword hover:cursor-pointer"
+                  >
                     <p className="font-medium">Change Password</p>
                   </Link>
                 </button>
 
                 <button
                   onClick={handleLogout}
-                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all hover:cursor-pointer">
+                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all hover:cursor-pointer"
+                >
                   <Link to="/" className="clicklogout">
                     <p className="font-medium">Log out</p>
                   </Link>
@@ -278,6 +358,7 @@ const HeaderForAllPages = () => {
                   }}
                   onClick={() => {
                     setOpenNotification_1(!openNotification_1);
+                    if (!openNotification_1) handleNotificationClick();
                   }}
                 />
                 {notificationCount > 0 && (
@@ -303,10 +384,28 @@ const HeaderForAllPages = () => {
               style={{
                 minWidth: '3rem',
                 height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-              }}></div>
+              }}
+            >
+              <ul className="py-1">
+                {notifications?.length > 0 ? (
+                  notifications.map(notification => (
+                    <li
+                      key={notification._id}
+                      className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${!notification.isRead ? 'font-bold' : ''}`}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      {notification.message}
+                    </li>
+                  ))
+                ) : (
+                  <p className="px-4 py-2 text-gray-400">No notifications</p>
+                )}
+              </ul>
+            </div>
 
             <div
-              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            >
               <a className="flex items-center">
                 {AvatarUrl ? (
                   <img
@@ -318,7 +417,8 @@ const HeaderForAllPages = () => {
                   <svg
                     height="30"
                     width="30"
-                    xmlns="https://www.w3.org/2000/svg">
+                    xmlns="https://www.w3.org/2000/svg"
+                  >
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
                 )}
@@ -338,7 +438,8 @@ const HeaderForAllPages = () => {
                         : ''
                     }
                   `}
-                  onClick={() => handleClick(index, true)}>
+                  onClick={() => handleClick(index, true)}
+                >
                   <span className="text-[20px] pl-[10px]">
                     {item.name}
                     {item.check(location.pathname) && (
@@ -353,20 +454,23 @@ const HeaderForAllPages = () => {
                   <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link
                       to="/storage"
-                      className="hover:cursor-pointer w-full h-full flex items-center">
+                      className="hover:cursor-pointer w-full h-full flex items-center"
+                    >
                       <p className="font-medium text-[18px]">Storage</p>
                     </Link>
                   </button>
                   <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link
                       to="/changepassword"
-                      className="hover:cursor-pointer w-full flex items-center">
+                      className="hover:cursor-pointer w-full flex items-center"
+                    >
                       <p className="font-medium text-[18px]">Change Password</p>
                     </Link>
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="w-full h-full px-[5px] text-red-600 hover:bg-slate-300/[.1] rounded-[10px]">
+                    className="w-full h-full px-[5px] text-red-600 hover:bg-slate-300/[.1] rounded-[10px]"
+                  >
                     <Link to="/" className="w-full h-full flex items-center">
                       <p className="font-medium text-[18px]">Log out</p>
                     </Link>
@@ -393,14 +497,16 @@ const HeaderForAllPages = () => {
 
             <div
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
-              onMouseLeave={() => setHoveredIndex(null)}>
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
               {['Home', 'Discussion', 'Storage', 'Profile'].map(
                 (item, index) => (
                   <div
                     key={index}
                     className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
                     onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                    onClick={() => navigate('/login')}>
+                    onClick={() => navigate('/login')}
+                  >
                     <span>{item}</span>
                   </div>
                 ),
@@ -411,7 +517,8 @@ const HeaderForAllPages = () => {
                   style={{
                     width: '25%',
                     transform: `translateX(calc(100% * ${hoveredIndex}))`,
-                  }}></div>
+                  }}
+                ></div>
               )}
             </div>
 
@@ -429,7 +536,8 @@ const HeaderForAllPages = () => {
             </div>
             <button
               className="lg:hidden flex justify-end z-10"
-              onClick={() => setMenuOpen(!menuOpen)}>
+              onClick={() => setMenuOpen(!menuOpen)}
+            >
               {menuOpen ? (
                 <X size={30} className="text-white" />
               ) : (
@@ -437,13 +545,15 @@ const HeaderForAllPages = () => {
               )}
             </button>
             <div
-              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
+              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
+            >
               {['Home', 'Discussion', 'Storage', 'Profile', 'Search'].map(
                 (item, index) => (
                   <div
                     key={index}
                     className="h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]"
-                    onClick={() => navigate('/login')}>
+                    onClick={() => navigate('/login')}
+                  >
                     <span className="text-[20px] pl-[10px]">{item}</span>
                   </div>
                 ),

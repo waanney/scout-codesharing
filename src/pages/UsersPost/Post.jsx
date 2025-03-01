@@ -18,8 +18,14 @@ import '../../utils/customeStyle.css';
 import useUserData from '../../hooks/useUserData.js';
 import { env } from '../../configs/environment.js';
 import demoAvatar from '../../assets/demo_avatar.png';
+import { io } from 'socket.io-client';
 
 const API_ROOT = env.API_ROOT;
+
+const socket = io(API_ROOT, {
+  withCredentials: true,
+  transports: ['websocket'], // Giảm polling
+});
 
 function Post({ board, boardId }) {
   const { currentUserData, userId } = useUserData();
@@ -69,6 +75,14 @@ function Post({ board, boardId }) {
         },
       ]);
       setContent('');
+      if (currentUserData._id !== board.userId) {
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          message: `${currentUserData.username} đã bình luận vào bài viết của bạn`,
+          type: 'comment',
+        });
+      }
     } catch (error) {
       console.error('Error posting comment:', error);
     }
@@ -156,6 +170,42 @@ function Post({ board, boardId }) {
   //     window.removeEventListener('resize', adjustFontSize);
   //   };
   // }, []);
+
+  const createNotification = async notificationData => {
+    try {
+      await axios.post(`${API_ROOT}/v1/notification`, notificationData);
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+    }
+  };
+
+  useEffect(() => {
+    const onNewComment = newComment => {
+      if (newComment.boardId === boardId && newComment.userId !== userId) {
+        // Tạo thông báo
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          message: `${newComment.username} đã bình luận vào bài viết của bạn`,
+          type: 'comment',
+        });
+
+        // Gửi thông báo đến socket của người nhận
+        socket.to(board.userId).emit('newNotification');
+      }
+    };
+
+    // Lắng nghe sự kiện comment mới
+    socket.on('newComment', onNewComment);
+
+    // Lắng nghe sự kiện comment inline mới
+    socket.on('newCommentInline', onNewComment); // Sử dụng lại hàm onNewComment
+
+    return () => {
+      socket.off('newComment', onNewComment);
+      socket.off('newCommentInline', onNewComment);
+    };
+  }, [boardId, board.userId, userId]);
 
   // handle comment inline
   const [line_content, setLineContent] = useState('');

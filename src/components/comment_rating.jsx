@@ -8,10 +8,26 @@ const API_ROOT = env.API_ROOT;
 
 //import { comment } from 'postcss';
 
-const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
+const CommentRating = ({
+  commentId,
+  upvote,
+  downvote,
+  setComments,
+  comment,
+  boardId,
+}) => {
   const { currentUserData } = useUserData();
   const [userVote, setUserVote] = useState(null);
   const [isVoted, setIsVoted] = useState(null);
+
+  const createNotification = async notificationData => {
+    try {
+      await axios.post(`${API_ROOT}/v1/notifications`, notificationData);
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+    }
+  };
+
   useEffect(() => {
     if (currentUserData) {
       setUserVote(upvote > downvote ? 'up' : downvote > upvote ? 'down' : null);
@@ -57,6 +73,14 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
       );
 
       setIsVoted(type === userVote ? null : type);
+      if (currentUserData._id !== comment.userId) {
+        createNotification({
+          userId: comment.userId,
+          postId: boardId,
+          message: `${currentUserData.username} đã vote cho bình luận của bạn`,
+          type: 'rating',
+        });
+      }
     } catch (error) {
       console.error('Vote thất bại:', error);
     }
