@@ -379,7 +379,7 @@ function Post({ board, boardId }) {
   const [openMenuId, setOpenMenuId] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const menuRef = useRef(null);
+  const menuRefs = useRef({});
 
   const toggleMenu = id => {
     setOpenMenuId(openMenuId === id ? null : id);
@@ -387,7 +387,7 @@ function Post({ board, boardId }) {
 
   useEffect(() => {
     const handleClickOutside = event => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (menuRefs.current && !menuRefs.current.contains(event.target)) {
         setOpenMenuId(null);
       }
     };
@@ -717,7 +717,10 @@ function Post({ board, boardId }) {
                       {comment.username}
                     </a>
                     {comment.userId === userId && (
-                      <div className="relative" ref={menuRef}>
+                      <div
+                        className="relative"
+                        ref={el => (menuRefs.current[comment._id] = el)}
+                      >
                         <Ellipsis
                           className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
                           onClick={() => toggleMenu(comment._id)}
