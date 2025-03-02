@@ -252,7 +252,7 @@ const HeaderForAllPages = () => {
                 )}
               </div>
               <div
-                className={`absolute right-0 top-[30px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform ${
+                className={`absolute right-0 top-[30px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform overflow-x-hidden overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin ${
                   openNotification
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'
@@ -266,7 +266,7 @@ const HeaderForAllPages = () => {
                     notifications.map(notification => (
                       <li
                         key={notification._id}
-                        className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold ${!notification.isRead ? 'font-bold' : ''}`}
+                        className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold   ${!notification.isRead ? 'font-bold' : ''}`}
                         onClick={e => e.stopPropagation()}>
                         {notification.message}
                       </li>
@@ -365,7 +365,7 @@ const HeaderForAllPages = () => {
               </button>
             </div>
             <div
-              className={`lg:hidden flex absolute right-0 top-[40px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform z-100 ${
+              className={`lg:hidden flex absolute right-0 top-[40px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform z-100 overflow-x-hidden overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin ${
                 openNotification_1
                   ? 'opacity-100 translate-y-0 pointer-events-auto'
                   : 'opacity-0 -translate-y-5 pointer-events-none'
@@ -379,7 +379,7 @@ const HeaderForAllPages = () => {
                   notifications.map(notification => (
                     <li
                       key={notification._id}
-                      className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold ${!notification.isRead ? 'font-bold' : ''}`}
+                      className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold  ${!notification.isRead ? 'font-bold' : ''}`}
                       onClick={e => e.stopPropagation()}>
                       {notification.message}
                     </li>
