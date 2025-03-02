@@ -25,7 +25,6 @@ function MyProfile() {
   const { currentUserData, userId } = useUserData();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [language, setLanguage] = useState('');
   const [text, setText] = useState('');
   const [lineNumbers, setLineNumbers] = useState([true]);
   const textareaRef = useRef(null);
@@ -255,54 +254,107 @@ function MyProfile() {
     }
   };
 
-  const handleKeyDown = e => {
-    if (e.key === 'Enter') {
-      const newLineNumbers = [...lineNumbers];
-      newLineNumbers.push(true);
-      setLineNumbers(newLineNumbers);
-    }
-    if (e.key === 'Tab') {
-      e.preventDefault();
-
-      const start = e.target.selectionStart;
-      const end = e.target.selectionEnd;
-      const newText = text.substring(0, start) + '  ' + text.substring(end);
-      setText(newText);
-
-      setTimeout(() => {
-        e.target.selectionStart = e.target.selectionEnd = start + 2;
-      }, 0);
-    }
-  };
+  const [highlightedCode, setHighlightedCode] = useState('');
+  const [language, setLanguage] = useState('');
+  const highlightedCodeRef = useRef(null);
+  const lineNumbersRef = useRef(null);
+  const langlist = hljsLanguages;
 
   const handleInputChange = e => {
     const maxCharsPerLine = 80;
     const value = e.target.value;
 
-    // Split the input text into an array of lines
     const lines = value.split('\n');
 
-    // Process each line to enforce the character limit and break lines
     const updatedLines = lines.map(line => {
       if (line.length > maxCharsPerLine) {
-        // Break the line at maxCharsPerLine if it's longer
         const chunks = [];
         while (line.length > maxCharsPerLine) {
           chunks.push(line.slice(0, maxCharsPerLine));
           line = line.slice(maxCharsPerLine);
         }
-        if (line.length > 0) chunks.push(line); // Append the remaining part of the line
+        if (line.length > 0) chunks.push(line);
         return chunks.join('\n');
       }
-      return line; // No modification if within the limit
+      return line;
     });
 
-    // Join the updated lines and set it as the new value
-    setText(updatedLines.join('\n'));
+    const wrappedText = updatedLines.join('\n');
+
+    setText(wrappedText);
+    if (hljs.getLanguage(language)) {
+      setHighlightedCode(
+        hljs.highlight(wrappedText, { language: language }).value,
+      );
+    } else {
+      setHighlightedCode(hljs.highlightAuto(wrappedText).value);
+    }
   };
 
-  //Hiển thị các Language
-  const langlist = hljsLanguages;
+  const handleKeyDown = e => {
+    if (e.key === 'Tab') {
+      e.preventDefault();
+      const { selectionStart, selectionEnd } = e.target;
+      const startLine =
+        text.substring(0, selectionStart).split('\n').length - 1;
+      const endLine = text.substring(0, selectionEnd).split('\n').length - 1;
+      const lines = text.split('\n');
+
+      const uniqueLines = new Set();
+      for (let i = startLine; i <= endLine; i++) {
+        uniqueLines.add(i);
+      }
+
+      uniqueLines.forEach(i => {
+        lines[i] = '  ' + lines[i];
+      });
+
+      const newText = lines.join('\n');
+      setText(newText);
+      if (hljs.getLanguage(language)) {
+        setHighlightedCode(
+          hljs.highlight(newText, { language: language }).value,
+        );
+      } else {
+        setHighlightedCode(hljs.highlightAuto(newText).value);
+      }
+
+      const newStart =
+        text.split('\n').slice(0, startLine).join('\n').length +
+        (startLine > 0 ? 1 : 0) +
+        2 * uniqueLines.size;
+      const newEnd =
+        text.split('\n').slice(0, endLine).join('\n').length +
+        lines[endLine].length +
+        (endLine > 0 ? 1 : 0);
+
+      e.target.selectionStart = newStart;
+      e.target.selectionEnd = newEnd;
+    }
+  };
+  const handleLanguageChange = e => {
+    setLanguage(e.target.value);
+    if (hljs.getLanguage(e.target.value)) {
+      setHighlightedCode(
+        hljs.highlight(text, { language: e.target.value }).value,
+      );
+    } else {
+      setHighlightedCode(hljs.highlightAuto(text).value);
+    }
+  };
+
+  useEffect(() => {
+    if (highlightedCodeRef.current && textareaRef.current) {
+      highlightedCodeRef.current.style.height =
+        textareaRef.current.style.height;
+    }
+  }, [highlightedCode]);
+
+  useEffect(() => {
+    if (lineNumbersRef.current && textareaRef.current) {
+      lineNumbersRef.current.style.height = textareaRef.current.style.height;
+    }
+  }, [numberOfVisibleLines, lineHeight]);
 
   const handleAvatarSave = async croppedAvatarURL => {
     try {
@@ -340,6 +392,14 @@ function MyProfile() {
       setTimeout(() => setShowError(false), 1000);
     }
   };
+  const hljscode = useRef(null);
+  useEffect(() => {
+    if (hljscode.current) {
+      hljscode.current.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+      });
+    }
+  }, [text]);
 
   if (loading) {
     return <LoadingAnimation />;
@@ -627,7 +687,7 @@ function MyProfile() {
                   name="langSelect"
                   value={language}
                   required
-                  onChange={e => setLanguage(e.target.value)}
+                  onChange={handleLanguageChange}
                 >
                   <optgroup label="Choose Language..." className="bg-slate-800">
                     <option value="" disabled hidden>
@@ -642,8 +702,7 @@ function MyProfile() {
                 </select>
 
                 {/* Code Editor */}
-                <div className=" bg-black bg-opacity-50 rounded-[5px] flex mt-[5px]">
-                  {/* Line Numbers */}
+                <div className="bg-black bg-opacity-50 rounded-[5px] flex mt-[5px]">
                   <div
                     className="py-2 px-2 text-right bg-opacity-50 bg-muted font-mono select-none overflow-hidden"
                     style={{
@@ -653,6 +712,7 @@ function MyProfile() {
                   >
                     <div
                       className="h-full"
+                      ref={lineNumbersRef}
                       style={{
                         transform: textareaRef.current
                           ? `translateY(-${textareaRef.current.scrollTop}px)`
@@ -682,32 +742,50 @@ function MyProfile() {
                       )}
                     </div>
                   </div>
+                  <div className="relative flex-1 ">
+                    {/* Highlighted Code */}
+                    <pre
+                      ref={highlightedCodeRef}
+                      className="absolute left-0 top-0 w-full p-2 overflow-y-auto"
+                      style={{
+                        lineHeight,
+                        height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
+                        pointerEvents: 'none',
+                      }}
+                      dangerouslySetInnerHTML={{ __html: highlightedCode }}
+                    />
 
-                  {/* Textarea */}
-                  <textarea
-                    ref={textareaRef}
-                    value={text}
-                    onChange={handleInputChange}
-                    onKeyDown={handleKeyDown}
-                    onScroll={e => {
-                      const target = e.target;
-                      if (target) {
-                        const lineNumbersContainer =
-                          target.previousSibling.firstChild;
-                        if (lineNumbersContainer) {
-                          lineNumbersContainer.style.transform = `translateY(-${target.scrollTop}px)`;
+                    {/* Textarea */}
+                    <textarea
+                      ref={textareaRef}
+                      value={text}
+                      onChange={handleInputChange}
+                      onKeyDown={handleKeyDown}
+                      onScroll={e => {
+                        const target = e.target;
+                        if (
+                          target &&
+                          highlightedCodeRef.current &&
+                          lineNumbersRef.current
+                        ) {
+                          highlightedCodeRef.current.scrollTop =
+                            target.scrollTop;
+                          lineNumbersRef.current.style.transform = `translateY(-${target.scrollTop}px)`;
                         }
-                      }
-                    }}
-                    className="flex-1 p-2 bg-transparent border-none outline-none resize-none font-mono"
-                    placeholder="Put your codes here..."
-                    style={{
-                      lineHeight,
-                      height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                      overflowY: 'auto',
-                    }}
-                    aria-label="Numbered text editor"
-                  />
+                      }}
+                      className="absolute inset-0 p-2 bg-transparent border-none outline-none resize-none font-mono w-full"
+                      placeholder="Put your codes here..."
+                      style={{
+                        lineHeight,
+                        height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
+                        overflowY: 'auto',
+                        backgroundColor: 'transparent',
+                        color: 'transparent',
+                        caretColor: 'white',
+                      }}
+                      aria-label="Numbered text editor"
+                    />
+                  </div>
                 </div>
               </div>
             </form>
