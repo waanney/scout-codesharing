@@ -24,7 +24,7 @@ const API_ROOT = env.API_ROOT;
 
 const socket = io(API_ROOT, {
   withCredentials: true,
-  transports: ['websocket'], // Giảm polling
+  transports: ['websocket', 'polling'], // Giảm polling
 });
 
 function Post({ board, boardId }) {
@@ -87,7 +87,9 @@ function Post({ board, boardId }) {
         createNotification({
           userId: board.userId,
           postId: boardId,
-          message: `${currentUserData.username} đã bình luận vào bài viết của bạn`,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${currentUserData.username} has commented on your post`,
           type: 'comment',
         });
       }
@@ -260,7 +262,9 @@ function Post({ board, boardId }) {
         createNotification({
           userId: board.userId,
           postId: boardId,
-          message: `${currentUserData.username} đã bình luận vào bài viết của bạn ở dòng ${lineNumber}`,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${currentUserData.username} has commented on your post on line ${lineNumber}`,
           type: 'inline',
         });
       }
@@ -277,7 +281,9 @@ function Post({ board, boardId }) {
         createNotification({
           userId: board.userId,
           postId: boardId,
-          message: `${newComment.username} đã bình luận vào bài viết của bạn`,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${newComment.username} has commented on your post`,
           type: 'comment',
         });
 
@@ -294,7 +300,9 @@ function Post({ board, boardId }) {
         createNotification({
           userId: board.userId,
           postId: boardId,
-          message: `${newLineComment.username} đã bình luận vào bài viết của bạn ở dòng ${newLineComment.lineNumber}`,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${newLineComment.username} has commented on your post on line ${newLineComment.lineNumber}`,
           type: 'inline',
         });
 
@@ -746,6 +754,8 @@ function Post({ board, boardId }) {
                     upvote={comment.upvote}
                     downvote={comment.downvote}
                     setComments={setComments}
+                    comment={comment}
+                    boardId={boardId}
                   />
                 </div>
               ))}
