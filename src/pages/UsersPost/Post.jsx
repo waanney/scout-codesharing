@@ -42,6 +42,14 @@ function Post({ board, boardId }) {
   const [fadeSuccess, setFadeSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
 
+  const createNotification = async notificationData => {
+    try {
+      await axios.post(`${API_ROOT}/v1/notification`, notificationData);
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+    }
+  };
+
   const handleComment = async e => {
     e.preventDefault();
     if (!content.trim()) {
@@ -171,42 +179,6 @@ function Post({ board, boardId }) {
   //   };
   // }, []);
 
-  const createNotification = async notificationData => {
-    try {
-      await axios.post(`${API_ROOT}/v1/notification`, notificationData);
-    } catch (error) {
-      console.error('Failed to create notification:', error);
-    }
-  };
-
-  useEffect(() => {
-    const onNewComment = newComment => {
-      if (newComment.boardId === boardId && newComment.userId !== userId) {
-        // Tạo thông báo
-        createNotification({
-          userId: board.userId,
-          postId: boardId,
-          message: `${newComment.username} đã bình luận vào bài viết của bạn`,
-          type: 'comment',
-        });
-
-        // Gửi thông báo đến socket của người nhận
-        socket.to(board.userId).emit('newNotification');
-      }
-    };
-
-    // Lắng nghe sự kiện comment mới
-    socket.on('newComment', onNewComment);
-
-    // Lắng nghe sự kiện comment inline mới
-    socket.on('newCommentInline', onNewComment); // Sử dụng lại hàm onNewComment
-
-    return () => {
-      socket.off('newComment', onNewComment);
-      socket.off('newCommentInline', onNewComment);
-    };
-  }, [boardId, board.userId, userId]);
-
   // handle comment inline
   const [line_content, setLineContent] = useState('');
   const [open, setOpen] = useState([]);
@@ -284,11 +256,64 @@ function Post({ board, boardId }) {
       });
 
       setLineContent('');
+      if (currentUserData._id !== board.userId) {
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          message: `${currentUserData.username} đã bình luận vào bài viết của bạn ở dòng ${lineNumber}`,
+          type: 'inline',
+        });
+      }
     } catch (error) {
       console.error('Error posting comment:', error);
       alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.');
     }
   };
+
+  useEffect(() => {
+    const onNewComment = newComment => {
+      if (newComment.boardId === boardId && newComment.userId !== userId) {
+        // Tạo thông báo
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          message: `${newComment.username} đã bình luận vào bài viết của bạn`,
+          type: 'comment',
+        });
+
+        // Gửi thông báo đến socket của người nhận
+        socket.to(board.userId).emit('newNotification');
+      }
+    };
+
+    const onNewCommentInline = newLineComment => {
+      if (
+        newLineComment.boardId === boardId &&
+        newLineComment.userId !== userId
+      ) {
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          message: `${newLineComment.username} đã bình luận vào bài viết của bạn ở dòng ${newLineComment.lineNumber}`,
+          type: 'inline',
+        });
+
+        // Gửi thông báo đến socket của người nhận
+        socket.to(board.userId).emit('newNotification');
+      }
+    };
+
+    // Lắng nghe sự kiện comment mới
+    socket.on('newComment', onNewComment);
+
+    // Lắng nghe sự kiện comment inline mới
+    socket.on('newCommentInline', onNewCommentInline);
+
+    return () => {
+      socket.off('newComment', onNewComment);
+      socket.off('newCommentInline', onNewCommentInline);
+    };
+  }, [boardId, board.userId, userId]);
 
   const [isShared, setIsShared] = useState(false);
 
