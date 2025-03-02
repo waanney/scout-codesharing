@@ -4,14 +4,36 @@ import useUserData from '~/hooks/useUserData.js';
 import { env } from '~/configs/environment.js';
 import upvoteC from '~/assets/up.svg';
 import downvoteC from '~/assets/down.svg';
+import { io } from 'socket.io-client';
 const API_ROOT = env.API_ROOT;
+
+const socket = io(API_ROOT, {
+  withCredentials: true,
+  transports: ['websocket', 'polling'], // Giảm polling
+});
 
 //import { comment } from 'postcss';
 
-const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
-  const { currentUserData } = useUserData();
+const CommentRating = ({
+  commentId,
+  upvote,
+  downvote,
+  setComments,
+  comment,
+  boardId,
+}) => {
+  const { currentUserData, userId } = useUserData();
   const [userVote, setUserVote] = useState(null);
   const [isVoted, setIsVoted] = useState(null);
+
+  const createNotification = async notificationData => {
+    try {
+      await axios.post(`${API_ROOT}/v1/notification`, notificationData);
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+    }
+  };
+
   useEffect(() => {
     if (currentUserData) {
       setUserVote(upvote > downvote ? 'up' : downvote > upvote ? 'down' : null);
@@ -57,10 +79,42 @@ const CommentRating = ({ commentId, upvote, downvote, setComments }) => {
       );
 
       setIsVoted(type === userVote ? null : type);
+      if (currentUserData._id !== comment.userId) {
+        createNotification({
+          userId: comment.userId,
+          postId: boardId,
+          owner: currentUserData._id,
+          commentId: comment._id,
+          message: `${currentUserData.username} has voted your comment`,
+          type: 'rating',
+        });
+      }
     } catch (error) {
       console.error('Vote thất bại:', error);
     }
   };
+
+  useEffect(() => {
+    const onNewVote = comment => {
+      if (comment.boardId === boardId && comment.userId !== userId) {
+        createNotification({
+          userId: comment.userId,
+          postId: boardId,
+          owner: currentUserData._id,
+          commentId: comment._id,
+          message: `${currentUserData.username} đã vote comment của bạn`,
+          type: 'rating',
+        });
+
+        // Gửi thông báo đến socket của người nhận
+        socket.to(comment.userId).emit('newNotification');
+      }
+    };
+    socket.on('newRating', onNewVote);
+    return () => {
+      socket.off('newRating', onNewVote);
+    };
+  }, [boardId, comment.userId, userId]);
   const isUpvoted = isVoted === 'up';
   const isDownvoted = isVoted === 'down';
 

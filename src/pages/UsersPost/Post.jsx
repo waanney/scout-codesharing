@@ -18,8 +18,14 @@ import '../../utils/customeStyle.css';
 import useUserData from '../../hooks/useUserData.js';
 import { env } from '../../configs/environment.js';
 import demoAvatar from '../../assets/demo_avatar.png';
+import { io } from 'socket.io-client';
 
 const API_ROOT = env.API_ROOT;
+
+const socket = io(API_ROOT, {
+  withCredentials: true,
+  transports: ['websocket', 'polling'], // Giảm polling
+});
 
 function Post({ board, boardId }) {
   const { currentUserData, userId } = useUserData();
@@ -35,6 +41,14 @@ function Post({ board, boardId }) {
   const [showSuccess, setShowSuccess] = useState(false);
   const [fadeSuccess, setFadeSuccess] = useState(false);
   const [successMessage, setSuccessMessage] = useState('');
+
+  const createNotification = async notificationData => {
+    try {
+      await axios.post(`${API_ROOT}/v1/notification`, notificationData);
+    } catch (error) {
+      console.error('Failed to create notification:', error);
+    }
+  };
 
   const handleComment = async e => {
     e.preventDefault();
@@ -69,6 +83,16 @@ function Post({ board, boardId }) {
         },
       ]);
       setContent('');
+      if (currentUserData._id !== board.userId) {
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${currentUserData.username} has commented on your post`,
+          type: 'comment',
+        });
+      }
     } catch (error) {
       console.error('Error posting comment:', error);
     }
@@ -234,11 +258,70 @@ function Post({ board, boardId }) {
       });
 
       setLineContent('');
+      if (currentUserData._id !== board.userId) {
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${currentUserData.username} has commented on your post on line ${lineNumber}`,
+          type: 'inline',
+        });
+      }
     } catch (error) {
       console.error('Error posting comment:', error);
       alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.');
     }
   };
+
+  useEffect(() => {
+    const onNewComment = newComment => {
+      if (newComment.boardId === boardId && newComment.userId !== userId) {
+        // Tạo thông báo
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${newComment.username} has commented on your post`,
+          type: 'comment',
+        });
+
+        // Gửi thông báo đến socket của người nhận
+        socket.to(board.userId).emit('newNotification');
+      }
+    };
+
+    const onNewCommentInline = newLineComment => {
+      if (
+        newLineComment.boardId === boardId &&
+        newLineComment.userId !== userId
+      ) {
+        createNotification({
+          userId: board.userId,
+          postId: boardId,
+          owner: currentUserData._id,
+          commentId: null,
+          message: `${newLineComment.username} has commented on your post on line ${newLineComment.lineNumber}`,
+          type: 'inline',
+        });
+
+        // Gửi thông báo đến socket của người nhận
+        socket.to(board.userId).emit('newNotification');
+      }
+    };
+
+    // Lắng nghe sự kiện comment mới
+    socket.on('newComment', onNewComment);
+
+    // Lắng nghe sự kiện comment inline mới
+    socket.on('newCommentInline', onNewCommentInline);
+
+    return () => {
+      socket.off('newComment', onNewComment);
+      socket.off('newCommentInline', onNewCommentInline);
+    };
+  }, [boardId, board.userId, userId]);
 
   const [isShared, setIsShared] = useState(false);
 
@@ -296,7 +379,7 @@ function Post({ board, boardId }) {
   const [openMenuId, setOpenMenuId] = useState(null);
   const [showConfirmModal, setShowConfirmModal] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState(null);
-  const menuRef = useRef(null);
+  const menuRefs = useRef({});
 
   const toggleMenu = id => {
     setOpenMenuId(openMenuId === id ? null : id);
@@ -304,7 +387,7 @@ function Post({ board, boardId }) {
 
   useEffect(() => {
     const handleClickOutside = event => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
+      if (menuRefs.current && !menuRefs.current.contains(event.target)) {
         setOpenMenuId(null);
       }
     };
@@ -634,7 +717,10 @@ function Post({ board, boardId }) {
                       {comment.username}
                     </a>
                     {comment.userId === userId && (
-                      <div className="relative" ref={menuRef}>
+                      <div
+                        className="relative"
+                        ref={el => (menuRefs.current[comment._id] = el)}
+                      >
                         <Ellipsis
                           className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
                           onClick={() => toggleMenu(comment._id)}
@@ -671,6 +757,8 @@ function Post({ board, boardId }) {
                     upvote={comment.upvote}
                     downvote={comment.downvote}
                     setComments={setComments}
+                    comment={comment}
+                    boardId={boardId}
                   />
                 </div>
               ))}

@@ -8,9 +8,10 @@ import useRestoreState from '~/redux/useRestoreState';
 import useUserId from '~/utils/useUserId';
 import axios from 'axios';
 import { useEffect } from 'react';
-import { Menu, X } from 'lucide-react';
+import { Menu, X, Bell } from 'lucide-react';
 import { env } from '~/configs/environment.js';
 import logo from '~/assets/Scout.ico';
+import { io } from 'socket.io-client';
 const API_ROOT = env.API_ROOT;
 
 const HeaderForAllPages = () => {
@@ -26,7 +27,7 @@ const HeaderForAllPages = () => {
   const [AvatarUrl, setAvatarUrl] = useState(null);
 
   const location = useLocation(); // Lấy thông tin location hiện tại
-  const location_1= useLocation();
+  const location_1 = useLocation();
 
   // Tạo mảng routes với điều kiện kiểm tra active
   const routes = [
@@ -47,10 +48,14 @@ const HeaderForAllPages = () => {
       check: path => path.includes('/search'),
     },
   ];
-  const user=[
+  const user = [
     { name: 'Storage', path: '/storage', check: path => path === '/storage' },
-    { name: 'Change Password', path: '/changepassword', check: path => path === '/changepassword' },
-  ]
+    {
+      name: 'Change Password',
+      path: '/changepassword',
+      check: path => path === '/changepassword',
+    },
+  ];
 
   // Xác định active index dựa trên location
   const [activeIndex, setActiveIndex] = useState(null);
@@ -140,6 +145,7 @@ const HeaderForAllPages = () => {
     const handleClickOutside = event => {
       if (menuRef.current && !menuRef.current.contains(event.target)) {
         setOpen(null);
+        setOpenNotification(null);
       }
     };
 
@@ -148,6 +154,64 @@ const HeaderForAllPages = () => {
       document.removeEventListener('click', handleClickOutside);
     };
   }, []);
+
+  //Notification
+  const socket = useRef(null);
+  const [openNotification, setOpenNotification] = useState(false);
+  const [notifications, setNotifications] = useState([]);
+  const [openNotification_1, setOpenNotification_1] = useState(false);
+  const [notificationCount, setNotificationCount] = useState(0);
+  const lineHeight = '2rem';
+  const numberOfVisibleLines = 10;
+
+  useEffect(() => {
+    socket.current = io(API_ROOT, {
+      withCredentials: true,
+      transports: ['websocket', 'polling'],
+    });
+
+    if (currentUser) {
+      socket.current.emit('registerUser', userId);
+    }
+
+    socket.current.on('newNotification', () => {
+      fetchNotifications();
+    });
+
+    return () => {
+      socket.current.disconnect();
+    };
+  }, [currentUser, userId]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [userId]);
+
+  const fetchNotifications = async () => {
+    try {
+      const response = await axios.get(`${API_ROOT}/v1/notification/${userId}`);
+      setNotifications(response.data.notifications);
+      setNotificationCount(response.data.unreadCount);
+    } catch (error) {
+      console.error('Failed to fetch notifications:', error);
+    }
+  };
+
+  const handleNotificationClick = async () => {
+    try {
+      await axios.put(`${API_ROOT}/v1/notification/${userId}/mark-as-read`);
+      setNotifications(prev =>
+        prev.map(notification => ({ ...notification, isRead: true })),
+      );
+      setNotificationCount(0);
+      // setNotifications(prevNotifications => prevNotifications.map(notification =>
+      //   notification._id === notificationId ? { ...notification, isRead: true } : notification
+      // ));
+      // setNotificationCount(prevCount => prevCount - 1);
+    } catch (error) {
+      console.error('Failed to mark notification as read:', error);
+    }
+  };
 
   return (
     <div className="fixed w-full px-[10px] z-20 bg-[#0b2878] h-[80px]">
@@ -195,29 +259,85 @@ const HeaderForAllPages = () => {
 
             <div
               className="hidden lg:flex h-[30px] w-[20%] relative items-center space-x-1 cursor-pointer justify-end"
-              onClick={() => setOpen(!open)}
               ref={menuRef}
             >
-              <a className="flex items-center">
-                {AvatarUrl ? (
-                  <img
-                    className="aspect-square h-[30px] w-[30px] rounded-full"
-                    src={AvatarUrl}
-                    alt="Avatar"
-                  />
-                ) : (
-                  <svg
-                    height="30"
-                    width="30"
-                    xmlns="https://www.w3.org/2000/svg"
-                  >
-                    <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
-                  </svg>
+              <div className="relative inline-flex items-center">
+                <Bell
+                  className="transition-colors duration-200 cursor-pointer mr-[10px]"
+                  style={{ fill: 'none' }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.fill = 'white';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.fill = 'none';
+                  }}
+                  onClick={() => {
+                    setOpenNotification(!openNotification);
+                    setOpen(false);
+                    if (!openNotification) handleNotificationClick();
+                  }}
+                />
+                {notificationCount > 0 && (
+                  <div className="absolute top-[-8px] right-[2px] bg-red-500 text-white rounded-full px-2 text-xs font-bold">
+                    {notificationCount}
+                  </div>
                 )}
-                <h5 className="ml-[5px] font-Raleway font-bold text-[22px] text-nowrap">
-                  {currentUserData?.username}
-                </h5>
-              </a>
+              </div>
+              <div
+                className={`absolute right-0 top-[30px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform overflow-x-hidden overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin ${
+                  openNotification
+                    ? 'opacity-100 translate-y-0 pointer-events-auto'
+                    : 'opacity-0 -translate-y-5 pointer-events-none'
+                }`}
+                style={{
+                  minWidth: '3rem',
+                  height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
+                }}
+              >
+                <ul className="py-1">
+                  {notifications?.length > 0 ? (
+                    notifications.map(notification => (
+                      <li
+                        key={notification._id}
+                        className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold   ${!notification.isRead ? 'font-bold' : ''}`}
+                        onClick={e => e.stopPropagation()}
+                      >
+                        {notification.message}
+                      </li>
+                    ))
+                  ) : (
+                    <p className="px-4 py-2 text-gray-400">No notifications</p>
+                  )}
+                </ul>
+              </div>
+
+              <div
+                onClick={() => {
+                  setOpen(!open);
+                  setOpenNotification(false);
+                }}
+              >
+                <a className="flex items-center">
+                  {AvatarUrl ? (
+                    <img
+                      className="aspect-square h-[30px] w-[30px] rounded-full"
+                      src={AvatarUrl}
+                      alt="Avatar"
+                    />
+                  ) : (
+                    <svg
+                      height="30"
+                      width="30"
+                      xmlns="https://www.w3.org/2000/svg"
+                    >
+                      <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
+                    </svg>
+                  )}
+                  <h5 className="ml-[5px] font-Raleway font-bold text-[22px] text-nowrap">
+                    {currentUserData?.username}
+                  </h5>
+                </a>
+              </div>
 
               <div
                 className={`absolute right-0 top-[30px] mt-2 w-[150px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
@@ -252,17 +372,65 @@ const HeaderForAllPages = () => {
                 {error}
               </div>
             </div>
-            <button
-              className="lg:hidden flex justify-end z-10"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
-              {menuOpen ? (
-                <X size={30} className="text-white" />
-              ) : (
-                <Menu size={30} className="text-white" />
-              )}
-            </button>
             {/*Menu nhỏ */}
+            <div className="lg:hidden flex justify-end">
+              <div className="relative inline-flex items-center">
+                <Bell
+                  className="transition-colors duration-200 mr-[10px] cursor-pointer"
+                  style={{ fill: 'none' }}
+                  onMouseEnter={e => {
+                    e.currentTarget.style.fill = 'white';
+                  }}
+                  onMouseLeave={e => {
+                    e.currentTarget.style.fill = 'none';
+                  }}
+                  onClick={() => {
+                    setOpenNotification_1(!openNotification_1);
+                    if (!openNotification_1) handleNotificationClick();
+                  }}
+                />
+                {notificationCount > 0 && (
+                  <div className="absolute top-[-8px] right-[2px] bg-red-500 text-white rounded-full px-2 text-xs font-bold">
+                    {notificationCount}
+                  </div>
+                )}
+              </div>
+              <button className=" z-10" onClick={() => setMenuOpen(!menuOpen)}>
+                {menuOpen ? (
+                  <X size={30} className="text-white" />
+                ) : (
+                  <Menu size={30} className="text-white" />
+                )}
+              </button>
+            </div>
+            <div
+              className={`lg:hidden flex absolute right-0 top-[40px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform z-100 overflow-x-hidden overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin ${
+                openNotification_1
+                  ? 'opacity-100 translate-y-0 pointer-events-auto'
+                  : 'opacity-0 -translate-y-5 pointer-events-none'
+              }`}
+              style={{
+                minWidth: '3rem',
+                height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
+              }}
+            >
+              <ul className="py-1">
+                {notifications?.length > 0 ? (
+                  notifications.map(notification => (
+                    <li
+                      key={notification._id}
+                      className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold  ${!notification.isRead ? 'font-bold' : ''}`}
+                      onClick={e => e.stopPropagation()}
+                    >
+                      {notification.message}
+                    </li>
+                  ))
+                ) : (
+                  <p className="px-4 py-2 text-gray-400">No notifications</p>
+                )}
+              </ul>
+            </div>
+
             <div
               className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
@@ -312,35 +480,35 @@ const HeaderForAllPages = () => {
               <div className="mt-[10px]">
                 <div className="h-[70px] grid-flow-row justify-start rounded-[10px] z-10 mt-[10px] ">
                   {user.map((item, index) => (
-                <div
-                  key={index}
-                  className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
-                    item.check(location_1.pathname) ? 'bg-blue-500/[.2]' : ''
-                  }
+                    <div
+                      key={index}
+                      className={`h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1] ${
+                        item.check(location_1.pathname)
+                          ? 'bg-blue-500/[.2]'
+                          : ''
+                      }
                     ${
-                      activeIndex_1 === index && mobileBorderActiveIndex === index
+                      activeIndex_1 === index &&
+                      mobileBorderActiveIndex === index
                         ? 'border-2 border-red-500 animate-pulse'
                         : ''
                     }
                   `}
-                  onClick={() => handleClick_1(index, true)}
-                >
-                  <span className="text-[20px] pl-[10px]">
-                    {item.name}
-                    {item.check(location_1.pathname) && (
-                      <span className="ml-2 w-2 h-2 bg-blue-500 rounded-full inline-block" />
-                    )}
-                  </span>
-                </div>
-              ))}
+                      onClick={() => handleClick_1(index, true)}
+                    >
+                      <span className="text-[20px] pl-[10px]">
+                        {item.name}
+                        {item.check(location_1.pathname) && (
+                          <span className="ml-2 w-2 h-2 bg-blue-500 rounded-full inline-block" />
+                        )}
+                      </span>
+                    </div>
+                  ))}
                   <button
                     onClick={handleLogout}
                     className="w-full h-full px-[5px] cursor-pointer mt-[10px]  hover:font-bold  hover:bg-slate-300/[.1] rounded-[10px]"
                   >
-                    <Link
-                      to="/"
-                      className="w-full h-full flex items-center"
-                    >
+                    <Link to="/" className="w-full h-full flex items-center">
                       <p className="text-[20px] text-red-600">Log out</p>
                     </Link>
                   </button>
