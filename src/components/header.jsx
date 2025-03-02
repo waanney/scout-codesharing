@@ -200,8 +200,7 @@ const HeaderForAllPages = () => {
             </a>
             <div
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px] items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
+              onMouseLeave={() => setHoveredIndex(null)}>
               {routes.map((item, index) => (
                 <div
                   key={index}
@@ -212,8 +211,7 @@ const HeaderForAllPages = () => {
                   }`}
                   onMouseEnter={() => setHoveredIndex(index)}
                   onMouseLeave={() => setHoveredIndex(activeIndex)} // Trở về activeIndex khi không hover
-                  onClick={() => handleClick(index, false)}
-                >
+                  onClick={() => handleClick(index, false)}>
                   <span>{item.name}</span>
                 </div>
               ))}
@@ -224,15 +222,13 @@ const HeaderForAllPages = () => {
                   style={{
                     width: '25%',
                     transform: `translateX(calc(100% * ${hoveredIndex ?? activeIndex}))`,
-                  }}
-                ></div>
+                  }}></div>
               )}
             </div>
 
             <div
               className="hidden lg:flex h-[30px] w-[20%] relative items-center space-x-1 cursor-pointer justify-end"
-              ref={menuRef}
-            >
+              ref={menuRef}>
               <div className="relative inline-flex items-center">
                 <Bell
                   className="transition-colors duration-200 cursor-pointer mr-[10px]"
@@ -256,7 +252,7 @@ const HeaderForAllPages = () => {
                 )}
               </div>
               <div
-                className={`absolute right-0 top-[30px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform ${
+                className={`absolute right-0 top-[30px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform ${
                   openNotification
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'
@@ -264,16 +260,14 @@ const HeaderForAllPages = () => {
                 style={{
                   minWidth: '3rem',
                   height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                }}
-              >
+                }}>
                 <ul className="py-1">
                   {notifications?.length > 0 ? (
                     notifications.map(notification => (
                       <li
                         key={notification._id}
-                        className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${!notification.isRead ? 'font-bold' : ''}`}
-                        onClick={e => e.stopPropagation()}
-                      >
+                        className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold ${!notification.isRead ? 'font-bold' : ''}`}
+                        onClick={e => e.stopPropagation()}>
                         {notification.message}
                       </li>
                     ))
@@ -287,8 +281,7 @@ const HeaderForAllPages = () => {
                 onClick={() => {
                   setOpen(!open);
                   setOpenNotification(false);
-                }}
-              >
+                }}>
                 <a className="flex items-center">
                   {AvatarUrl ? (
                     <img
@@ -300,8 +293,7 @@ const HeaderForAllPages = () => {
                     <svg
                       height="30"
                       width="30"
-                      xmlns="https://www.w3.org/2000/svg"
-                    >
+                      xmlns="https://www.w3.org/2000/svg">
                       <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                     </svg>
                   )}
@@ -316,8 +308,7 @@ const HeaderForAllPages = () => {
                   open
                     ? 'opacity-100 translate-y-0 pointer-events-auto'
                     : 'opacity-0 -translate-y-5 pointer-events-none'
-                }`}
-              >
+                }`}>
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
                   <Link to="/storage" className=" hover:cursor-pointer">
                     <p className="font-medium">Storage</p>
@@ -326,16 +317,14 @@ const HeaderForAllPages = () => {
                 <button className="flex h-10 w-full cursor-pointer items-center px-3 text-primary transition-all">
                   <Link
                     to="/changepassword"
-                    className="clickchangepassword hover:cursor-pointer"
-                  >
+                    className="clickchangepassword hover:cursor-pointer">
                     <p className="font-medium">Change Password</p>
                   </Link>
                 </button>
 
                 <button
                   onClick={handleLogout}
-                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all hover:cursor-pointer"
-                >
+                  className="flex h-10 w-full cursor-pointer items-center px-3 text-red-600 transition-all hover:cursor-pointer">
                   <Link to="/" className="clicklogout">
                     <p className="font-medium">Log out</p>
                   </Link>
@@ -376,7 +365,7 @@ const HeaderForAllPages = () => {
               </button>
             </div>
             <div
-              className={`lg:hidden flex absolute right-0 top-[40px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[50%] transition-all duration-300 transform z-100 ${
+              className={`lg:hidden flex absolute right-0 top-[40px] mt-2 w-[300px] whitespace-nowrap rounded-lg bg-black bg-opacity-[80%] transition-all duration-300 transform z-100 ${
                 openNotification_1
                   ? 'opacity-100 translate-y-0 pointer-events-auto'
                   : 'opacity-0 -translate-y-5 pointer-events-none'
@@ -384,16 +373,14 @@ const HeaderForAllPages = () => {
               style={{
                 minWidth: '3rem',
                 height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-              }}
-            >
+              }}>
               <ul className="py-1">
                 {notifications?.length > 0 ? (
                   notifications.map(notification => (
                     <li
                       key={notification._id}
-                      className={`px-4 py-2 cursor-pointer hover:bg-gray-100 ${!notification.isRead ? 'font-bold' : ''}`}
-                      onClick={e => e.stopPropagation()}
-                    >
+                      className={`px-4 py-2 cursor-pointer text-[16px] hover:bg-gray-700 text-wrap w-[300px] hover:font-bold ${!notification.isRead ? 'font-bold' : ''}`}
+                      onClick={e => e.stopPropagation()}>
                       {notification.message}
                     </li>
                   ))
@@ -404,8 +391,7 @@ const HeaderForAllPages = () => {
             </div>
 
             <div
-              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-            >
+              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               <a className="flex items-center">
                 {AvatarUrl ? (
                   <img
@@ -417,8 +403,7 @@ const HeaderForAllPages = () => {
                   <svg
                     height="30"
                     width="30"
-                    xmlns="https://www.w3.org/2000/svg"
-                  >
+                    xmlns="https://www.w3.org/2000/svg">
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
                 )}
@@ -438,8 +423,7 @@ const HeaderForAllPages = () => {
                         : ''
                     }
                   `}
-                  onClick={() => handleClick(index, true)}
-                >
+                  onClick={() => handleClick(index, true)}>
                   <span className="text-[20px] pl-[10px]">
                     {item.name}
                     {item.check(location.pathname) && (
@@ -454,23 +438,20 @@ const HeaderForAllPages = () => {
                   <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link
                       to="/storage"
-                      className="hover:cursor-pointer w-full h-full flex items-center"
-                    >
+                      className="hover:cursor-pointer w-full h-full flex items-center">
                       <p className="font-medium text-[18px]">Storage</p>
                     </Link>
                   </button>
                   <button className="w-full h-full px-[5px] hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link
                       to="/changepassword"
-                      className="hover:cursor-pointer w-full flex items-center"
-                    >
+                      className="hover:cursor-pointer w-full flex items-center">
                       <p className="font-medium text-[18px]">Change Password</p>
                     </Link>
                   </button>
                   <button
                     onClick={handleLogout}
-                    className="w-full h-full px-[5px] text-red-600 hover:bg-slate-300/[.1] rounded-[10px]"
-                  >
+                    className="w-full h-full px-[5px] text-red-600 hover:bg-slate-300/[.1] rounded-[10px]">
                     <Link to="/" className="w-full h-full flex items-center">
                       <p className="font-medium text-[18px]">Log out</p>
                     </Link>
@@ -497,16 +478,14 @@ const HeaderForAllPages = () => {
 
             <div
               className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
+              onMouseLeave={() => setHoveredIndex(null)}>
               {['Home', 'Discussion', 'Storage', 'Profile'].map(
                 (item, index) => (
                   <div
                     key={index}
                     className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
                     onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                    onClick={() => navigate('/login')}
-                  >
+                    onClick={() => navigate('/login')}>
                     <span>{item}</span>
                   </div>
                 ),
@@ -517,8 +496,7 @@ const HeaderForAllPages = () => {
                   style={{
                     width: '25%',
                     transform: `translateX(calc(100% * ${hoveredIndex}))`,
-                  }}
-                ></div>
+                  }}></div>
               )}
             </div>
 
@@ -536,8 +514,7 @@ const HeaderForAllPages = () => {
             </div>
             <button
               className="lg:hidden flex justify-end z-10"
-              onClick={() => setMenuOpen(!menuOpen)}
-            >
+              onClick={() => setMenuOpen(!menuOpen)}>
               {menuOpen ? (
                 <X size={30} className="text-white" />
               ) : (
@@ -545,15 +522,13 @@ const HeaderForAllPages = () => {
               )}
             </button>
             <div
-              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
-            >
+              className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}>
               {['Home', 'Discussion', 'Storage', 'Profile', 'Search'].map(
                 (item, index) => (
                   <div
                     key={index}
                     className="h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]"
-                    onClick={() => navigate('/login')}
-                  >
+                    onClick={() => navigate('/login')}>
                     <span className="text-[20px] pl-[10px]">{item}</span>
                   </div>
                 ),
