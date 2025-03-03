@@ -759,6 +759,9 @@ function Post({ board, boardId }) {
                     setComments={setComments}
                     comment={comment}
                     boardId={boardId}
+                    setErrorMessage={setErrorMessage}
+                    setShowError={setShowError}
+                    setFadeError={setFadeError}
                   />
                 </div>
               ))}

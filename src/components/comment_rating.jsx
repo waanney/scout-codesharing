@@ -21,6 +21,9 @@ const CommentRating = ({
   setComments,
   comment,
   boardId,
+  setErrorMessage,
+  setShowError,
+  setFadeError,
 }) => {
   const { currentUserData, userId } = useUserData();
   const [userVote, setUserVote] = useState(null);
@@ -90,7 +93,15 @@ const CommentRating = ({
         });
       }
     } catch (error) {
-      console.error('Vote thất bại:', error);
+      if (error.response?.status === 404) {
+        setErrorMessage('Comment has been deleted');
+        setShowError(true);
+        setFadeError(false);
+        setTimeout(() => setFadeError(true), 500);
+        setTimeout(() => setShowError(false), 1000);
+        // Loại bỏ comment khỏi UI
+        setComments(prev => prev.filter(c => c._id !== commentId));
+      }
     }
   };
 
