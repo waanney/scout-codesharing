@@ -58,7 +58,6 @@ function MyProfile() {
       language: language,
       userId: userId,
       content: text,
-      username: currentUserData.username,
     };
 
     setSuccessMessage('Create post successfully!');

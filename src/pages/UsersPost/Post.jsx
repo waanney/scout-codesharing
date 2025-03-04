@@ -101,6 +101,7 @@ function Post({ board, boardId }) {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
+  const [postUsername, setPostUsername] = useState(null);
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
@@ -109,6 +110,10 @@ function Post({ board, boardId }) {
         return;
       }
       try {
+        const postUsername = await axios.get(
+          `${API_ROOT}/v1/Auth/${board.userId}`,
+        );
+        setPostUsername(postUsername.data.username);
         const avatarcontent = await axios.get(
           `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
         );
@@ -586,7 +591,7 @@ function Post({ board, boardId }) {
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${board.userId}`}
                     >
-                      {board.username}
+                      {postUsername}
                     </a>
                   </div>
                   <div className="ml-[10px] text-white text-sm font-normal leading-[21pt]">
