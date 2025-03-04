@@ -27,6 +27,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
   const [pageNumber, setPageNumber] = useState(1);
   const observer = useRef();
   const [sharedPostAvatars, setSharedPostAvatars] = useState({});
+  const [sharedPostUsernames, setSharedPostUsernames] = useState({});
   const postsPerPage = 10;
   const [sharedPostsData, setSharedPostsData] = useState({
     posts: [],
@@ -76,6 +77,18 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
             postsPerPage,
           );
           const Posts = data.posts;
+          const postUsernames = await Promise.all(
+            Posts.map(post => axios.get(`${API_ROOT}/v1/Auth/${post.userId}`)),
+          );
+          const usernameMap = postUsernames.reduce((acc, post, index) => {
+            acc[post.data._id] = postUsernames[index].data.username;
+            return acc;
+          }, {});
+          setSharedPostUsernames(prevUsernames => ({
+            ...prevUsernames,
+            ...usernameMap,
+          }));
+          console.log(usernameMap);
           const avatars = await Promise.all(
             Posts.map(post => fetchAvatar(post.userId)),
           );
@@ -309,7 +322,9 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                       <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                     </svg>
                   )}
-                  <h5 className="ml-2 font-bold text-lg">{post.username}</h5>
+                  <h5 className="ml-2 font-bold text-lg">
+                    {sharedPostUsernames[post.userId]}
+                  </h5>
                 </div>
                 <div>
                   <h1 className="ml-4 text-xl font-bold text-center">

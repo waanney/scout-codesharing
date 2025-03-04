@@ -52,13 +52,18 @@ const SavePostCard = ({ board, onDeletePost }) => {
 
   const language = board.language;
   const sourceCode = board?.content?.split('\n');
+  const [postUsername, setPostUsername] = useState('');
 
-  // Fetch avatar
+  // Fetch userdata
   useEffect(() => {
     if (!board?.userID) return;
 
     const fetchData = async () => {
       try {
+        const postUsername = await axios.get(
+          `${API_ROOT}/v1/Auth/${board.userID}`,
+        );
+        setPostUsername(postUsername.data.username);
         const avatarcontent = await axios.get(
           `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
         );
@@ -164,7 +169,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
               </svg>
             )}
             <div className="ml-[10px] text-white font-bold text-[20px]">
-              {board.username}
+              {postUsername}
             </div>
           </div>
           <div className="flex justify-end items-center ml-[10px] text-white text-[16px] font-normal">
