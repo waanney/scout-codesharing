@@ -84,7 +84,7 @@ const PostCard = ({ board }) => {
         onClick={handlePostClick}
       >
         {/* User Info */}
-        <div className="cards grid grid-cols-2 gap-[10px]">
+        <div className="cards grid grid-cols-[3fr_1fr] gap-[10px]">
           <div className="card flex flex-row">
             {AvatarUrl ? (
               <img
