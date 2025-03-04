@@ -12,6 +12,7 @@ const PostCard = ({ board }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [AvatarUrl, setAvatarUrl] = useState(null);
+  const [postUsername, setPostUsername] = useState('');
   const [showError, setShowError] = useState(false);
   const [fadeError, setFadeError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
@@ -20,6 +21,10 @@ const PostCard = ({ board }) => {
     const fetchData = async () => {
       setLoading(true);
       try {
+        const postUsername = await axios.get(
+          `${env.API_ROOT}/v1/Auth/${board.userID}`,
+        );
+        setPostUsername(postUsername.data.username);
         const avatarcontent = await axios.get(
           `${env.API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
         );
@@ -93,7 +98,7 @@ const PostCard = ({ board }) => {
               </svg>
             )}
             <div className="ml-[10px] text-white font-bold text-[20px]">
-              {board.username}
+              {postUsername}
             </div>
           </div>
           <div className="ml-[10px] text-end text-white text-[16px] font-normal">
