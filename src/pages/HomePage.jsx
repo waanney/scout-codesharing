@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState, useCallback } from 'react';
 import VanillaTilt from 'vanilla-tilt';
 import HeaderForAllPages from '~/components/header.jsx';
 import FooterAllPage from '~/components/footer.jsx';
@@ -17,6 +17,59 @@ import ThreeDLogo from '~/components/threedlogo.jsx';
 function HomePage() {
   usecheckTokenAndRedirect();
   const cardRefs = useRef([]);
+
+  // Animated Text
+  const [displayText, setDisplayText] = useState('');
+  const fullText = 'Source Code Open for Universal Testing';
+  const typingSpeed = 50;
+  const deletingSpeed = 50;
+  const pauseTime = 2000;
+  const transitionTime = 1000;
+
+  const indexRef = useRef(0);
+  const modeRef = useRef('typing');
+  const lastUpdateTimeRef = useRef(0);
+
+  const animate = useCallback(currentTime => {
+    const delta = currentTime - lastUpdateTimeRef.current;
+
+    if (
+      modeRef.current === 'typing' &&
+      delta > typingSpeed &&
+      indexRef.current < fullText.length
+    ) {
+      setDisplayText(fullText.slice(0, ++indexRef.current));
+      lastUpdateTimeRef.current = currentTime;
+    } else if (
+      modeRef.current === 'typing' &&
+      indexRef.current === fullText.length
+    ) {
+      modeRef.current = 'pausing';
+      lastUpdateTimeRef.current = currentTime;
+    } else if (modeRef.current === 'pausing' && delta > pauseTime) {
+      modeRef.current = 'deleting';
+      lastUpdateTimeRef.current = currentTime;
+    } else if (
+      modeRef.current === 'deleting' &&
+      delta > deletingSpeed &&
+      indexRef.current > 0
+    ) {
+      setDisplayText(fullText.slice(0, --indexRef.current));
+      lastUpdateTimeRef.current = currentTime;
+    } else if (modeRef.current === 'deleting' && indexRef.current === 0) {
+      modeRef.current = 'typing';
+      lastUpdateTimeRef.current = currentTime + transitionTime;
+    }
+
+    requestAnimationFrame(animate);
+  }, []);
+
+  useEffect(() => {
+    lastUpdateTimeRef.current = performance.now();
+    const animationId = requestAnimationFrame(animate);
+    return () => cancelAnimationFrame(animationId);
+  }, [animate]);
+
   useEffect(() => {
     if (cardRefs.current.length) {
       cardRefs.current.forEach(card => {
@@ -85,17 +138,19 @@ function HomePage() {
     },
   ];
 
-  window.scrollTo({
-    top: 0,
-    behavior: 'auto',
-  });
-
   return (
     <div className="flex min-h-screen flex-col bg-[#0b2878] overflow-x-hidden ">
       <HeaderForAllPages className="sticky" />
 
-      <div className="h-screen flex justify-center items-center p-[50px] md:pl-[200px] md:pr-[200px]">
-        <ThreeDLogo />
+      <div className="h-screen flex flex-col justify-center items-center p-[50px] md:pl-[200px] md:pr-[200px]">
+        <div className="flex-grow flex items-center justify-center w-full">
+          <ThreeDLogo />
+        </div>
+        <div className="text-white text-2xl md:text-3xl font-bold tracking-wide">
+          <span className="animate-pulse">[</span>
+          {displayText}
+          <span className="animate-pulse">]</span>
+        </div>
       </div>
 
       <div className="relative p-[20px]">

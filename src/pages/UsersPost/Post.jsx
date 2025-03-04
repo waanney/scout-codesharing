@@ -150,7 +150,7 @@ function Post({ board, boardId }) {
     } else {
       setSourceCode([]);
     }
-  }, [board]);
+  }, [board, language]);
 
   // copy code
   const [isCopied, setIsCopied] = useState(false);
