@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom'; // Import useParams
+import { useParams, useNavigate } from 'react-router-dom'; // Import useParams
 import { fetchBoardDetails_API } from '../../api/index';
 import Post from './Post';
+import LoadingAnimation from '../../components/loading.jsx';
 
 function PostGetID() {
   const [board, setBoard] = useState(null);
@@ -33,16 +34,38 @@ function PostGetID() {
   }, [boardId]);
 
   if (loading) {
-    return <div>Đang tải chi tiết bảng...</div>;
+    <LoadingAnimation />;
   }
 
-  if (error) {
-    return <div>Lỗi: {error.message || 'Không thể tải chi tiết bảng.'}</div>;
-  }
+  const handleNavigate = useNavigate();
 
-  if (!board) {
-    // Xử lý trường hợp board vẫn là null sau khi loading
-    return <div>Không tìm thấy bảng.</div>;
+  if (error || !board) {
+    return (
+      <div className="flex min-h-screen flex-col items-center justify-center bg-[#0b2878]">
+        <div className="rounded-lg bg-[#05143c] p-8 text-center">
+          <h2 className="mb-4 text-2xl font-bold text-white">Post Not Found</h2>
+          <p className="mb-6 text-lg text-gray-300">
+            {error?.message === 'Invalid post ID'
+              ? 'The post ID provided is invalid. Please check the URL and try again.'
+              : 'This post may have been deleted or is no longer available.'}
+          </p>
+          <div className="flex justify-center space-x-4">
+            <button
+              onClick={() => handleNavigate('/')}
+              className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
+            >
+              To Home
+            </button>
+            <button
+              onClick={() => handleNavigate('/discussion')}
+              className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
+            >
+              To Discussion
+            </button>
+          </div>
+        </div>
+      </div>
+    );
   }
 
   return <Post board={board} boardId={boardId} />;
