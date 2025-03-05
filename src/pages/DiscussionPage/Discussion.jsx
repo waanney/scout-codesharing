@@ -97,7 +97,7 @@ export default function Discussion({
                 </li>
                 <li>
                   <div className="flex items-center justify-center px-3 py-2 leading-tight text-gray-700 bg-gray-900 border border-black rounded-full">
-                    <span className="mr-2">Trang</span>
+                    <span className="mr-2">Page</span>
                     <form onSubmit={handleSummit} className="inline-block">
                       <input
                         type="tel"
