@@ -59,11 +59,16 @@ function MyProfile() {
       userId: userId,
       content: text,
     };
+    if (!text) {
+      setSuccessMessage('');
+    } else {
 
-    setSuccessMessage('Create post successfully!');
-    setShowSuccess(true);
-    setFadeSuccess(false);
+      setSuccessMessage('Create post successfully!');
+      setShowSuccess(true);
+      setFadeSuccess(false);
 
+
+    }
     setTimeout(() => setFadeSuccess(true), 1500);
     setTimeout(() => {
       setShowSuccess(false);

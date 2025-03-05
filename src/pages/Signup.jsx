@@ -5,7 +5,7 @@ import { clearError } from '~/redux/authSlice';
 import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-
+import { formattedError } from '../utils/formater';
 function Signup() {
   const [Username, setUsername] = useState('');
   const [Email, setEmail] = useState('');
@@ -15,7 +15,6 @@ function Signup() {
   const navigate = useNavigate();
 
   const error = useSelector(state => state.auth.register.error);
-
   const handleRegister = e => {
     e.preventDefault();
 
@@ -73,8 +72,8 @@ function Signup() {
                 ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
                 transition-all duration-1000 ease-in-out flex items-center justify-center`}
               >
-                <p className="text-base md:text-[22px] font-bold text-center text-red-600">
-                  {error}
+                <p className="text-base md:text-[18px] font-bold text-center text-red-600 ">
+                  {formattedError(error)}
                 </p>
               </div>
             </div>
