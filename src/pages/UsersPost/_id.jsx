@@ -39,15 +39,13 @@ function PostGetID() {
 
   const handleNavigate = useNavigate();
 
-  if (error || !board) {
+  if (error) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#0b2878]">
         <div className="rounded-lg bg-[#05143c] p-8 text-center">
           <h2 className="mb-4 text-2xl font-bold text-white">Post Not Found</h2>
           <p className="mb-6 text-lg text-gray-300">
-            {error?.message === 'Invalid post ID'
-              ? 'The post ID provided is invalid. Please check the URL and try again.'
-              : 'This post may have been deleted or is no longer available.'}
+            This post may have been deleted or is no longer available.
           </p>
           <div className="flex justify-center space-x-4">
             <button
@@ -66,6 +64,10 @@ function PostGetID() {
         </div>
       </div>
     );
+  }
+
+  if (!board) {
+    return null;
   }
 
   return <Post board={board} boardId={boardId} />;
