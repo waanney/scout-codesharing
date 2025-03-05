@@ -532,32 +532,6 @@ const HeaderForAllPages = () => {
               <h4 className="text-[32px] font-bold font-raleway">Scout</h4>
             </a>
 
-            <div
-              className="hidden lg:flex absolute left-1/2 -translate-x-1/2 mt-[20px]  items-center justify-between bg-black bg-opacity-50 h-[68px] w-[498px] rounded-[10px]"
-              onMouseLeave={() => setHoveredIndex(null)}
-            >
-              {['Home', 'Discussion', 'Storage', 'Profile'].map(
-                (item, index) => (
-                  <div
-                    key={index}
-                    className="w-[25%] h-full flex items-center justify-center hover:font-bold cursor-pointer z-10"
-                    onMouseEnter={() => setHoveredIndex(index)} // Show span on hover
-                    onClick={() => navigate('/login')}
-                  >
-                    <span>{item}</span>
-                  </div>
-                ),
-              )}
-              {hoveredIndex !== null && (
-                <div
-                  className="absolute top-0 left-0 h-full bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] transition-transform duration-300"
-                  style={{
-                    width: '25%',
-                    transform: `translateX(calc(100% * ${hoveredIndex}))`,
-                  }}
-                ></div>
-              )}
-            </div>
 
             <div className="hidden lg:flex justify-between space-x-1">
               <Link to="/signup" className="clickSignup">
@@ -584,18 +558,6 @@ const HeaderForAllPages = () => {
             <div
               className={`fixed top-0 left-0 h-full bg-[#0b2878] w-full p-6 transform transition-transform ${menuOpen ? 'translate-x-0' : 'translate-x-full'}`}
             >
-              {['Home', 'Discussion', 'Storage', 'Profile', 'Search'].map(
-                (item, index) => (
-                  <div
-                    key={index}
-                    className="h-[70px] flex items-center justify-start hover:font-bold cursor-pointer rounded-[10px] z-10 mt-[10px] hover:bg-slate-300/[.1]"
-                    onClick={() => navigate('/login')}
-                  >
-                    <span className="text-[20px] pl-[10px]">{item}</span>
-                  </div>
-                ),
-              )}
-              <hr />
               <div className="flex gap-[20px] space-x-1 mt-[20px]">
                 <Link to="/signup" className="clickSignup">
                   <button className="h-[40px] w-[90px] bg-black text-white rounded-[10px] font-raleway text-[16px] cursor-pointer hover:font-bold">

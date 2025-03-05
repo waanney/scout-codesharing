@@ -9,3 +9,9 @@ export function formatMillisecondsToDate(milliseconds) {
 
   return day + '/' + month + '/' + year; // Định dạng dd/mm/yyyy
 }
+
+
+export function formattedError(error){
+  return error.toString().replace(/\./g, ".\n" );
+  
+}
