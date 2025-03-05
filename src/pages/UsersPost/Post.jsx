@@ -110,19 +110,22 @@ function Post({ board, boardId }) {
         return;
       }
       try {
-        const postUsername = await axios.get(
-          `${API_ROOT}/v1/Auth/${board.userId}`,
-        );
-        setPostUsername(postUsername.data.username);
-        const avatarcontent = await axios.get(
-          `${API_ROOT}/v1/Auth/get-avatar/${board.userID}`,
-        );
-        setAvatarUrl(avatarcontent.data.avatarUrl);
+        const [{ data: userData }, { data: avatarData }] = await Promise.all([
+          axios.get(`${API_ROOT}/v1/Auth/${board.userID}`),
+          axios.get(`${API_ROOT}/v1/Auth/get-avatar/${board.userID}`),
+        ]);
+
+        setPostUsername(userData.username);
+        setAvatarUrl(avatarData.avatarUrl);
       } catch (err) {
         setError(err);
         console.error('Error fetching user data:', err);
       } finally {
         setLoading(false);
+
+        setTimeout(() => {
+          hljs.highlightAll();
+        }, 100);
       }
     };
 
@@ -135,15 +138,8 @@ function Post({ board, boardId }) {
 
   const language = board.language;
   const [sourceCode, setSourceCode] = useState(null);
-  hljs.highlightAll();
-  const PostsRef = useRef(null);
 
   useEffect(() => {
-    if (PostsRef.current) {
-      PostsRef.current.querySelectorAll('pre code').forEach(block => {
-        hljs.highlightElement(block);
-      });
-    }
     if (board?.content) {
       const codeLines = board.content.split('\n');
       if (Array.isArray(codeLines)) {
