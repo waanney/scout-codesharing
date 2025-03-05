@@ -146,10 +146,16 @@ function HomePage() {
         <div className="flex-grow flex items-center justify-center w-full">
           <ThreeDLogo />
         </div>
-        <div className="text-white text-2xl md:text-3xl font-bold tracking-wide">
-          <span className="animate-pulse">[</span>
-          {displayText}
-          <span className="animate-pulse">]</span>
+        <div className="text-white text-2xl md:text-3xl w-[300px] md:w-full font-bold tracking-wide text-wrap text-center">
+          <span className="animate-pulse bg-blue-400 text-transparent bg-clip-text">
+            [
+          </span>
+          <span className="bg-gradient-to-r from-blue-400 to-purple-600 text-transparent bg-clip-text">
+            {displayText}
+          </span>
+          <span className="animate-pulse bg-purple-600 text-transparent bg-clip-text">
+            ]
+          </span>
         </div>
       </div>
 
@@ -164,8 +170,7 @@ function HomePage() {
               ref={el => (cardRefs.current[index] = el)}
               className={`card ${
                 card.isTall ? 'h-[536px] row-span-2' : 'h-[252px]'
-              } w-[280px] bg-[#274494] rounded-[10px] border border-[#3653a3] text-left shadow-md`}
-            >
+              } w-[280px] bg-[#274494] rounded-[10px] border border-[#3653a3] text-left shadow-md`}>
               <img
                 className="h-[44px] w-[44px] bg-black rounded-[9px] mt-[29px] mb-[19px] ml-[22px]"
                 src={card.img}
