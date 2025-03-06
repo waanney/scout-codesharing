@@ -127,58 +127,6 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
     }
   }, [sharedPostsData.posts]);
 
-  useEffect(() => {
-    const fetchSharedPosts = async () => {
-      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
-      const currentProfile = getcurrentProfile.data;
-      if (currentProfile && currentProfile.sharedPosts) {
-        try {
-          setLoading(true);
-          const data = await fetchSharedPostsDetails_API(
-            owner,
-            pageNumber,
-            postsPerPage,
-          );
-          const Posts = data.posts;
-          const avatars = await Promise.all(
-            Posts.map(post => fetchAvatar(post.userId)),
-          );
-          const avatarMap = Posts.reduce((acc, post, index) => {
-            acc[post._id] = avatars[index];
-            return acc;
-          }, {});
-          setSharedPostAvatars(prevAvatars => ({
-            ...prevAvatars,
-            ...avatarMap,
-          }));
-          setSharedPostsData(prevData => ({
-            ...data,
-            posts:
-              pageNumber === 1
-                ? data.posts
-                : [...prevData.posts, ...data.posts],
-          }));
-          setLoading(false);
-        } catch (error) {
-          const errorMessage =
-            error.response?.data?.message ||
-            error.message ||
-            'Lỗi khi tải bài viết chia sẻ';
-          setErrorMessage(errorMessage);
-        }
-      }
-    };
-    fetchSharedPosts();
-  }, [owner, pageNumber, profileData]);
-
-  useEffect(() => {
-    if (sharedPostsRef.current) {
-      sharedPostsRef.current.querySelectorAll('pre code').forEach(block => {
-        hljs.highlightElement(block);
-      });
-    }
-  }, [sharedPostsData.posts]);
-
   const toggleMenu = (id, event) => {
     event.stopPropagation();
     setOpenMenuId(prevId => (prevId === id ? null : id));
