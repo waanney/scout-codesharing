@@ -80,15 +80,14 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
           const postUsernames = await Promise.all(
             Posts.map(post => axios.get(`${API_ROOT}/v1/Auth/${post.userId}`)),
           );
-          const usernameMap = postUsernames.reduce((acc, post, index) => {
-            acc[post.data._id] = postUsernames[index].data.username;
-            return acc;
+          const usernameMap = postUsernames.reduce((name, post, index) => {
+            name[post.data._id] = postUsernames[index].data.username;
+            return name;
           }, {});
           setSharedPostUsernames(prevUsernames => ({
             ...prevUsernames,
             ...usernameMap,
           }));
-          console.log(usernameMap);
           const avatars = await Promise.all(
             Posts.map(post => fetchAvatar(post.userId)),
           );
@@ -119,6 +118,58 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
     };
     fetchSharedPosts();
   }, [owner, pageNumber]);
+
+  useEffect(() => {
+    if (sharedPostsRef.current) {
+      sharedPostsRef.current.querySelectorAll('pre code').forEach(block => {
+        hljs.highlightElement(block);
+      });
+    }
+  }, [sharedPostsData.posts]);
+
+  useEffect(() => {
+    const fetchSharedPosts = async () => {
+      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
+      const currentProfile = getcurrentProfile.data;
+      if (currentProfile && currentProfile.sharedPosts) {
+        try {
+          setLoading(true);
+          const data = await fetchSharedPostsDetails_API(
+            owner,
+            pageNumber,
+            postsPerPage,
+          );
+          const Posts = data.posts;
+          const avatars = await Promise.all(
+            Posts.map(post => fetchAvatar(post.userId)),
+          );
+          const avatarMap = Posts.reduce((acc, post, index) => {
+            acc[post._id] = avatars[index];
+            return acc;
+          }, {});
+          setSharedPostAvatars(prevAvatars => ({
+            ...prevAvatars,
+            ...avatarMap,
+          }));
+          setSharedPostsData(prevData => ({
+            ...data,
+            posts:
+              pageNumber === 1
+                ? data.posts
+                : [...prevData.posts, ...data.posts],
+          }));
+          setLoading(false);
+        } catch (error) {
+          const errorMessage =
+            error.response?.data?.message ||
+            error.message ||
+            'Lỗi khi tải bài viết chia sẻ';
+          setErrorMessage(errorMessage);
+        }
+      }
+    };
+    fetchSharedPosts();
+  }, [owner, pageNumber, profileData]);
 
   useEffect(() => {
     if (sharedPostsRef.current) {
