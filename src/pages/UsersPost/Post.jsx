@@ -388,7 +388,10 @@ function Post({ board, boardId }) {
 
   useEffect(() => {
     const handleClickOutside = event => {
-      if (menuRefs.current && !menuRefs.current.contains(event.target)) {
+      const isClickInsideAnyMenu = Object.values(menuRefs.current).some(
+        menuRef => menuRef && menuRef.contains(event.target),
+      );
+      if (!isClickInsideAnyMenu) {
         setOpenMenuId(null);
       }
     };
