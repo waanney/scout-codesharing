@@ -66,10 +66,12 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
 
   useEffect(() => {
     const fetchSharedPosts = async () => {
-      const getcurrentProfile = await axios.get(`${API_ROOT}/v1/Auth/${owner}`);
-      const currentProfile = getcurrentProfile.data;
-      if (currentProfile && currentProfile.sharedPosts) {
-        try {
+      try {
+        const getcurrentProfile = await axios.get(
+          `${API_ROOT}/v1/Auth/${owner}`,
+        );
+        const currentProfile = getcurrentProfile.data;
+        if (currentProfile && currentProfile.sharedPosts) {
           setLoading(true);
           const data = await fetchSharedPostsDetails_API(
             owner,
@@ -77,43 +79,60 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
             postsPerPage,
           );
           const Posts = data.posts;
-          const postUsernames = await Promise.all(
-            Posts.map(post => axios.get(`${API_ROOT}/v1/Auth/${post.userId}`)),
+
+          // Lọc các bài post có userId hợp lệ
+          const validPosts = Posts.filter(
+            post => post.userId && post.userId !== 'undefined',
           );
-          const usernameMap = postUsernames.reduce((name, post, index) => {
-            name[post.data._id] = postUsernames[index].data.username;
-            return name;
+
+          // Fetch username cho các bài post hợp lệ
+          const postUsernamesPromises = validPosts.map(post =>
+            axios.get(`${API_ROOT}/v1/Auth/${post.userId}`).catch(error => {
+              console.error(
+                `Error fetching username for ${post.userId}:`,
+                error,
+              );
+              return { data: { username: 'Unknown' } }; // Giá trị mặc định nếu lỗi
+            }),
+          );
+          const postUsernames = await Promise.all(postUsernamesPromises);
+          const usernameMap = validPosts.reduce((map, post, index) => {
+            map[validPosts[index]._id] = postUsernames[index].data.username;
+            return map;
           }, {});
-          setSharedPostUsernames(prevUsernames => ({
-            ...prevUsernames,
-            ...usernameMap,
-          }));
+
+          // Fetch avatar cho các bài post hợp lệ
           const avatars = await Promise.all(
-            Posts.map(post => fetchAvatar(post.userId)),
+            validPosts.map(post =>
+              fetchAvatar(post.userId).catch(error => {
+                console.error(
+                  `Error fetching avatar for ${post.userId}:`,
+                  error,
+                );
+                return null; // Giá trị mặc định nếu lỗi
+              }),
+            ),
           );
-          const avatarMap = Posts.reduce((acc, post, index) => {
+          const avatarMap = validPosts.reduce((acc, post, index) => {
             acc[post._id] = avatars[index];
             return acc;
           }, {});
-          setSharedPostAvatars(prevAvatars => ({
-            ...prevAvatars,
-            ...avatarMap,
-          }));
+
+          // Cập nhật state
+          setSharedPostUsernames(prev => ({ ...prev, ...usernameMap }));
+          setSharedPostAvatars(prev => ({ ...prev, ...avatarMap }));
           setSharedPostsData(prevData => ({
             ...data,
-            posts:
-              pageNumber === 1
-                ? data.posts
-                : [...prevData.posts, ...data.posts],
+            posts: pageNumber === 1 ? Posts : [...prevData.posts, ...Posts],
           }));
           setLoading(false);
-        } catch (error) {
-          const errorMessage =
-            error.response?.data?.message ||
-            error.message ||
-            'Lỗi khi tải bài viết chia sẻ';
-          setErrorMessage(errorMessage);
         }
+      } catch (error) {
+        const errorMessage =
+          error.response?.data?.message ||
+          error.message ||
+          'Lỗi khi tải bài viết chia sẻ';
+        setErrorMessage(errorMessage);
       }
     };
     fetchSharedPosts();
@@ -223,6 +242,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
       )}
       {sharedPostsData.posts.map((post, index) => {
         const isLastPost = sharedPostsData.posts.length === index + 1;
+        const username = sharedPostUsernames[post._id] || 'Unknown';
         return (
           <div
             key={post._id}
@@ -321,9 +341,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                       <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                     </svg>
                   )}
-                  <h5 className="ml-2 font-bold text-lg">
-                    {sharedPostUsernames[post.userId]}
-                  </h5>
+                  <h5 className="ml-2 font-bold text-lg">{username}</h5>
                 </div>
                 <div>
                   <h1 className="ml-4 text-xl font-bold text-center">
@@ -351,9 +369,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                     <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                   </svg>
                 </div>
-                <p className="text-center mt-4">
-                  Owner has deleted or hidden this post.
-                </p>
+                <p className="text-center mt-4">Owner has deleted this post.</p>
               </div>
             )}
           </div>

@@ -99,7 +99,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
             />
           </button>
           <div className="text-center text-white">
-            Owner has deleted or hidden this post.
+            Owner has deleted this post.
           </div>
         </div>
         {showConfirmModal && (
