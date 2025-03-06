@@ -16,6 +16,7 @@ export default {
         shadow3: 'shadow 0.5s alternate 0.3s infinite ease',
         shadow4: 'shadow 0.5s alternate 0.4s infinite ease',
         shadow5: 'shadow 0.5s alternate 0.5s infinite ease',
+        gradient: 'gradientAnimation 20s linear infinite',
       },
       keyframes: {
         circle: {
@@ -36,6 +37,10 @@ export default {
           '0%': { transform: 'scaleX(1.5)' },
           '40%': { transform: 'scaleX(1)', opacity: '0.7' },
           '100%': { transform: 'scaleX(0.2)', opacity: '0.4' },
+        },
+        gradientAnimation: {
+          '0%': { backgroundPosition: '0%' },
+          '100%': { backgroundPosition: '400%' },
         },
       },
     },

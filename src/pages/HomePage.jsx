@@ -160,9 +160,12 @@ function HomePage() {
       </div>
 
       <div className="relative p-[20px]">
-        <h2 className="relative flex text-[60px] text-white font-bold w-full">
+        <h2
+          className="relative text-[60px] font-bold font-sans tracking-wider text-transparent bg-clip-text bg-[linear-gradient(90deg,#60a5fa,#7a5bd8,#a66ff0,#7a5bd8,#60a5fa)]
+ bg-[length:400%_100%] animate-gradient">
           Who are we?
         </h2>
+
         <div className="cards grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-[34px_23px] mt-7 place-items-center">
           {cardDetails.map((card, index) => (
             <div
@@ -176,10 +179,10 @@ function HomePage() {
                 src={card.img}
                 alt={card.title}
               />
-              <span className="ml-[22px] mb-[18px] font-inter font-semibold text-[20px]">
+              <span className="ml-[22px] mb-[18px] font-inter font-semibold text-[20px] text-transparent bg-clip-text bg-[linear-gradient(90deg,#60a5fa,#7a5bd8,#a66ff0,#7a5bd8,#60a5fa)] bg-[length:400%_100%] animate-gradient">
                 {card.title}
               </span>
-              <p className="ml-[22px] w-[231px] font-inter font-medium text-[14px]">
+              <p className="ml-[22px] w-[231px] font-inter font-medium text-[14px] text-transparent bg-clip-text bg-[linear-gradient(90deg,#60a5fa,#7a5bd8,#a66ff0,#7a5bd8,#60a5fa)] bg-[length:400%_100%] animate-gradient">
                 {card.description}
               </p>
               {card.extraImg && (
