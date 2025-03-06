@@ -80,7 +80,7 @@ const PostCard = ({ board }) => {
     <>
       {/* Post Card */}
       <div
-        className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)]"
+        className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[0px_0px_10px_rgba(255,255,255,0.5)]"
         onClick={handlePostClick}
       >
         {/* User Info */}

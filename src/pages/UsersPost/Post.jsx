@@ -565,6 +565,7 @@ function Post({ board, boardId }) {
           </div>
         )}
         <div className="cards grid w-full lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
+          {/*Post info*/}
           <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
             <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
               <div className="card flex flex-row">
@@ -672,124 +673,129 @@ function Post({ board, boardId }) {
                 )}
               </div>
             </div>
-            {board ? (
-              <div className="text-white">
-                <div className="text-[1.5em] w-[90%] text-center place-self-center font-bold leading-[150%] break-words">
-                  {board.title || ''}
-                </div>
-                <div className="w-full px-[20px]">
+            {/*Post title and description*/}
+            <div className="h-[67%] lg:h-[74%] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+              {board ? (
+                <div className="text-white">
                   <div
-                    className={`h-[84px] text-xl font-normal leading-[150%] break-all ${
-                      fullText
-                        ? 'overflow-y-auto snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin'
-                        : 'line-clamp-3'
-                    }`}
+                    className={`text-[1.5em] w-[90%] mx-auto font-bold leading-[150%] break-words 
+                                ${!fullText && 'line-clamp-1 '}`}
                   >
-                    {board.description || 'Owner has deleted this post.'}
+                    {board.title || ''}
                   </div>
-                  {board.description && board.description.length > 100 && (
-                    <button
-                      className="font-bold"
-                      onClick={() => setFullText(!fullText)}
+                  <div className="w-full px-[20px]">
+                    <div
+                      className={`text-xl font-normal leading-[150%] break-words ${
+                        !fullText && 'line-clamp-1'
+                      }`}
                     >
-                      {fullText ? 'less' : 'more'}
-                    </button>
-                  )}
-                </div>
-              </div>
-            ) : (
-              <div className="text-white text-center text-xl font-bold">
-                Board data not found.
-              </div>
-            )}
-
-            <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] overflow-y-auto snap-y snap-mandatory scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-              {comments.map(comment => (
-                <div
-                  key={comment._id}
-                  className="w-[100%] rounded-[10px] mb-4 p-[15px 5px] bg-blue-950"
-                >
-                  <div className="flex justify-between text-white text-2xl pl-[10px] font-bold leading-9">
-                    <a
-                      target="_blank"
-                      href={`${env.FE_ROOT}/profile/${comment.userId}`}
-                    >
-                      {comment.username}
-                    </a>
-                    {comment.userId === userId && (
-                      <div
-                        className="relative"
-                        ref={el => (menuRefs.current[comment._id] = el)}
+                      {board.description ||
+                        'Owner has deleted or hidden this post.'}
+                    </div>
+                    {board.description && board.description.length > 40 && (
+                      <button
+                        className="font-bold"
+                        onClick={() => setFullText(!fullText)}
                       >
-                        <Ellipsis
-                          className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
-                          onClick={() => toggleMenu(comment._id)}
-                        />
-                        {openMenuId === comment._id && (
-                          <div
-                            className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
-                              openMenuId === comment._id
-                                ? 'opacity-100 translate-y-0 pointer-events-auto'
-                                : 'opacity-0 -translate-y-5 pointer-events-none'
-                            }`}
-                          >
-                            <button
-                              className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
-                              onClick={event =>
-                                handleDeleteClick(comment._id, event)
-                              }
-                            >
-                              <p className="font-medium text-red-600 text-[20px]">
-                                Delete
-                              </p>
-                            </button>
-                          </div>
-                        )}
-                      </div>
+                        {fullText ? 'less' : 'more'}
+                      </button>
                     )}
                   </div>
-
-                  <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
-                    {comment.content}
-                  </div>
-                  <CommentRating
-                    commentId={comment._id}
-                    upvote={comment.upvote}
-                    downvote={comment.downvote}
-                    setComments={setComments}
-                    comment={comment}
-                    boardId={boardId}
-                    setErrorMessage={setErrorMessage}
-                    setShowError={setShowError}
-                    setFadeError={setFadeError}
-                  />
                 </div>
-              ))}
-              {showConfirmModal && (
-                <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
-                  <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
-                    <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
-                    <p>Are you sure you want to delete this comment?</p>
-                    <div className="flex justify-between mt-4">
-                      <button
-                        className="px-4 py-2 bg-gray-300 rounded-md mr-2"
-                        onClick={event => {
-                          event.stopPropagation();
-                          setShowConfirmModal(false);
-                        }}
-                      >
-                        Cancel
-                      </button>
-                      <button
-                        className="px-4 py-2 bg-red-600 text-white rounded-md"
-                        onClick={handleConfirmDelete}
-                      >
-                        Confirm
-                      </button>
-                    </div>
-                  </div>
+              ) : (
+                <div className="text-white text-center text-xl font-bold">
+                  Board data not found.
                 </div>
               )}
+
+              <div className="h-[35%] lg:h-[49%] mx-auto px-[10px] mt-[10px] ">
+                {comments.map(comment => (
+                  <div
+                    key={comment._id}
+                    className="w-[100%] rounded-[10px] mb-4 p-[15px 5px] bg-blue-950"
+                  >
+                    <div className="flex justify-between text-white text-2xl pl-[10px] font-bold leading-9">
+                      <a
+                        target="_blank"
+                        href={`${env.FE_ROOT}/profile/${comment.userId}`}
+                      >
+                        {comment.username}
+                      </a>
+                      {comment.userId === userId && (
+                        <div
+                          className="relative"
+                          ref={el => (menuRefs.current[comment._id] = el)}
+                        >
+                          <Ellipsis
+                            className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
+                            onClick={() => toggleMenu(comment._id)}
+                          />
+                          {openMenuId === comment._id && (
+                            <div
+                              className={`absolute top-[20px] right-[5px] mt-2 w-32 rounded-[10px] bg-gray-700 bg-opacity-90 shadow-lg transition-all duration-300 transform ${
+                                openMenuId === comment._id
+                                  ? 'opacity-100 translate-y-0 pointer-events-auto'
+                                  : 'opacity-0 -translate-y-5 pointer-events-none'
+                              }`}
+                            >
+                              <button
+                                className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
+                                onClick={event =>
+                                  handleDeleteClick(comment._id, event)
+                                }
+                              >
+                                <p className="font-medium text-red-600 text-[20px]">
+                                  Delete
+                                </p>
+                              </button>
+                            </div>
+                          )}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="w-[95%] text-white text-[20px] pl-[15px] font-normal leading-[150%] break-words">
+                      {comment.content}
+                    </div>
+                    <CommentRating
+                      commentId={comment._id}
+                      upvote={comment.upvote}
+                      downvote={comment.downvote}
+                      setComments={setComments}
+                      comment={comment}
+                      boardId={boardId}
+                      setErrorMessage={setErrorMessage}
+                      setShowError={setShowError}
+                      setFadeError={setFadeError}
+                    />
+                  </div>
+                ))}
+                {showConfirmModal && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                      <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                      <p>Are you sure you want to delete this comment?</p>
+                      <div className="flex justify-between mt-4">
+                        <button
+                          className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                          onClick={event => {
+                            event.stopPropagation();
+                            setShowConfirmModal(false);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-600 text-white rounded-md"
+                          onClick={handleConfirmDelete}
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
             <form
               onSubmit={handleComment}
@@ -819,7 +825,7 @@ function Post({ board, boardId }) {
                 </div>
                 <button
                   onClick={copyToClipboard(board.content)}
-                  className="absolute right-3"
+                  className="absolute right-6 rounded-[5px] hover:bg-gray-600"
                 >
                   <Copy
                     className={`${isCopied ? 'text-blue-500' : 'text-white'}`}
