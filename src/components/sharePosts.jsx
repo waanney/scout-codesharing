@@ -78,7 +78,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
             pageNumber,
             postsPerPage,
           );
-          const Posts = data.posts;
+          const Posts = data.posts || [];
 
           // Lọc các bài post có userId hợp lệ
           const validPosts = Posts.filter(
