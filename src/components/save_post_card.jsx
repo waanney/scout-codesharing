@@ -155,7 +155,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
         </button>
 
         {/* User Info */}
-        <div className="cards grid grid-cols-2 gap-[10px]">
+        <div className="cards grid grid-cols-[3fr_1fr] gap-[10px]">
           <div className="card flex flex-row">
             {AvatarUrl ? (
               <img
@@ -168,7 +168,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
                 <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
               </svg>
             )}
-            <div className="ml-[10px] text-white font-bold text-[20px]">
+            <div className="ml-[10px] text-white font-bold text-[20px] break-all line-clamp-1">
               {postUsername}
             </div>
           </div>

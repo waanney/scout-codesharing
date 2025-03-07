@@ -97,7 +97,7 @@ const PostCard = ({ board }) => {
                 <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
               </svg>
             )}
-            <div className="ml-[10px] text-white font-bold text-[20px]">
+            <div className="ml-[10px] text-white font-bold text-[20px] break-all line-clamp-1">
               {postUsername}
             </div>
           </div>
