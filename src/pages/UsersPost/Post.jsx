@@ -2,15 +2,12 @@ import { Send, Save, Share, MessageSquareText, Copy } from 'lucide-react';
 import { Ellipsis } from 'lucide-react';
 import HeaderForAllPages from '../../components/header.jsx';
 import FooterAllPage from '../../components/footer.jsx';
-import CommentCard from '../../components/comment_card.jsx';
+import CommentInlineCard from '../../components/commentinline_card.jsx';
 import axios from 'axios';
 import CommentRating from '../../components/comment_rating.jsx';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import {
-  commentPost_API,
-  commentInlinePost_API,
-} from '../../redux/apiRequest.js';
+import { commentPost_API } from '../../redux/apiRequest.js';
 import { useState, useEffect, useRef, useCallback } from 'react';
 import { formatMillisecondsToDate } from '../../utils/formater.js';
 import hljs from 'highlight.js';
@@ -221,22 +218,30 @@ function Post({ board, boardId }) {
       lineNumber: lineNumber,
     };
     try {
-      const response = await commentInlinePost_API(
+      const response = await axios.post(
+        `${API_ROOT}/v1/commentinline/`,
         newLineComment,
-        dispatch,
-        navigate,
       );
       const createdComment = response?.data?.createdComment;
 
-      setComments(prevComments => {
-        if (!Array.isArray(prevComments)) {
-          console.error('prevComments is not an array:', prevComments);
-          return createdComment ? [createdComment] : [];
-        }
-        return createdComment
-          ? [...prevComments, createdComment]
-          : prevComments;
-      });
+      // setComments(prevComments => {
+      //   if (!Array.isArray(prevComments)) {
+      //     console.error('prevComments is not an array:', prevComments);
+      //     return createdComment ? [createdComment] : [];
+      //   }
+      //   return createdComment
+      //     ? [...prevComments, createdComment]
+      //     : prevComments;
+      // });
+
+      if (
+        !createdComment ||
+        typeof createdComment !== 'object' ||
+        !createdComment._id
+      ) {
+        console.error('Invalid createdComment:', createdComment);
+        throw new Error('Server returned invalid comment data');
+      }
 
       setCommentsByLine(prevCommentsByLine => {
         const updatedLineComments = prevCommentsByLine[lineNumber]
@@ -258,6 +263,17 @@ function Post({ board, boardId }) {
         };
       });
 
+      // setCommentsByLine(prevCommentsByLine => {
+      //   const updatedLineComments = prevCommentsByLine[lineNumber]
+      //     ? [...prevCommentsByLine[lineNumber]]
+      //     : [];
+      //   updatedLineComments.push(createdComment);
+      //   return {
+      //     ...prevCommentsByLine,
+      //     [lineNumber]: updatedLineComments,
+      //   };
+      // });
+
       setLineContent('');
       if (currentUserData._id !== board.userId) {
         createNotification({
@@ -272,6 +288,59 @@ function Post({ board, boardId }) {
     } catch (error) {
       console.error('Error posting comment:', error);
       alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.');
+    }
+  };
+
+  const [showInlineConfirmModal, setShowInlineConfirmModal] = useState(false);
+  const [inlineCommentToDelete, setInlineCommentToDelete] = useState(null);
+
+  const handleRequestDeleteInlineComment = async commentId => {
+    setInlineCommentToDelete(commentId);
+    setShowInlineConfirmModal(true);
+  };
+
+  const handleConfirmDeleteInlineComment = async event => {
+    event.stopPropagation();
+    if (!inlineCommentToDelete) return;
+
+    try {
+      await axios.delete(
+        `${API_ROOT}/v1/commentinline/${inlineCommentToDelete}/delete`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('accessToken')}`,
+          },
+        },
+      );
+
+      setCommentsByLine(prev => {
+        const updated = { ...prev };
+        Object.keys(updated).forEach(line => {
+          updated[line] = updated[line].filter(
+            c => c._id !== inlineCommentToDelete,
+          );
+        });
+        return updated;
+      });
+
+      // Hiển thị thông báo thành công
+      setSuccessMessage('Xóa comment inline thành công!');
+      setShowSuccess(true);
+      setFadeSuccess(false);
+
+      setTimeout(() => setFadeSuccess(true), 1500);
+      setTimeout(() => setShowSuccess(false), 1000);
+    } catch (error) {
+      setErrorMessage(
+        error.response?.data?.message || 'Không thể xóa comment inline',
+      );
+      setShowError(true);
+      setFadeError(false);
+      setTimeout(() => setFadeError(true), 1500);
+      setTimeout(() => setShowError(false), 1000);
+    } finally {
+      setShowInlineConfirmModal(false);
+      setInlineCommentToDelete(null);
     }
   };
 
@@ -388,7 +457,10 @@ function Post({ board, boardId }) {
 
   useEffect(() => {
     const handleClickOutside = event => {
-      if (menuRefs.current && !menuRefs.current.contains(event.target)) {
+      const isClickInsideAnyMenu = Object.values(menuRefs.current).some(
+        menuRef => menuRef && menuRef.contains(event.target),
+      );
+      if (!isClickInsideAnyMenu) {
         setOpenMenuId(null);
       }
     };
@@ -672,6 +744,33 @@ function Post({ board, boardId }) {
                     </div>
                   </div>
                 )}
+                {showInlineConfirmModal && (
+                  <div className="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-50">
+                    <div className="bg-blue-950 p-5 rounded-lg shadow-lg">
+                      <h2 className="text-lg font-bold mb-3">Confirm Delete</h2>
+                      <p>
+                        Are you sure you want to delete this inline comment?
+                      </p>
+                      <div className="flex justify-between mt-4">
+                        <button
+                          className="px-4 py-2 bg-gray-300 rounded-md mr-2"
+                          onClick={event => {
+                            event.stopPropagation();
+                            setShowInlineConfirmModal(false);
+                          }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          className="px-4 py-2 bg-red-600 text-white rounded-md"
+                          onClick={handleConfirmDeleteInlineComment}
+                        >
+                          Confirm
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
             </div>
             {/*Post title and description*/}
@@ -875,9 +974,22 @@ function Post({ board, boardId }) {
                           This is line {lineNum + 1}
                         </p>
                         <div className="w-full h-[7em] md:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
-                          {(commentsByLine[lineNum + 1] || []).map(comment => (
-                            <CommentCard key={comment._id} comment={comment} />
-                          ))}
+                          {Array.isArray(commentsByLine[lineNum + 1]) &&
+                          commentsByLine[lineNum + 1].length > 0 ? (
+                            commentsByLine[lineNum + 1].map(comment => (
+                              <CommentInlineCard
+                                key={comment._id}
+                                comment={comment}
+                                onRequestDelete={
+                                  handleRequestDeleteInlineComment
+                                }
+                              />
+                            ))
+                          ) : (
+                            <p className="text-center text-gray-400">
+                              No comments yet
+                            </p>
+                          )}
                         </div>
                         <form
                           onSubmit={e => handleInlineComment(e, lineNum + 1)}
