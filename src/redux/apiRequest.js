@@ -146,15 +146,16 @@ export const commentPost_API = async (commentData, dispatch) => {
 
 // comment inline
 
-export const commentInlinePost_API = async (commentData, dispatch) => {
-  dispatch(commentStart());
-  try {
-    await axios.post(`${API_ROOT}/v1/commentinline/`, commentData);
-    dispatch(commentSuccess());
-  } catch (err) {
-    dispatch(commentFailed(err.response?.data?.message));
-  }
-};
+// export const commentInlinePost_API = async (commentData, dispatch) => {
+//   dispatch(commentStart());
+//   try {
+//     const response = await axios.post(`${API_ROOT}/v1/commentinline/`, commentData);
+//     dispatch(commentSuccess());
+//     return response;
+//   } catch (err) {
+//     dispatch(commentFailed(err.response?.data?.message));
+//   }
+// };
 
 /*export const myProfile = async (myProfileData, dispatch) => {
   dispatch(myProfileStart());
