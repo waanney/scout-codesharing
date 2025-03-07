@@ -661,8 +661,7 @@ function MyProfile() {
                 <input
                   className="w-full h-[lineHeight] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  maxLength="60"
-                  placeholder="Describe your problem...(Maximum 60 characters)"
+                  placeholder="Describe your problem..."
                   required
                   onChange={e => setDescription(e.target.value)}
                 />
