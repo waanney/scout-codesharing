@@ -1,8 +1,9 @@
 import { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom'; // Import useParams
+import { useParams } from 'react-router-dom'; // Import useParams
 import { fetchBoardDetails_API } from '../../api/index';
 import Post from './Post';
 import LoadingAnimation from '../../components/loading.jsx';
+import { env } from '../../configs/environment.js';
 
 function PostGetID() {
   const [board, setBoard] = useState(null);
@@ -37,8 +38,6 @@ function PostGetID() {
     <LoadingAnimation />;
   }
 
-  const handleNavigate = useNavigate();
-
   if (error) {
     return (
       <div className="flex min-h-screen flex-col items-center justify-center bg-[#0b2878]">
@@ -49,13 +48,15 @@ function PostGetID() {
           </p>
           <div className="flex justify-center space-x-4">
             <button
-              onClick={() => handleNavigate('/')}
+              onClick={() => (window.location.href = `${env.FE_ROOT}/`)}
               className="rounded bg-blue-500 px-4 py-2 font-bold text-white hover:bg-blue-700"
             >
               To Home
             </button>
             <button
-              onClick={() => handleNavigate('/discussion')}
+              onClick={() =>
+                (window.location.href = `${env.FE_ROOT}/discussion`)
+              }
               className="rounded bg-green-500 px-4 py-2 font-bold text-white hover:bg-green-700"
             >
               To Discussion
