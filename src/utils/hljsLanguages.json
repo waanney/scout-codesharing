@@ -1,9 +1,5 @@
 [
   {
-    "language": "Assembly",
-    "aliases": ["asm"]
-  },
-  {
     "language": "C",
     "aliases": ["c"]
   },
@@ -20,70 +16,6 @@
     "aliases": ["css"]
   },
   {
-    "language": "Dart",
-    "aliases": ["dart"]
-  },
-  {
-    "language": "Elixir",
-    "aliases": ["elixir"]
-  },
-  {
-    "language": "Erlang",
-    "aliases": ["erlang"]
-  },
-  {
-    "language": "Go",
-    "aliases": ["go"]
-  },
-  {
-    "language": "GraphQL",
-    "aliases": ["graphql"]
-  },
-  {
-    "language": "GraphQL Directive",
-    "aliases": ["graphqldirective"]
-  },
-  {
-    "language": "GraphQL Enum",
-    "aliases": ["graphiqlenum"]
-  },
-  {
-    "language": "GraphQL Fragment",
-    "aliases": ["graphqlfragment"]
-  },
-  {
-    "language": "GraphQL Input",
-    "aliases": ["graphiqlinput"]
-  },
-  {
-    "language": "GraphQL Interface",
-    "aliases": ["graphiqlinterface"]
-  },
-  {
-    "language": "GraphQL Mutation",
-    "aliases": ["graphqlmutation"]
-  },
-  {
-    "language": "GraphQL Object",
-    "aliases": ["graphiqlobject"]
-  },
-  {
-    "language": "GraphQL Query",
-    "aliases": ["graphqlquery"]
-  },
-  {
-    "language": "GraphQL Scalar",
-    "aliases": ["graphiqlscalar"]
-  },
-  {
-    "language": "GraphQL Schema",
-    "aliases": ["graphqlschema"]
-  },
-  {
-    "language": "GraphQL Subscription",
-    "aliases": ["graphqlsubscription"]
-  },
-  {
     "language": "HTML",
     "aliases": [
       "html",
@@ -97,10 +29,6 @@
       "plist",
       "svg"
     ]
-  },
-  {
-    "language": "Haskell",
-    "aliases": ["haskell"]
   },
   {
     "language": "JSON",
@@ -119,32 +47,12 @@
     "aliases": ["javascript", "js", "jsx"]
   },
   {
-    "language": "Kotlin",
-    "aliases": ["kotlin"]
-  },
-  {
     "language": "LaTeX",
     "aliases": ["tex"]
   },
   {
-    "language": "Lua",
-    "aliases": ["lua"]
-  },
-  {
-    "language": "Markdown",
-    "aliases": ["markdown", "md", "mkdown", "mkd"]
-  },
-  {
-    "language": "Objective-C",
-    "aliases": ["objc"]
-  },
-  {
     "language": "PHP",
     "aliases": ["php"]
-  },
-  {
-    "language": "Perl",
-    "aliases": ["perl"]
   },
   {
     "language": "PowerShell",
@@ -155,55 +63,15 @@
     "aliases": ["python"]
   },
   {
-    "language": "R",
-    "aliases": ["r"]
-  },
-  {
     "language": "Ruby",
     "aliases": ["ruby"]
-  },
-  {
-    "language": "Rust",
-    "aliases": ["rust"]
   },
   {
     "language": "SQL",
     "aliases": ["sql"]
   },
   {
-    "language": "Scala",
-    "aliases": ["scala"]
-  },
-  {
-    "language": "Shell",
-    "aliases": ["bash", "sh"]
-  },
-  {
-    "language": "Swift",
-    "aliases": ["swift"]
-  },
-  {
-    "language": "Swift",
-    "aliases": ["swift"]
-  },
-  {
-    "language": "TOML",
-    "aliases": ["toml"]
-  },
-  {
     "language": "TypeScript",
     "aliases": ["typescript"]
-  },
-  {
-    "language": "VHDL",
-    "aliases": ["vhdl"]
-  },
-  {
-    "language": "Verilog",
-    "aliases": ["verilog"]
-  },
-  {
-    "language": "YAML",
-    "aliases": ["yaml"]
   }
 ]
