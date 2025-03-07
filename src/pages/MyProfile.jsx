@@ -236,8 +236,8 @@ function MyProfile() {
       setFadeError(false);
       setPersonalityError(true); // Đánh dấu lỗi
 
-      setTimeout(() => setFadeError(true), 1000);
-      setTimeout(() => setShowError(false), 1500);
+      setTimeout(() => setFadeError(true), 500);
+      setTimeout(() => setShowError(false), 100);
 
       return;
     }
@@ -366,16 +366,16 @@ function MyProfile() {
       setShowSuccess(true);
       setFadeSuccess(false);
 
-      setTimeout(() => setFadeSuccess(true), 1500);
+      setTimeout(() => setFadeSuccess(true), 1000);
       setTimeout(() => {
         setShowSuccess(false);
-      }, 1000);
+      }, 500);
     } catch (error) {
       setErrorMessage(error);
       setShowError(true);
       setFadeError(false);
-      setTimeout(() => setFadeError(true), 1500);
-      setTimeout(() => setShowError(false), 1000);
+      setTimeout(() => setFadeError(true), 1000);
+      setTimeout(() => setShowError(false), 500);
     }
   };
   const hljscode = useRef(null);
@@ -407,7 +407,8 @@ function MyProfile() {
                 <div
                   className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
                   ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                  transition-all duration-1000 ease-in-out flex items-center justify-center`}>
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
+                >
                   <p className="text-base md:text-[22px] font-bold text-center text-white">
                     {errorMessage}
                   </p>
@@ -419,7 +420,8 @@ function MyProfile() {
                 <div
                   className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
                   ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                  transition-all duration-1000 ease-in-out flex items-center justify-center`}>
+                  transition-all duration-1000 ease-in-out flex items-center justify-center`}
+                >
                   <p className="text-base md:text-[22px] font-bold text-center text-white">
                     {successMessage}
                   </p>
@@ -447,7 +449,8 @@ function MyProfile() {
                   <div>
                     <button
                       className="absolute right-[5px] mt-[-5px]"
-                      onClick={isEditing ? handleSaveClick : handleEditClick}>
+                      onClick={isEditing ? handleSaveClick : handleEditClick}
+                    >
                       <img
                         src={isEditing ? savePost : editPost}
                         alt={isEditing ? 'Save icon' : 'Edit icon'}
@@ -504,7 +507,8 @@ function MyProfile() {
           <div className="flex h-[120px] lg:w-[300px] w-[90%] bg-[#3366CC] mt-[11px] lg:ml-[35px] rounded-[10px]">
             <img
               className="h-[13px] w-[14px] m-[11px]"
-              src={content || '/placeholder.svg'}></img>
+              src={content || '/placeholder.svg'}
+            ></img>
             <div className="text-[12px] font-Manrope text-[#EAEBF6] mt-[11px] flex-grow">
               {isEditing ? (
                 <textarea
@@ -532,7 +536,8 @@ function MyProfile() {
                     wordBreak: 'break-word', // Handle long strings
                     lineHeight: '1.5rem',
                     padding: '5px',
-                  }}>
+                  }}
+                >
                   {intro}
                 </div>
               )}
@@ -548,7 +553,8 @@ function MyProfile() {
               style={{
                 border: personalityError ? '2px solid red' : 'none',
                 padding: '5px',
-              }}>
+              }}
+            >
               {isEditing ? (
                 <>
                   {personality.map((trait, index) => (
@@ -559,7 +565,8 @@ function MyProfile() {
                       style={{
                         border: trait.trim() === '' ? '2px solid red' : 'none',
                         padding: '5px',
-                      }}>
+                      }}
+                    >
                       <input
                         value={trait}
                         onChange={e => {
@@ -576,14 +583,16 @@ function MyProfile() {
                           setPersonality(
                             personality.filter((_, i) => i !== index),
                           )
-                        }>
+                        }
+                      >
                         x
                       </button>
                     </div>
                   ))}
                   <div
                     className="h-[20px] w-[20px] text-center bg-white rounded-full text-black text-sm font-medium cursor-pointer flex items-center justify-center"
-                    onClick={() => setPersonality([...personality, ''])}>
+                    onClick={() => setPersonality([...personality, ''])}
+                  >
                     +
                   </div>
                 </>
@@ -591,7 +600,8 @@ function MyProfile() {
                 editableProfile.personality?.map((trait, index) => (
                   <div
                     key={index}
-                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium">
+                    className="px-[8px] py-[2px] bg-white rounded-full text-black text-sm font-medium"
+                  >
                     {trait}
                   </div>
                 ))
@@ -604,7 +614,8 @@ function MyProfile() {
           <div className=" mt-[20px] lg:mt-[125px] mb-[20px] w-[90%] h-[500px] bg-opacity-50 rounded-[10px] mx-auto bg-black">
             <form
               onSubmit={handleCreatepost}
-              className="flex-col  rounded-[10px]">
+              className="flex-col  rounded-[10px]"
+            >
               <div className="flex justify-between mt-[10px] mx-[10px]">
                 <div className=" flex items-center space-x-1">
                   <a className="flex items-center">
@@ -618,7 +629,8 @@ function MyProfile() {
                       <svg
                         height="30"
                         width="30"
-                        xmlns="https://www.w3.org/2000/svg">
+                        xmlns="https://www.w3.org/2000/svg"
+                      >
                         <circle r="15" cx="15" cy="15" fill="#D9D9D9" />
                       </svg>
                     )}
@@ -629,7 +641,8 @@ function MyProfile() {
                 </div>
                 <button
                   type="submit"
-                  className="cursor-pointer transition-all mb-[5px] bg-white text-black font-bold text-[18px] px-6 py-2 mt-[4px] rounded-lg border-slate-200 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]">
+                  className="cursor-pointer transition-all mb-[5px] bg-white text-black font-bold text-[18px] px-6 py-2 mt-[4px] rounded-lg border-slate-200 border-b-[4px] hover:brightness-110 hover:-translate-y-[1px] hover:border-b-[6px] active:border-b-[2px] active:brightness-90 active:translate-y-[2px]"
+                >
                   Create
                 </button>
               </div>
@@ -661,7 +674,8 @@ function MyProfile() {
                   name="langSelect"
                   value={language}
                   required
-                  onChange={handleLanguageChange}>
+                  onChange={handleLanguageChange}
+                >
                   <optgroup label="Choose Language..." className="bg-slate-800">
                     <option value="" disabled hidden>
                       Choose Language...
@@ -681,7 +695,8 @@ function MyProfile() {
                     style={{
                       minWidth: '3rem',
                       height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
-                    }}>
+                    }}
+                  >
                     <div
                       className="h-full"
                       ref={lineNumbersRef}
@@ -689,7 +704,8 @@ function MyProfile() {
                         transform: textareaRef.current
                           ? `translateY(-${textareaRef.current.scrollTop}px)`
                           : 'none',
-                      }}>
+                      }}
+                    >
                       {Array.from(
                         {
                           length: Math.max(
@@ -705,7 +721,8 @@ function MyProfile() {
                               height: lineHeight,
                               lineHeight,
                               opacity: index < lineNumbers.length ? 1 : 0,
-                            }}>
+                            }}
+                          >
                             {(index + 1).toString().padStart(2, '0')}
                           </div>
                         ),
