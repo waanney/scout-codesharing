@@ -954,7 +954,7 @@ function Post({ board, boardId }) {
                     }}
                   >
                     {/* Line Number */}
-                    <div className="min-w-[30px] text-gray-400 text-right pr-[10px]">
+                    <div className="min-w-[30px] text-gray-400 text-right pr-[10px] select-none">
                       {lineNum + 1}
                     </div>
 
