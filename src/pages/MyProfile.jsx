@@ -733,7 +733,7 @@ function MyProfile() {
                     {/* Highlighted Code */}
                     <pre
                       ref={highlightedCodeRef}
-                      className="absolute left-0 top-0 w-full p-2 overflow-y-auto"
+                      className="absolute left-0 top-0 w-full p-2 overflow-y-auto  scrollbar-none"
                       style={{
                         lineHeight,
                         height: `calc(${lineHeight} * ${numberOfVisibleLines})`,
@@ -760,7 +760,7 @@ function MyProfile() {
                           lineNumbersRef.current.style.transform = `translateY(-${target.scrollTop}px)`;
                         }
                       }}
-                      className="absolute inset-0 p-2 bg-transparent border-none outline-none resize-none font-mono w-full"
+                      className="absolute inset-0 p-2 bg-transparent border-none outline-none resize-none font-mono w-full scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin"
                       placeholder="Put your codes here..."
                       style={{
                         lineHeight,
