@@ -35,20 +35,12 @@
     "aliases": ["json", "jsonc"]
   },
   {
-    "language": "JSON5",
-    "aliases": ["json5"]
-  },
-  {
     "language": "Java",
     "aliases": ["java", "jsp"]
   },
   {
     "language": "JavaScript",
     "aliases": ["javascript", "js", "jsx"]
-  },
-  {
-    "language": "LaTeX",
-    "aliases": ["tex"]
   },
   {
     "language": "PHP",
