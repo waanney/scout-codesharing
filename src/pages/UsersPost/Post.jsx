@@ -778,8 +778,7 @@ function Post({ board, boardId }) {
               {board ? (
                 <div className="text-white">
                   <div
-                    className={`text-[1.5em] w-[90%] mx-[20px] font-bold leading-[150%] break-words 
-                                ${!fullText && 'line-clamp-1 '}`}
+                    className={`text-[1.5em] w-[90%] mx-[20px] font-bold leading-[150%] break-words`}
                   >
                     {board.title || ''}
                   </div>
