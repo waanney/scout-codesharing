@@ -247,6 +247,7 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
           <div
             key={post._id}
             className="mt-5 mb-5 w-[90%] h-[580px] bg-black bg-opacity-50 rounded-lg mx-auto"
+            ref={isLastPost ? lastPostElementRef : null}
           >
             {/* Header */}
             <div className="flex items-center justify-between p-2">
@@ -266,7 +267,6 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                   {profileData.username}
                 </h5>
               </a>
-
               {/* Only Show Menu if the Logged-in User Owns the Post */}
               {owner === userId && (
                 <div
@@ -319,7 +319,6 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                 </div>
               )}
             </div>
-
             {/* Shared Post */}
             {post.content ? (
               <div
@@ -327,7 +326,6 @@ const SharedPostCo = ({ AvatarUrl, profileData, owner }) => {
                 onClick={() =>
                   (window.location.href = `${FE_ROOT}/post/${post._id}`)
                 }
-                ref={isLastPost ? lastPostElementRef : null}
               >
                 <div className="flex items-center p-2">
                   {sharedPostAvatars[post._id] ? (
