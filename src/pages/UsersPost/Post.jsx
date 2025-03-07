@@ -639,8 +639,8 @@ function Post({ board, boardId }) {
         <div className="cards grid w-full lg:grid-cols-[minmax(200px,3fr)_minmax(300px,7fr)] grid-cols-1 gap-[34px] place-self-center place-items-center px-5 py-[50px] mt-[50px]">
           {/*Post info*/}
           <div className="card rounded-[10px] lg:h-[636px] h-[500px] w-full bg-[#05143c]">
-            <div className="cards grid grid-cols-[4fr_1fr] gap-[10px] mt-[37px] mx-[20px]">
-              <div className="card flex flex-row">
+            <div className="flex flex-row mt-[37px] mx-[20px]">
+              <div className="flex flex-row w-[90%] overflow-hidden">
                 {AvatarUrl ? (
                   <img
                     className="aspect-square h-[50px] w-[50px] rounded-full"
@@ -669,7 +669,7 @@ function Post({ board, boardId }) {
                   </div>
                 </div>
               </div>
-              <div className="card flex flex-col bg-[#05143c] items-end">
+              <div className="flex flex-col w-[10%]">
                 <div className="relative" ref={menuPostRef}>
                   <Ellipsis
                     className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
@@ -778,7 +778,7 @@ function Post({ board, boardId }) {
               {board ? (
                 <div className="text-white">
                   <div
-                    className={`text-[1.5em] w-[90%] mx-auto font-bold leading-[150%] break-words 
+                    className={`text-[1.5em] w-[90%] mx-[20px] font-bold leading-[150%] break-words 
                                 ${!fullText && 'line-clamp-1 '}`}
                   >
                     {board.title || ''}
