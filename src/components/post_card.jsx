@@ -107,7 +107,7 @@ const PostCard = ({ board }) => {
         </div>
 
         {/* Title */}
-        <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%] break-words">
+        <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%] break-words line-clamp-1">
           {board?.title
             ? board.title.split(' ').slice(0, 20).join(' ')
             : 'No title available'}

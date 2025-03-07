@@ -587,6 +587,7 @@ function Post({ board, boardId }) {
                     <a
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${board.userId}`}
+                      className="overflow-ellipsis overflow-hidden whitespace-nowrap"
                     >
                       {postUsername}
                     </a>
