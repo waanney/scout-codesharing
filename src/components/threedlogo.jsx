@@ -19,8 +19,8 @@ function FourArcs({ scale }) {
   const angles = [0, Math.PI / 2, Math.PI, (3 * Math.PI) / 2];
   const arcAngle = Math.PI * 0.45;
 
-  const startColor = new THREE.Color(0x7bc5fe);
-  const endColor = new THREE.Color(0x1763b0);
+  const startColor = new THREE.Color(0x91ceff); // Xanh sáng hơn
+  const endColor = new THREE.Color(0x1d6fc4); // Xanh đậm hơn một chút
 
   return (
     <group ref={groupRef}>
