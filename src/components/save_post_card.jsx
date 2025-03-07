@@ -178,7 +178,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
         </div>
 
         {/* Content */}
-        <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%] break-words">
+        <div className="mx-[38px] text-white text-[14px] font-normal leading-[150%] break-words line-clamp-1">
           {board.title.split(' ').slice(0, 20).join(' ')}
           {board.title.split(' ').length > 20 ? '...' : ''}
         </div>
