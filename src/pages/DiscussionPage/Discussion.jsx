@@ -11,7 +11,7 @@ export default function Discussion({
   paginate,
   totalPages,
   totalPosts,
-  currentPage,
+  currentPage, //params
 }) {
   usecheckTokenAndRedirect();
   const [pageNumber, setPageNumber] = useState(currentPage);
@@ -35,6 +35,11 @@ export default function Discussion({
     }
   };
 
+  useEffect(() => {
+    paginate(currentPage)
+  }, [currentPage]);
+
+//windows history replace state
   const handlePageChange = pageNumber => {
     if (pageNumber >= 1 && pageNumber <= totalPages) {
       paginate(pageNumber);

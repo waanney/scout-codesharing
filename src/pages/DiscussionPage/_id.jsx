@@ -8,8 +8,9 @@ function Board() {
   const [data, setData] = useState(null);
   const [loading, setLoading] = useState(true); // Thêm trạng thái loading
   const [error, setError] = useState(null); // Thêm trạng thái lỗi
-  const [currentPage, setCurrentPage] = useState(1);
   const [searchParams, setSearchParams] = useSearchParams();
+  const [currentPage, setCurrentPage] = useState(1);
+
   useEffect(() => {
     setLoading(true); // Bắt đầu loading
     setError(null); // Reset lỗi
@@ -33,11 +34,11 @@ function Board() {
   ) {
     setSearchParams({ page: 1 });
   }
-
-  const paginate = pageNumber => {
+  const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
     setSearchParams({ page: pageNumber });
   };
+
 
   if (loading) {
     return <LoadingAnimation />; // Hiển thị thông báo loading
@@ -53,7 +54,7 @@ function Board() {
       paginate={paginate}
       totalPages={data.totalPages}
       totalPosts={data.totalCount}
-      currentPage={Number(searchParams.get('page')) || currentPage}
+      currentPage={Number(searchParams.get('page') || currentPage) }
     />
   );
 }
