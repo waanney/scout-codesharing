@@ -521,7 +521,7 @@ function MyProfile() {
                   className="w-full h-[1.5rem] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
                   maxLength="100"
-                  placeholder="Add your title here!(Maximum 60 characters)"
+                  placeholder="Add your title here!(Maximum 100 characters)"
                   required
                   onChange={e => setTitle(e.target.value)}
                 />
