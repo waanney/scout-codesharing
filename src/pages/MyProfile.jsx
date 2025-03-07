@@ -520,7 +520,7 @@ function MyProfile() {
                 <input
                   className="w-full h-[1.5rem] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  maxLength="60"
+                  maxLength="100"
                   placeholder="Add your title here!(Maximum 60 characters)"
                   required
                   onChange={e => setTitle(e.target.value)}
@@ -528,7 +528,6 @@ function MyProfile() {
                 <input
                   className="w-full h-[1.5rem] bg-black bg-opacity-50 rounded-[5px] pl-[15px] text-wrap"
                   type="text"
-                  maxLength="60"
                   placeholder="Describe your problem..."
                   required
                   onChange={e => setDescription(e.target.value)}
