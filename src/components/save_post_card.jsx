@@ -87,7 +87,7 @@ const SavePostCard = ({ board, onDeletePost }) => {
   if (!board || !board.content) {
     return (
       <>
-        <div className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[4px_4px_4px_rgba(0,0,0,0.5)] flex items-center justify-center">
+        <div className="card bg-[#05143c] h-[450px] rounded-[10px] p-[20px] cursor-pointer hover:drop-shadow-[0px_0px_10px_rgba(255,255,255,0.5)] flex items-center justify-center">
           <button
             className="absolute top-[5px] right-[5px] z-10"
             onClick={event => handleDeleteClick(board._id, event)}
