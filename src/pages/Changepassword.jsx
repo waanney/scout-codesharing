@@ -96,7 +96,7 @@ function Changepassword() {
       <div className="flex min-h-screen flex-col">
         <HeaderForAllPages />
         <div className="flex flex-col items-center justify-center px-4 mt-[100px] md:mt-[100px]">
-          <h1 className="text-center text-4xl md:text-[60px] font-bold mb-6 md:mb-[16px] text-white">
+          <h1 className="text-center text-4xl md:text-[60px] font-bold mb-[60px] md:mb-[16px] text-white">
             Change password
           </h1>
 
@@ -106,8 +106,7 @@ function Changepassword() {
               <div
                 className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#3366CC] to-[#1A3366] rounded-[10px] 
                                     ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                                    transition-all duration-1000 ease-in-out flex items-center justify-center`}
-              >
+                                    transition-all duration-1000 ease-in-out flex items-center justify-center`}>
                 <p className="text-base md:text-[22px] font-bold text-center text-red-600">
                   {error}
                 </p>
@@ -121,8 +120,7 @@ function Changepassword() {
               <div
                 className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
                                     ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                                    transition-all duration-1000 ease-in-out flex items-center justify-center`}
-              >
+                                    transition-all duration-1000 ease-in-out flex items-center justify-center`}>
                 <p className="text-base md:text-[22px] font-bold text-center text-white">
                   {success}
                 </p>
@@ -132,13 +130,11 @@ function Changepassword() {
 
           <form
             onSubmit={handlechangePassword}
-            className="flex flex-col w-full max-w-[500px] bg-black bg-opacity-50 rounded-[10px] p-4 md:p-8"
-          >
+            className="flex flex-col w-full max-w-[500px] bg-black bg-opacity-50 rounded-[10px] p-4 md:p-8 mt-[30px]">
             <div className="mb-4">
               <label
                 className="font-Inter font-bold text-base md:text-[18px]"
-                htmlFor="oldpassword"
-              >
+                htmlFor="oldpassword">
                 Old Password
               </label>
               <input
@@ -153,8 +149,7 @@ function Changepassword() {
             <div className="mb-4">
               <label
                 className="font-Inter font-bold text-base md:text-[18px]"
-                htmlFor="newpassword"
-              >
+                htmlFor="newpassword">
                 New Password
               </label>
               <input
@@ -169,8 +164,7 @@ function Changepassword() {
             <div className="mb-6">
               <label
                 className="font-Inter font-bold text-base md:text-[18px]"
-                htmlFor="confirmnewpassword"
-              >
+                htmlFor="confirmnewpassword">
                 Confirm New Password
               </label>
               <input
@@ -185,8 +179,7 @@ function Changepassword() {
               <button
                 type="submit"
                 className="w-full md:w-auto flex items-center justify-center h-[50px] px-6 md:px-8 bg-[#3366cc] bg-opacity-50 font-Inter font-bold text-base md:text-[25px] rounded-[10px] cursor-pointer"
-                disabled={isFetching}
-              >
+                disabled={isFetching}>
                 {isFetching ? 'Loading...' : 'Change'}
               </button>
             </div>
