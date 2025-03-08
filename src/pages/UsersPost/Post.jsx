@@ -607,16 +607,14 @@ function Post({ board, boardId }) {
     <>
       <div
         className="flex min-h-screen flex-col bg-[#0b2878]"
-        onClick={() => setOpen(Array(sourceCode.length).fill(false))}
-      >
+        onClick={() => setOpen(Array(sourceCode.length).fill(false))}>
         <HeaderForAllPages className="sticky" comment={comments} />
         {showError && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
             <div
               className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-[#cc3333] to-[#661a1a] rounded-[10px] 
               ${fadeError ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-                transition-all duration-1000 ease-in-out flex items-center justify-center`}
-            >
+                transition-all duration-1000 ease-in-out flex items-center justify-center`}>
               <p className="text-base md:text-[22px] font-bold text-center text-white">
                 {errorMessage}
               </p>
@@ -628,8 +626,7 @@ function Post({ board, boardId }) {
             <div
               className={`w-full max-w-[450px] h-[110px] bg-gradient-to-r from-green-500 to-green-700 rounded-[10px] 
               ${fadeSuccess ? 'opacity-0 visibility-hidden' : 'opacity-100 visibility-visible'} 
-              transition-all duration-1000 ease-in-out flex items-center justify-center`}
-            >
+              transition-all duration-1000 ease-in-out flex items-center justify-center`}>
               <p className="text-base md:text-[22px] font-bold text-center text-white">
                 {successMessage}
               </p>
@@ -659,8 +656,7 @@ function Post({ board, boardId }) {
                     <a
                       target="_blank"
                       href={`${env.FE_ROOT}/profile/${board.userId}`}
-                      className="overflow-ellipsis overflow-hidden whitespace-nowrap"
-                    >
+                      className="overflow-ellipsis overflow-hidden whitespace-nowrap">
                       {postUsername}
                     </a>
                   </div>
@@ -681,15 +677,13 @@ function Post({ board, boardId }) {
                       openPostMenuId === board._id
                         ? 'opacity-100 translate-y-0 pointer-events-auto'
                         : 'opacity-0 -translate-y-5 pointer-events-none'
-                    }`}
-                  >
+                    }`}>
                     {board.userId === userId && (
                       <button
                         className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
                         onClick={event =>
                           handlePostDeleteClick(board._id, event)
-                        }
-                      >
+                        }>
                         <p className="font-medium text-red-600 text-[20px]">
                           Delete
                         </p>
@@ -702,8 +696,7 @@ function Post({ board, boardId }) {
                           ? 'bg-transparent text-blue-500 cursor-not-allowed'
                           : 'hover:scale-110 text-white'
                       }`}
-                      disabled={isShared}
-                    >
+                      disabled={isShared}>
                       <Share
                         className={`h-[30px] w-[30px] ${isShared ? 'text-blue-500' : 'text-white'}`}
                       />
@@ -712,8 +705,7 @@ function Post({ board, boardId }) {
                     <button
                       onClick={handleSave}
                       className={`flex flex-row justify-center py-2 w-full hover:bg-gray-600 rounded-md  ${isSaved ? 'text-blue-500 cursor-not-allowed' : 'text-white hover:scale-110'}`}
-                      disabled={isSaved}
-                    >
+                      disabled={isSaved}>
                       <Save className="h-[30px] w-[30px]" />
                       {isSaved ? 'Saved' : 'Save'}
                     </button>
@@ -730,14 +722,12 @@ function Post({ board, boardId }) {
                           onClick={event => {
                             event.stopPropagation();
                             setShowPostConfirmModal(false);
-                          }}
-                        >
+                          }}>
                           Cancel
                         </button>
                         <button
                           className="px-4 py-2 bg-red-600 text-white rounded-md"
-                          onClick={handlePostConfirmDelete}
-                        >
+                          onClick={handlePostConfirmDelete}>
                           Confirm
                         </button>
                       </div>
@@ -757,14 +747,12 @@ function Post({ board, boardId }) {
                           onClick={event => {
                             event.stopPropagation();
                             setShowInlineConfirmModal(false);
-                          }}
-                        >
+                          }}>
                           Cancel
                         </button>
                         <button
                           className="px-4 py-2 bg-red-600 text-white rounded-md"
-                          onClick={handleConfirmDeleteInlineComment}
-                        >
+                          onClick={handleConfirmDeleteInlineComment}>
                           Confirm
                         </button>
                       </div>
@@ -778,24 +766,21 @@ function Post({ board, boardId }) {
               {board ? (
                 <div className="text-white">
                   <div
-                    className={`text-[1.5em] w-[90%] mx-[20px] font-bold leading-[150%] break-words`}
-                  >
+                    className={`text-[1.5em] w-[90%] mx-[20px] font-bold leading-[150%] break-words`}>
                     {board.title || ''}
                   </div>
                   <div className="w-full px-[20px]">
                     <div
                       className={`text-xl font-normal leading-[150%] break-words ${
                         !fullText && 'line-clamp-1'
-                      }`}
-                    >
+                      }`}>
                       {board.description ||
                         'Owner has deleted or hidden this post.'}
                     </div>
                     {board.description && board.description.length > 40 && (
                       <button
                         className="font-bold"
-                        onClick={() => setFullText(!fullText)}
-                      >
+                        onClick={() => setFullText(!fullText)}>
                         {fullText ? 'less' : 'more'}
                       </button>
                     )}
@@ -811,20 +796,17 @@ function Post({ board, boardId }) {
                 {comments.map(comment => (
                   <div
                     key={comment._id}
-                    className="w-[100%] rounded-[10px] mb-4 p-[15px 5px] bg-blue-950"
-                  >
+                    className="w-[100%] rounded-[10px] mb-4 p-[15px 5px] bg-blue-950">
                     <div className="flex justify-between text-white text-2xl pl-[10px] font-bold leading-9">
                       <a
                         target="_blank"
-                        href={`${env.FE_ROOT}/profile/${comment.userId}`}
-                      >
+                        href={`${env.FE_ROOT}/profile/${comment.userId}`}>
                         {comment.username}
                       </a>
                       {comment.userId === userId && (
                         <div
                           className="relative"
-                          ref={el => (menuRefs.current[comment._id] = el)}
-                        >
+                          ref={el => (menuRefs.current[comment._id] = el)}>
                           <Ellipsis
                             className="h-[30px] w-[30px] mr-[5px] cursor-pointer"
                             onClick={() => toggleMenu(comment._id)}
@@ -835,14 +817,12 @@ function Post({ board, boardId }) {
                                 openMenuId === comment._id
                                   ? 'opacity-100 translate-y-0 pointer-events-auto'
                                   : 'opacity-0 -translate-y-5 pointer-events-none'
-                              }`}
-                            >
+                              }`}>
                               <button
                                 className="w-full py-2 text-center text-red-600 hover:bg-gray-600 rounded-lg"
                                 onClick={event =>
                                   handleDeleteClick(comment._id, event)
-                                }
-                              >
+                                }>
                                 <p className="font-medium text-red-600 text-[20px]">
                                   Delete
                                 </p>
@@ -880,14 +860,12 @@ function Post({ board, boardId }) {
                           onClick={event => {
                             event.stopPropagation();
                             setShowConfirmModal(false);
-                          }}
-                        >
+                          }}>
                           Cancel
                         </button>
                         <button
                           className="px-4 py-2 bg-red-600 text-white rounded-md"
-                          onClick={handleConfirmDelete}
-                        >
+                          onClick={handleConfirmDelete}>
                           Confirm
                         </button>
                       </div>
@@ -898,8 +876,7 @@ function Post({ board, boardId }) {
             </div>
             <form
               onSubmit={handleComment}
-              className="flex flex-row px-[20px] py-[20px] pt-[10px] md:pb-6"
-            >
+              className="flex flex-row px-[20px] py-[20px] pt-[10px] md:pb-6">
               <input
                 value={content}
                 onChange={e => setContent(e.target.value)}
@@ -909,8 +886,7 @@ function Post({ board, boardId }) {
               />
               <button
                 type="submit"
-                className="text-white align-middle ml-[10px] rotate-45"
-              >
+                className="text-white align-middle ml-[10px] rotate-45">
                 <Send className="h-[30px] w-[30px] hover:scale-110" />
               </button>
             </form>
@@ -924,8 +900,7 @@ function Post({ board, boardId }) {
                 </div>
                 <button
                   onClick={copyToClipboard(board.content)}
-                  className="absolute right-6 rounded-[5px] hover:bg-gray-600"
-                >
+                  className="absolute right-6 rounded-[5px] hover:bg-gray-600">
                   <Copy
                     className={`${isCopied ? 'text-blue-500' : 'text-white'}`}
                   />
@@ -940,11 +915,9 @@ function Post({ board, boardId }) {
                     const NewOpen = new Array(sourceCode.length).fill(false);
                     NewOpen[lineNum] = !open[lineNum];
                     setOpen(NewOpen);
-                  }}
-                >
+                  }}>
                   <button
-                    className={`text-gray-500 ${commentsByLine[lineNum + 1] ? 'text-white' : ''}  ml-[10px] right-[15px] z-10`}
-                  >
+                    className={`text-gray-500 ${commentsByLine[lineNum + 1] ? 'text-white' : ''}  ml-[10px] right-[15px] z-10`}>
                     <MessageSquareText className="h-[20px] w-[20px]" />
                   </button>
                   <div
@@ -954,8 +927,7 @@ function Post({ board, boardId }) {
                       const NewOpen = new Array(sourceCode.length).fill(false);
                       NewOpen[lineNum] = !open[lineNum];
                       setOpen(NewOpen);
-                    }}
-                  >
+                    }}>
                     {/* Line Number */}
                     <div className="min-w-[30px] text-gray-400 text-right pr-[10px] select-none">
                       {lineNum + 1}
@@ -970,12 +942,11 @@ function Post({ board, boardId }) {
                     {open[lineNum] && (
                       <div
                         className="absolute top-7 left-0 z-10 lg:h-[400px] lg:w-[500px] max-lg:h-[240px] max-lg:w-[350px] bg-blue-950 rounded-[10px] shadow-lg p-4"
-                        onClick={event => event.stopPropagation()}
-                      >
+                        onClick={event => event.stopPropagation()}>
                         <p className="text-center font-bold leading-[150%] text-2xl">
                           This is line {lineNum + 1}
                         </p>
-                        <div className="w-full h-[7em] md:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
+                        <div className="w-full h-[7em] lg:h-[75%] overflow-auto scrollbar-thumb-gray-300 scrollbar-track-transparent scrollbar-thin">
                           {Array.isArray(commentsByLine[lineNum + 1]) &&
                           commentsByLine[lineNum + 1].length > 0 ? (
                             commentsByLine[lineNum + 1].map(comment => (
@@ -995,8 +966,7 @@ function Post({ board, boardId }) {
                         </div>
                         <form
                           onSubmit={e => handleInlineComment(e, lineNum + 1)}
-                          className="flex flex-row mt-4"
-                        >
+                          className="flex flex-row mt-4">
                           <input
                             value={line_content}
                             onChange={e => setLineContent(e.target.value)}
