@@ -287,7 +287,7 @@ function Post({ board, boardId }) {
       }
     } catch (error) {
       console.error('Error posting comment:', error);
-      alert('Có lỗi xảy ra khi đăng bình luận. Vui lòng thử lại sau.');
+      alert('Error posting comment. Please try again.');
     }
   };
 
@@ -324,7 +324,7 @@ function Post({ board, boardId }) {
       });
 
       // Hiển thị thông báo thành công
-      setSuccessMessage('Xóa comment inline thành công!');
+      setSuccessMessage('Delete comment inline successfully!');
       setShowSuccess(true);
       setFadeSuccess(false);
 
@@ -332,7 +332,7 @@ function Post({ board, boardId }) {
       setTimeout(() => setShowSuccess(false), 1000);
     } catch (error) {
       setErrorMessage(
-        error.response?.data?.message || 'Không thể xóa comment inline',
+        error.response?.data?.message || 'Failed to delete comment inline',
       );
       setShowError(true);
       setFadeError(false);
@@ -592,7 +592,7 @@ function Post({ board, boardId }) {
   };
   //loading data
   if (loading) {
-    return <div>Đang tải user data</div>;
+    return <div>Loading user data...</div>;
   }
 
   if (error) {
@@ -600,7 +600,7 @@ function Post({ board, boardId }) {
   }
 
   if (!board) {
-    return <div>Không tồn tại user data.</div>;
+    return <div>Board not found</div>;
   }
 
   return (
@@ -932,20 +932,23 @@ function Post({ board, boardId }) {
                 </button>
               </div>
               {sourceCode.map((code, lineNum) => (
-                <div key={lineNum} className="flex">
+                <div
+                  key={lineNum}
+                  className="flex hover:bg-gray-600"
+                  onClick={event => {
+                    event.stopPropagation();
+                    const NewOpen = new Array(sourceCode.length).fill(false);
+                    NewOpen[lineNum] = !open[lineNum];
+                    setOpen(NewOpen);
+                  }}
+                >
                   <button
                     className={`text-gray-500 ${commentsByLine[lineNum + 1] ? 'text-white' : ''}  ml-[10px] right-[15px] z-10`}
-                    onClick={event => {
-                      event.stopPropagation();
-                      const NewOpen = new Array(sourceCode.length).fill(false);
-                      NewOpen[lineNum] = !open[lineNum];
-                      setOpen(NewOpen);
-                    }}
                   >
                     <MessageSquareText className="h-[20px] w-[20px]" />
                   </button>
                   <div
-                    className="relative flex flex-row hover:bg-gray-600"
+                    className="relative flex flex-row "
                     onClick={event => {
                       event.stopPropagation();
                       const NewOpen = new Array(sourceCode.length).fill(false);
