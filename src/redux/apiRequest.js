@@ -19,13 +19,7 @@ import {
 import axiosJWT from './axiosJWT';
 import { createStart, createFailed, createSuccess } from './uppostSlice';
 import { commentStart, commentSuccess, commentFailed } from './commentSlice';
-/*import {
-  myProfileStart,
-  myProfileSuccess,
-  myProfileFailed,
-} from './myProfileSlice';*/
-//import { current } from '@reduxjs/toolkit';
-import { jwtDecode } from 'jwt-decode';
+// import { jwtDecode } from 'jwt-decode';
 import { env } from '~/configs/environment.js';
 
 const API_ROOT = env.API_ROOT;
@@ -51,20 +45,10 @@ export const registerUser = async (user, dispatch, navigate) => {
       .then(res => {
         localStorage.setItem('currentUser', JSON.stringify(res.data));
         dispatch(registerSuccess(res.data));
-        /*
-        // Lấy _id của user vừa tạo từ response (kiểu ObjectId)
-        const owner = res.data._id;
-
-        // Gọi API myProfile
-        const newmyProfile = {
-          username: res.data.username,
-          owner: owner,
-        };
-        myProfile(newmyProfile, dispatch, navigate);
-        */
-        const decodedToken = jwtDecode(res.data.access_token);
-        const userId = decodedToken.id;
-        navigate(`/profile/${userId}`);
+        // const decodedToken = jwtDecode(res.data.access_token);
+        // const userId = decodedToken.id;
+        // navigate(`/profile/${userId}`);
+        dispatch(logoutUser(dispatch, navigate));
       })
       .catch(err => {
         dispatch(registerFailed(err.response?.data?.message));
