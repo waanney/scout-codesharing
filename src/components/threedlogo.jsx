@@ -80,7 +80,7 @@ export default function ThreeDLogo() {
       <ambientLight intensity={0.3} />
       <directionalLight position={[5, 5, 5]} intensity={0.5} />
       <FourArcs scale={isMobile ? 0.8 : 1} />
-      <OrbitControls enableZoom={false} enablePan={true} enableRotate={true} />
+      <OrbitControls enableZoom={false} enablePan={false} enableRotate={true} />
     </Canvas>
   );
 }
