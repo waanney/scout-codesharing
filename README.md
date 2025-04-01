@@ -2,68 +2,67 @@
 
 ![image](https://github.com/user-attachments/assets/7aa28290-c9bd-4c27-a082-989623145bb4)
 
-## Mục lục
 
-- [Tính năng](#tính-năng)
-- [Công nghệ sử dụng](#công-nghệ-sử-dụng)
-- [Cài đặt](#cài-đặt)
-- [Sử dụng](#sử-dụng)
-- [Cấu trúc thư mục](#cấu-trúc-thư-mục)
+## Table of Contents  
 
-## Tính năng
+- [Features](#features)  
+- [Technologies Used](#technologies-used)  
+- [Installation](#installation)  
+- [Usage](#usage)  
+- [Project Structure](#project-structure)  
 
-Liệt kê các tính năng chính của frontend. Ví dụ:
+## Features  
 
-- UI/UX cho trang web
-- Hiển thị bài post theo thời gian thực
+- UI/UX for the website  
+- Real-time post display  
 
-## Công nghệ sử dụng
+## Technologies Used  
 
-Liệt kê các công nghệ, ngôn ngữ và thư viện được sử dụng. Ví dụ:
+List the technologies, languages, and libraries used. For example:  
 
-- React
-- React Router
-- Redux
-- Axios
-- Tailwindcss
-- Vite
-- Javascript
-- Một số thư viện bổ sung
+- React  
+- React Router  
+- Redux  
+- Axios  
+- Tailwind CSS  
+- Vite  
+- JavaScript  
+- Some additional libraries  
 
-## Cài đặt
+## Installation  
 
-Hướng dẫn chi tiết cách cài đặt và thiết lập môi trường. Ví dụ:
+Detailed instructions on how to install and set up the environment. For example:  
 
-1.  Clone repository:
+1. Clone the repository:  
 
     ```bash
     git clone https://github.com/waanney/scout-codesharing.git
-    ```
+    ```  
 
-2.  Di chuyển vào thư mục dự án:
+2. Navigate to the project directory:  
 
     ```bash
     cd scout_codesharing
-    ```
+    ```  
 
-3.  Cài đặt các dependencies:
+3. Install dependencies:  
 
     ```bash
     npm install
-    ```
+    ```  
 
-## Sử dụng
+## Usage  
 
-Hướng dẫn cách chạy ứng dụng. Ví dụ:
+Instructions on how to run the application. For example:  
 
-1.  Khởi động ứng dụng:
+1. Start the application:  
 
     ```bash
     npm run dev
-    ```
+    ```  
 
-2.  Truy cập ứng dụng tại `http://localhost:5173`
+2. Access the application at `http://localhost:5173`  
 
-## Cấu trúc thư mục
+## Project Structure  
 
 ![Screenshot 2025-01-10 224825](https://github.com/user-attachments/assets/7f6fe76d-394f-4e9c-812a-bafb4110b5a3)
